@@ -1,0 +1,105 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+html.embed-mode,
+html.embed-mode body,
+html.embed-mode form {
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+    overflow: hidden !important;
+}
+
+html.embed-mode .auth-wrap {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+html.embed-mode .auth-card {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 28px 36px 24px !important;
+    border: 1px solid #e4eaf3;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 22px 56px rgba(2, 62, 138, 0.18);
+    overflow: visible !important;
+}
+
+html.embed-mode .auth-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 4px;
+    border-radius: 18px 18px 0 0;
+    background: linear-gradient(90deg, #023e8a 0%, #0077b6 55%, #48cae4 100%);
+}
+
+html.embed-mode .auth-card-close {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+html.embed-mode .auth-card-brand { margin-bottom: 10px; }
+html.embed-mode .auth-card-head { margin-bottom: 16px; }
+html.embed-mode .auth-card-head h1 { font-size: 1.45rem; }
+html.embed-mode .auth-field { margin-bottom: 12px; }
+
+html.embed-mode .auth-grid-2 {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 12px 16px !important;
+}
+
+html.embed-mode .auth-grid-2 > * {
+    min-width: 0 !important;
+    max-width: 100%;
+}
+
+html.embed-mode .auth-card input[type="text"],
+html.embed-mode .auth-card input[type="email"],
+html.embed-mode .auth-card input[type="password"],
+html.embed-mode .auth-card select,
+html.embed-mode .auth-primary {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 44px !important;
+    box-sizing: border-box !important;
+}
+
+html.embed-mode .google-btn,
+html.embed-mode .auth-card a.google-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.65rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 44px !important;
+    box-sizing: border-box !important;
+    line-height: 1 !important;
+    text-align: center;
+}
+
+html.embed-mode .google-btn svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+html.embed-mode .google-btn span {
+    display: inline-block;
+    line-height: 1;
+    position: relative;
+    top: 0;
+}
+
+html.embed-mode .auth-divider { margin: 12px 0; }
+html.embed-mode .auth-check { margin: 4px 0 12px; }
+html.embed-mode .auth-foot { margin-top: 14px; padding-top: 14px; }

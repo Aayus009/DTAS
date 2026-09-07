@@ -1,0 +1,451 @@
+/* ============================================
+   DTAS Portal - Features.aspx Specific Styles
+   ============================================ */
+
+/* ── RADIUS TOKENS (Pacific Professional) ── */
+:root {
+    --radius-sm: 0.25rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+}
+
+/* ── HERO SECTION ── */
+.features-hero {
+    background: linear-gradient(180deg, rgb(var(--dt-surface-rgb)) 0%, rgb(var(--dt-surface-container-rgb)) 100%);
+    padding: 64px 0 80px;
+    border-bottom: 1px solid var(--surface-container-high);
+    text-align: center;
+}
+
+    .features-hero .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(var(--dt-primary-rgb) / 0.06);
+        border: 1px solid rgba(var(--dt-primary-rgb) / 0.12);
+        color: var(--primary);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 6px 16px;
+        border-radius: 999px;
+        margin-bottom: 24px;
+    }
+
+    .features-hero .hero-title {
+        font-family: 'Hanken Grotesk', 'Segoe UI', sans-serif;
+        font-size: 48px;
+        font-weight: 700;
+        color: var(--on-surface);
+        line-height: 1.15;
+        margin-bottom: 20px;
+    }
+
+    .features-hero .hero-accent {
+        color: var(--primary);
+        font-style: italic;
+    }
+
+    .features-hero .hero-desc {
+        font-size: 18px;
+        color: var(--on-surface-variant);
+        line-height: 1.7;
+        max-width: 640px;
+        margin: 0 auto;
+    }
+
+/* ── BENTO SECTION ── */
+.bento-section {
+    padding: 64px 0;
+    background: rgb(var(--dt-surface-rgb));
+}
+
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+}
+
+/* ── BENTO CARDS ── */
+.bento-card {
+    background: rgb(var(--dt-surface-container-lowest-rgb));
+    border: 1px solid rgb(var(--dt-outline-variant-rgb));
+    border-radius: var(--radius-xl);
+    padding: 32px;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .bento-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--primary);
+        box-shadow: 0 8px 24px rgba(0, 35, 111, 0.08);
+    }
+
+.bento-large {
+    grid-column: span 12;
+}
+
+.bento-medium {
+    grid-column: span 6;
+}
+
+.bento-wide {
+    grid-column: span 12;
+}
+
+.bento-small {
+    grid-column: span 3;
+}
+
+.bento-half {
+    grid-column: span 6;
+}
+
+/* Card sizing on tablet */
+@media (max-width: 1024px) {
+    .bento-large,
+    .bento-wide {
+        grid-column: span 12;
+    }
+
+    .bento-medium,
+    .bento-half {
+        grid-column: span 6;
+    }
+
+    .bento-small {
+        grid-column: span 6;
+    }
+}
+
+/* Card sizing on mobile */
+@media (max-width: 640px) {
+    .bento-card {
+        grid-column: span 12 !important;
+    }
+}
+
+/* ── BENTO HEADER ── */
+.bento-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+    .bento-header h3 {
+        margin: 0;
+    }
+
+/* ── MODULE TAG ── */
+.module-tag {
+    display: inline-block;
+    background: var(--primary-container);
+    color: var(--on-primary-container);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+}
+
+/* ── BENTO TITLES ── */
+.bento-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--primary);
+    line-height: 1.3;
+    margin-bottom: 12px;
+}
+
+.bento-subtitle {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+/* ── BENTO ICONS ── */
+.bento-icon {
+    font-size: 32px;
+    color: var(--primary);
+    margin-bottom: 16px;
+    display: block;
+}
+
+.bento-icon-large {
+    font-size: 48px;
+    color: var(--primary);
+}
+
+/* ── BENTO BODY (for large cards) ── */
+.bento-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: center;
+}
+
+.bento-text p {
+    font-size: 16px;
+    color: var(--on-surface-variant);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* ── FEATURE CHECKLIST ── */
+.feature-checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+    .feature-checklist li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--on-surface);
+    }
+
+    .feature-checklist .material-symbols-outlined {
+        font-size: 18px;
+        color: var(--primary);
+    }
+
+/* ── DECISION TREE VISUAL ── */
+.decision-tree-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 24px;
+    background: var(--surface-container);
+    border-radius: var(--radius-lg);
+}
+
+.tree-node {
+    background: var(--primary);
+    color: white;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+}
+
+    .tree-node.root {
+        background: var(--primary-container);
+        color: var(--on-primary-container);
+        font-size: 14px;
+    }
+
+.tree-connector {
+    width: 2px;
+    height: 20px;
+    background: var(--outline-variant);
+}
+
+.tree-branches {
+    display: flex;
+    gap: 12px;
+}
+
+    .tree-branches .tree-node {
+        background: var(--surface-container-high);
+        color: var(--on-surface);
+        font-size: 12px;
+        padding: 8px 14px;
+    }
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+    margin-top: 24px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin-bottom: 8px;
+}
+
+.progress-value {
+    color: var(--primary);
+}
+
+.progress-track {
+    width: 100%;
+    height: 8px;
+    background: var(--surface-container-high);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 999px;
+    transition: width 1s ease;
+}
+
+/* ── ICON BOX ── */
+.icon-box {
+    width: 48px;
+    height: 48px;
+    background: var(--secondary-container);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--on-secondary-container);
+    margin-bottom: 16px;
+}
+
+    .icon-box .material-symbols-outlined {
+        font-size: 24px;
+    }
+
+/* ── HIGHLIGHT CARD ── */
+.bento-highlight {
+    background: var(--primary);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    border-color: var(--primary);
+}
+
+    .bento-highlight:hover {
+        border-color: var(--primary-container);
+    }
+
+    .bento-highlight .bento-title {
+        color: white;
+    }
+
+    .bento-highlight p {
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .bento-highlight .icon-box {
+        background: var(--primary-container);
+        color: var(--on-primary-container);
+    }
+
+.btn-highlight {
+    display: inline-block;
+    background: white;
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 24px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    margin-top: 16px;
+    transition: opacity 0.2s;
+}
+
+    .btn-highlight:hover {
+        opacity: 0.9;
+    }
+
+.glow-effect {
+    position: absolute;
+    right: -48px;
+    bottom: -48px;
+    width: 256px;
+    height: 256px;
+    background: var(--primary-container);
+    border-radius: 50%;
+    opacity: 0.2;
+    filter: blur(48px);
+    pointer-events: none;
+}
+
+/* ── CTA SECTION ── */
+.features-cta {
+    padding: 64px 0;
+    background: var(--surface-container-low);
+    border-top: 1px solid var(--outline-variant);
+    text-align: center;
+}
+
+.cta-title {
+    font-family: 'Hanken Grotesk', 'Segoe UI', sans-serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--primary);
+    margin-bottom: 32px;
+}
+
+.cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+    .features-hero .hero-title {
+        font-size: 36px;
+    }
+
+    .bento-body {
+        grid-template-columns: 1fr;
+    }
+
+    .decision-tree-visual {
+        order: -1;
+    }
+}
+
+@media (max-width: 640px) {
+    .features-hero {
+        padding: 48px 0 64px;
+    }
+
+        .features-hero .hero-title {
+            font-size: 28px;
+        }
+
+        .features-hero .hero-desc {
+            font-size: 16px;
+        }
+
+    .bento-section {
+        padding: 48px 0;
+    }
+
+    .bento-card {
+        padding: 24px;
+    }
+
+    .bento-title {
+        font-size: 20px;
+    }
+
+    .cta-title {
+        font-size: 28px;
+    }
+
+    .cta-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .cta-actions .btn-primary,
+        .cta-actions .btn-secondary {
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+        }
+}

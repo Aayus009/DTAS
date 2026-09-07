@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="900" viewBox="0 0 1500 900">
+<style>
+  .t { font-family: 'Times New Roman', Times, serif; fill: #000; }
+  .title { font-size: 22px; font-weight: bold; }
+  .sub { font-size: 13px; }
+  .sys { font-size: 14px; font-weight: bold; }
+  .uc { font-size: 12px; }
+  .act { font-size: 13px; font-weight: bold; }
+  .rel { font-size: 11px; font-style: italic; }
+  .note { font-size: 11px; }
+</style>
+<rect x="0" y="0" width="1500" height="900" fill="#fff"/>
+<text class="t title" x="750.0" y="36" text-anchor="middle">Figure UC-3. Campus events</text>
+<text class="t sub" x="750.0" y="58" text-anchor="middle">Faculty and staff create events. Students propose. Admin approves proposals and may restrict records.</text>
+<rect x="300" y="90" width="900" height="740" fill="#fff" stroke="#000" stroke-width="1.8"/>
+<text class="t sys" x="750.0" y="112" text-anchor="middle">DTAS Events</text>
+<circle cx="110" cy="180" r="10" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="190" x2="110" y2="218" stroke="#000" stroke-width="1.6"/>
+<line x1="94" y1="202" x2="126" y2="202" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="218" x2="96" y2="238" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="218" x2="124" y2="238" stroke="#000" stroke-width="1.6"/>
+<text class="t act" x="110" y="256" text-anchor="middle">Faculty / Staff</text>
+<circle cx="110" cy="420" r="10" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="430" x2="110" y2="458" stroke="#000" stroke-width="1.6"/>
+<line x1="94" y1="442" x2="126" y2="442" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="458" x2="96" y2="478" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="458" x2="124" y2="478" stroke="#000" stroke-width="1.6"/>
+<text class="t act" x="110" y="496" text-anchor="middle">Student</text>
+<circle cx="110" cy="680" r="10" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="690" x2="110" y2="718" stroke="#000" stroke-width="1.6"/>
+<line x1="94" y1="702" x2="126" y2="702" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="718" x2="96" y2="738" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="718" x2="124" y2="738" stroke="#000" stroke-width="1.6"/>
+<text class="t act" x="110" y="756" text-anchor="middle">Event Admin</text>
+<circle cx="1390" cy="420" r="10" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<line x1="1390" y1="430" x2="1390" y2="458" stroke="#000" stroke-width="1.6"/>
+<line x1="1374" y1="442" x2="1406" y2="442" stroke="#000" stroke-width="1.6"/>
+<line x1="1390" y1="458" x2="1376" y2="478" stroke="#000" stroke-width="1.6"/>
+<line x1="1390" y1="458" x2="1404" y2="478" stroke="#000" stroke-width="1.6"/>
+<text class="t act" x="1390" y="496" text-anchor="middle">System Admin</text>
+<ellipse cx="520" cy="170" rx="140" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="520" y="170" text-anchor="middle">Create event</text>
+<ellipse cx="520" cy="270" rx="140" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="520" y="270" text-anchor="middle">Propose event</text>
+<ellipse cx="520" cy="370" rx="140" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="520" y="370" text-anchor="middle">Browse campus events</text>
+<ellipse cx="520" cy="470" rx="140" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="520" y="470" text-anchor="middle">Request to join event</text>
+<ellipse cx="520" cy="570" rx="140" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="520" y="570" text-anchor="middle">Accept invitation code</text>
+<ellipse cx="850" cy="200" rx="150" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="850" y="200" text-anchor="middle">Open event workspace</text>
+<ellipse cx="850" cy="320" rx="150" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="850" y="313" text-anchor="middle">Accept or decline</text>
+<text class="t uc" x="850" y="327" text-anchor="middle">join requests</text>
+<ellipse cx="850" cy="450" rx="150" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="850" y="450" text-anchor="middle">Invite members</text>
+<ellipse cx="850" cy="570" rx="150" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="850" y="570" text-anchor="middle">Assign event roles</text>
+<ellipse cx="850" cy="690" rx="150" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="850" y="690" text-anchor="middle">Link club to event</text>
+<ellipse cx="1150" cy="280" rx="145" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="1150" y="273" text-anchor="middle">Approve or reject</text>
+<text class="t uc" x="1150" y="287" text-anchor="middle">proposal</text>
+<ellipse cx="1150" cy="430" rx="145" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="1150" y="423" text-anchor="middle">Restrict or restore</text>
+<text class="t uc" x="1150" y="437" text-anchor="middle">event</text>
+<ellipse cx="1150" cy="580" rx="145" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="1150" y="580" text-anchor="middle">View all events</text>
+<line x1="128" y1="202" x2="380" y2="170" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="202" x2="380" y2="370" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="202" x2="700" y2="200" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="202" x2="700" y2="320" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="202" x2="700" y2="450" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="442" x2="380" y2="270" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="442" x2="380" y2="370" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="442" x2="380" y2="470" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="442" x2="380" y2="570" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="442" x2="700" y2="200" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="702" x2="700" y2="200" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="702" x2="700" y2="320" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="702" x2="700" y2="450" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="702" x2="700" y2="570" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="702" x2="700" y2="690" stroke="#000" stroke-width="1.15"/>
+<line x1="1372" y1="442" x2="1295" y2="280" stroke="#000" stroke-width="1.15"/>
+<line x1="1372" y1="442" x2="1295" y2="430" stroke="#000" stroke-width="1.15"/>
+<line x1="1372" y1="442" x2="1295" y2="580" stroke="#000" stroke-width="1.15"/>
+<line x1="660" y1="170" x2="700" y2="200" stroke="#000" stroke-width="1.15" stroke-dasharray="6 4"/>
+<text class="t rel" x="680.0" y="177.0" text-anchor="middle">&lt;&lt;include&gt;&gt;</text>
+<rect x="40" y="800" width="360" height="70" fill="#fff" stroke="#000" stroke-width="1"/>
+<text class="t note" x="48" y="818">Admin cannot create events.</text>
+<text class="t note" x="48" y="832">Public join is a request. Event Admin</text>
+<text class="t note" x="48" y="846">or Event Manager accepts members.</text>
+</svg>

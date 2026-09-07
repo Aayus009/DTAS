@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1078" height="848" viewBox="0 0 1078 848">
+<style>.t{font-family:'Times New Roman',Times,serif;fill:#000}.title{font-size:20px;font-weight:bold}.sub{font-size:12px}.act{font-size:13px;font-weight:bold}.lab{font-size:12px}.fr{font-size:11px;font-style:italic}.kind{font-size:11px;font-weight:bold}</style>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#000"/></marker></defs>
+<rect width="1078" height="848" fill="#fff"/>
+<text class="t title" x="539.0" y="28" text-anchor="middle">Figure SD-5. Create a club or request to join</text>
+<text class="t sub" x="539.0" y="50" text-anchor="middle">Admin cannot create clubs. Public join is a request. Invite code joins immediately.</text>
+<rect x="80" y="108" width="168" height="42" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t act" x="164.0" y="134" text-anchor="middle">Campus user</text>
+<line x1="164.0" y1="150" x2="164.0" y2="824" stroke="#000" stroke-width="1" stroke-dasharray="5 4"/>
+<rect x="330" y="108" width="168" height="42" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t act" x="414.0" y="134" text-anchor="middle">ClubService</text>
+<line x1="414.0" y1="150" x2="414.0" y2="824" stroke="#000" stroke-width="1" stroke-dasharray="5 4"/>
+<rect x="580" y="108" width="168" height="42" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t act" x="664.0" y="134" text-anchor="middle">SQL Server</text>
+<line x1="664.0" y1="150" x2="664.0" y2="824" stroke="#000" stroke-width="1" stroke-dasharray="5 4"/>
+<rect x="830" y="108" width="168" height="42" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t act" x="914.0" y="134" text-anchor="middle">Club lead</text>
+<line x1="914.0" y1="150" x2="914.0" y2="824" stroke="#000" stroke-width="1" stroke-dasharray="5 4"/>
+<rect x="62" y="174" width="954" height="588" fill="none" stroke="#000" stroke-width="1.15"/>
+<polygon points="62,174 106,174 98,190 62,190" fill="#fff" stroke="#000" stroke-width="1.15"/>
+<text class="t kind" x="68" y="187">alt</text>
+<text class="t fr" x="118" y="188">[Create]</text>
+<line x1="62" y1="328" x2="1016" y2="328" stroke="#000" stroke-width="1" stroke-dasharray="6 4"/>
+<text class="t fr" x="118" y="342">[Join with code]</text>
+<line x1="62" y1="482" x2="1016" y2="482" stroke="#000" stroke-width="1" stroke-dasharray="6 4"/>
+<text class="t fr" x="118" y="496">[Join public (request)]</text>
+<line x1="164.0" y1="196" x2="414.0" y2="196" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="289.0" y="189" text-anchor="middle">CreateClub(name, visibility)</text>
+<line x1="414.0" y1="244" x2="664.0" y2="244" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="539.0" y="237" text-anchor="middle">INSERT Clubs; creator becomes lead</text>
+<line x1="414.0" y1="292" x2="164.0" y2="292" stroke="#000" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+<text class="t lab" x="289.0" y="285" text-anchor="middle">Club created</text>
+<line x1="164.0" y1="350" x2="414.0" y2="350" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="289.0" y="343" text-anchor="middle">JoinByCode(code)</text>
+<line x1="414.0" y1="398" x2="664.0" y2="398" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="539.0" y="391" text-anchor="middle">Add active member</text>
+<line x1="414.0" y1="446" x2="164.0" y2="446" stroke="#000" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+<text class="t lab" x="289.0" y="439" text-anchor="middle">Joined</text>
+<line x1="164.0" y1="504" x2="414.0" y2="504" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="289.0" y="497" text-anchor="middle">JoinPublic(clubId)</text>
+<line x1="414.0" y1="552" x2="664.0" y2="552" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="539.0" y="545" text-anchor="middle">Store pending request</text>
+<line x1="414.0" y1="600" x2="914.0" y2="600" stroke="#000" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+<text class="t lab" x="664.0" y="593" text-anchor="middle">Join request</text>
+<line x1="914.0" y1="648" x2="414.0" y2="648" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="664.0" y="641" text-anchor="middle">AcceptJoinRequest() or DeclineJoinRequest()</text>
+<line x1="414.0" y1="696" x2="664.0" y2="696" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="539.0" y="689" text-anchor="middle">Activate or decline membership</text>
+<line x1="414.0" y1="744" x2="164.0" y2="744" stroke="#000" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+<text class="t lab" x="289.0" y="737" text-anchor="middle">Notify decision</text>
+</svg>

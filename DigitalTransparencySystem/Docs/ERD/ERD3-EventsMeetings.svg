@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="860" viewBox="0 0 1500 860">
+<style>.t{font-family:'Times New Roman',Times,serif;fill:#000}.title{font-size:20px;font-weight:bold}.sub{font-size:12px}.en{font-size:13px;font-weight:bold}.at{font-size:11px}.pk{font-size:11px;font-weight:bold}.nt{font-size:11px}</style>
+<rect width="1500" height="860" fill="#fff"/>
+<text class="t title" x="750.0" y="28" text-anchor="middle">Figure ERD-3. Campus events and Zoom meetings</text>
+<text class="t sub" x="750.0" y="50" text-anchor="middle">Public join is a request. Invite code joins immediately. The Zoom room closes when start plus duration ends.</text>
+<polyline points="210.0,280.0 255.0,280.0 255.0,176.0 300.0,176.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="210.0" y1="285.0" x2="210.0" y2="275.0" stroke="#000" stroke-width="1.3"/>
+<line x1="290.0" y1="182.0" x2="300" y2="176.0" stroke="#000" stroke-width="1.2"/>
+<line x1="290.0" y1="176.0" x2="300" y2="176.0" stroke="#000" stroke-width="1.2"/>
+<line x1="290.0" y1="170.0" x2="300" y2="176.0" stroke="#000" stroke-width="1.2"/>
+<text class="t nt" x="255.0" y="222.0" text-anchor="middle">optional</text>
+<polyline points="210.0,120.0 255.0,120.0 255.0,176.0 300.0,176.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="210.0" y1="125.0" x2="210.0" y2="115.0" stroke="#000" stroke-width="1.3"/>
+<line x1="290.0" y1="182.0" x2="300" y2="176.0" stroke="#000" stroke-width="1.2"/>
+<line x1="290.0" y1="176.0" x2="300" y2="176.0" stroke="#000" stroke-width="1.2"/>
+<line x1="290.0" y1="170.0" x2="300" y2="176.0" stroke="#000" stroke-width="1.2"/>
+<polyline points="530.0,176.0 575.0,176.0 575.0,152.0 620.0,152.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="530.0" y1="181.0" x2="530.0" y2="171.0" stroke="#000" stroke-width="1.3"/>
+<line x1="610.0" y1="158.0" x2="620" y2="152.0" stroke="#000" stroke-width="1.2"/>
+<line x1="610.0" y1="152.0" x2="620" y2="152.0" stroke="#000" stroke-width="1.2"/>
+<line x1="610.0" y1="146.0" x2="620" y2="152.0" stroke="#000" stroke-width="1.2"/>
+<polyline points="125.0,150.0 125.0,152.0 620.0,152.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="120.0" y1="150.0" x2="130.0" y2="150.0" stroke="#000" stroke-width="1.3"/>
+<line x1="610.0" y1="158.0" x2="620" y2="152.0" stroke="#000" stroke-width="1.2"/>
+<line x1="610.0" y1="152.0" x2="620" y2="152.0" stroke="#000" stroke-width="1.2"/>
+<line x1="610.0" y1="146.0" x2="620" y2="152.0" stroke="#000" stroke-width="1.2"/>
+<polyline points="415.0,262.0 415.0,321.0 420.0,321.0 420.0,380.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="410.0" y1="262.0" x2="420.0" y2="262.0" stroke="#000" stroke-width="1.3"/>
+<line x1="414.0" y1="370.0" x2="420.0" y2="380" stroke="#000" stroke-width="1.2"/>
+<line x1="420.0" y1="370.0" x2="420.0" y2="380" stroke="#000" stroke-width="1.2"/>
+<line x1="426.0" y1="370.0" x2="420.0" y2="380" stroke="#000" stroke-width="1.2"/>
+<polyline points="415.0,262.0 415.0,321.0 735.0,321.0 735.0,380.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="410.0" y1="262.0" x2="420.0" y2="262.0" stroke="#000" stroke-width="1.3"/>
+<line x1="729.0" y1="370.0" x2="735.0" y2="380" stroke="#000" stroke-width="1.2"/>
+<line x1="735.0" y1="370.0" x2="735.0" y2="380" stroke="#000" stroke-width="1.2"/>
+<line x1="741.0" y1="370.0" x2="735.0" y2="380" stroke="#000" stroke-width="1.2"/>
+<polyline points="530.0,176.0 735.0,176.0 735.0,168.0 940.0,168.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="530.0" y1="181.0" x2="530.0" y2="171.0" stroke="#000" stroke-width="1.3"/>
+<line x1="930.0" y1="174.0" x2="940" y2="168.0" stroke="#000" stroke-width="1.2"/>
+<line x1="930.0" y1="168.0" x2="940" y2="168.0" stroke="#000" stroke-width="1.2"/>
+<line x1="930.0" y1="162.0" x2="940" y2="168.0" stroke="#000" stroke-width="1.2"/>
+<polyline points="1060.0,246.0 1060.0,313.0 1065.0,313.0 1065.0,380.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="1055.0" y1="246.0" x2="1065.0" y2="246.0" stroke="#000" stroke-width="1.3"/>
+<line x1="1059.0" y1="370.0" x2="1065.0" y2="380" stroke="#000" stroke-width="1.2"/>
+<line x1="1065.0" y1="370.0" x2="1065.0" y2="380" stroke="#000" stroke-width="1.2"/>
+<line x1="1071.0" y1="370.0" x2="1065.0" y2="380" stroke="#000" stroke-width="1.2"/>
+<rect x="40" y="90" width="170" height="60" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="40" y="90" width="170" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="125.0" y="108" text-anchor="middle">Users</text>
+<text class="t pk" x="48" y="132" style=" text-decoration:underline;">PK  UserID</text>
+<text class="t at" x="48" y="148" style="">FullName</text>
+<rect x="40" y="250" width="170" height="60" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="40" y="250" width="170" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="125.0" y="268" text-anchor="middle">Clubs</text>
+<text class="t pk" x="48" y="292" style=" text-decoration:underline;">PK  ClubID</text>
+<text class="t at" x="48" y="308" style="">ClubName</text>
+<rect x="300" y="90" width="230" height="172" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="300" y="90" width="230" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="415.0" y="108" text-anchor="middle">Events</text>
+<text class="t pk" x="308" y="132" style=" text-decoration:underline;">PK  EventID</text>
+<text class="t at" x="308" y="148" style="">FK  ClubID</text>
+<text class="t at" x="308" y="164" style="">FK  CreatedBy</text>
+<text class="t at" x="308" y="180" style="">FK  ProposedBy</text>
+<text class="t at" x="308" y="196" style="">EventName</text>
+<text class="t at" x="308" y="212" style="">Status</text>
+<text class="t at" x="308" y="228" style="">Visibility</text>
+<text class="t at" x="308" y="244" style="">InviteCode</text>
+<text class="t at" x="308" y="260" style="">IsDisabled</text>
+<rect x="620" y="90" width="230" height="124" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="620" y="90" width="230" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="735.0" y="108" text-anchor="middle">EventMembers</text>
+<text class="t pk" x="628" y="132" style=" text-decoration:underline;">PK  EventMemberID</text>
+<text class="t at" x="628" y="148" style="">FK  EventID</text>
+<text class="t at" x="628" y="164" style="">FK  UserID</text>
+<text class="t at" x="628" y="180" style="">RoleInEvent</text>
+<text class="t at" x="628" y="196" style="">InviteStatus</text>
+<text class="t at" x="628" y="212" style="">IsActive</text>
+<rect x="300" y="380" width="240" height="124" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="300" y="380" width="240" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="420.0" y="398" text-anchor="middle">EventInvitations</text>
+<text class="t pk" x="308" y="422" style=" text-decoration:underline;">PK  InvitationID</text>
+<text class="t at" x="308" y="438" style="">FK  EventID</text>
+<text class="t at" x="308" y="454" style="">Email</text>
+<text class="t at" x="308" y="470" style="">FK  InvitedUserID</text>
+<text class="t at" x="308" y="486" style="">InviteRole</text>
+<text class="t at" x="308" y="502" style="">Status</text>
+<rect x="620" y="380" width="230" height="108" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="620" y="380" width="230" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="735.0" y="398" text-anchor="middle">EventNotes</text>
+<text class="t pk" x="628" y="422" style=" text-decoration:underline;">PK  NoteID</text>
+<text class="t at" x="628" y="438" style="">FK  EventID</text>
+<text class="t at" x="628" y="454" style="">FK  UserID</text>
+<text class="t at" x="628" y="470" style="">NoteText</text>
+<text class="t at" x="628" y="486" style="">IsPinned</text>
+<rect x="940" y="90" width="240" height="156" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="940" y="90" width="240" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="1060.0" y="108" text-anchor="middle">Meetings</text>
+<text class="t pk" x="948" y="132" style=" text-decoration:underline;">PK  MeetingID</text>
+<text class="t at" x="948" y="148" style="">FK  EventID</text>
+<text class="t at" x="948" y="164" style="">FK  CreatedBy</text>
+<text class="t at" x="948" y="180" style="">ScheduledDate</text>
+<text class="t at" x="948" y="196" style="">Duration</text>
+<text class="t at" x="948" y="212" style="">ZoomMeetingId</text>
+<text class="t at" x="948" y="228" style="">ZoomJoinUrl</text>
+<text class="t at" x="948" y="244" style="">Status</text>
+<rect x="940" y="380" width="250" height="108" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="940" y="380" width="250" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="1065.0" y="398" text-anchor="middle">MeetingParticipants</text>
+<text class="t pk" x="948" y="422" style=" text-decoration:underline;">PK  ParticipantID</text>
+<text class="t at" x="948" y="438" style="">FK  MeetingID</text>
+<text class="t at" x="948" y="454" style="">FK  UserID</text>
+<text class="t at" x="948" y="470" style="">Role</text>
+<text class="t at" x="948" y="486" style="">AttendanceStatus</text>
+<rect x="1240" y="90" width="220" height="92" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="1240" y="90" width="220" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="1350.0" y="108" text-anchor="middle">Notifications</text>
+<text class="t pk" x="1248" y="132" style=" text-decoration:underline;">PK  NotificationID</text>
+<text class="t at" x="1248" y="148" style="">FK  UserID</text>
+<text class="t at" x="1248" y="164" style="">RelatedType</text>
+<text class="t at" x="1248" y="180" style="">RelatedID</text>
+</svg>

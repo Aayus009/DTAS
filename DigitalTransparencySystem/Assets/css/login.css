@@ -1,0 +1,65 @@
+body {
+}
+/* ============================================
+   Login Page Specific Styles
+   DTAS - Digital Transparency and Accountability System
+   ============================================ */
+
+/* Page background override for login */
+body {
+    background: linear-gradient(180deg, rgb(var(--dt-surface-rgb)) 0%, rgb(var(--dt-surface-container-rgb)) 100%);
+    min-height: 100vh;
+}
+
+/* Glass morphism card */
+.glass-card {
+    background: rgba(var(--dt-surface-container-lowest-rgb) / 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(var(--dt-primary-rgb) / 0.08);
+    box-shadow: 0 10px 40px -10px rgba(0, 17, 66, 0.08);
+}
+
+/* CORRECT - numeric values, no quotes */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+
+/* Button press micro-interaction */
+.btn-hover-effect:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* Visual accent blobs */
+.accent-blob-top {
+    position: fixed;
+    top: -10%;
+    right: -10%;
+    width: 40vw;
+    height: 40vw;
+    background: rgba(var(--dt-primary-rgb) / 0.06);
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.accent-blob-bottom {
+    position: fixed;
+    bottom: -5%;
+    left: -5%;
+    width: 30vw;
+    height: 30vw;
+    background: rgba(var(--dt-secondary-rgb) / 0.08);
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Input focus icon color transition */
+.input-icon-focus {
+    transition: color 0.2s ease;
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="996" height="1212" viewBox="0 0 996 1212">
+<style>.t{font-family:'Times New Roman',Times,serif;fill:#000}.title{font-size:20px;font-weight:bold}.sub{font-size:12px}.lane{font-size:13px;font-weight:bold}.lab{font-size:12px}.el{font-size:11px}</style>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#000"/></marker></defs>
+<rect width="996" height="1212" fill="#fff"/>
+<text class="t title" x="498.0" y="32" text-anchor="middle">Figure AD-1. Register, verify email, and verify identity</text>
+<text class="t sub" x="498.0" y="54" text-anchor="middle">Campus modules stay locked until email and institutional ID are approved.</text>
+<rect x="48" y="72" width="300" height="1124" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="48" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="198.0" y="91" text-anchor="middle">User</text>
+<rect x="348" y="72" width="300" height="1124" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="348" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="498.0" y="91" text-anchor="middle">System</text>
+<rect x="648" y="72" width="300" height="1124" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="648" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="798.0" y="91" text-anchor="middle">System Admin</text>
+<polyline points="198.0,190.0 198.0,243.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="198.0,293.0 198.0,326.5 391.0,326.5 391.0,360.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,385.0 498.0,418.5 272.0,418.5 272.0,452.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="198.0,489.0 198.0,519.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="208.0" y="508.0">Yes</text>
+<polyline points="272.0,452.0 627.0,452.0 627.0,385.0 498.0,385.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="449.5" y="442.0">No</text>
+<polyline points="198.0,569.0 198.0,602.5 391.0,602.5 391.0,636.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,661.0 498.0,694.5 691.0,694.5 691.0,728.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="798.0,753.0 798.0,783.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="724.0,820.0 724.0,866.0 605.0,866.0 605.0,912.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="734.0" y="847.0">Yes</text>
+<polyline points="724.0,820.0 724.0,866.0 305.0,866.0 305.0,912.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="734.0" y="847.0">No</text>
+<polyline points="498.0,937.0 498.0,990.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="198.0,937.0 198.0,990.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<circle cx="198.0" cy="176.0" r="12" fill="#000"/>
+<rect x="91.0" y="243.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="268.0" text-anchor="middle">Register or sign in</text>
+<rect x="391.0" y="335.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="360.0" text-anchor="middle">Send email OTP</text>
+<polygon points="198.0,415.0 272.0,452.0 198.0,489.0 124.0,452.0" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="445.0" text-anchor="middle">Email</text>
+<text class="t lab" x="198.0" y="459.0" text-anchor="middle">verified?</text>
+<rect x="91.0" y="519.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="544.0" text-anchor="middle">Upload institutional ID</text>
+<rect x="391.0" y="611.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="636.0" text-anchor="middle">Place document in identity queue</text>
+<rect x="691.0" y="703.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="798.0" y="728.0" text-anchor="middle">Review identity document</text>
+<polygon points="798.0,783.0 872.0,820.0 798.0,857.0 724.0,820.0" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="798.0" y="820.0" text-anchor="middle">Approved?</text>
+<rect x="391.0" y="887.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="912.0" text-anchor="middle">Allow campus modules</text>
+<rect x="91.0" y="887.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="912.0" text-anchor="middle">Keep account gated / ask again</text>
+<circle cx="498.0" cy="1004.0" r="13" fill="#fff" stroke="#000" stroke-width="2"/>
+<circle cx="498.0" cy="1004.0" r="7" fill="#000"/>
+<circle cx="198.0" cy="1004.0" r="13" fill="#fff" stroke="#000" stroke-width="2"/>
+<circle cx="198.0" cy="1004.0" r="7" fill="#000"/>
+</svg>

@@ -1,0 +1,94 @@
+﻿/* ============================================
+   EDUTRANSPARENCY - ABOUT PAGE STYLES
+   ============================================ */
+
+/* --- Glass Card Effect --- */
+.glass-card {
+    background: rgba(var(--dt-surface-container-lowest-rgb) / 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(var(--dt-primary-rgb) / 0.08);
+}
+
+/* --- Grayscale Hover Effect --- */
+.grayscale-hover {
+    filter: grayscale(100%);
+    transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+    .grayscale-hover:hover {
+        filter: grayscale(0%);
+        transform: scale(1.02);
+    }
+
+/* --- Pill Border for Mission Section --- */
+.pill-border {
+    border-right: 1px solid var(--dt-outline-variant);
+}
+
+@media (max-width: 768px) {
+    .pill-border {
+        border-right: none;
+        border-bottom: 1px solid var(--dt-outline-variant);
+    }
+}
+
+/* --- Fade In Animation --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* --- Section Entrance Animation --- */
+.section-animate {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: all 0.7s ease-out;
+}
+
+    .section-animate.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+/* --- Leader Card Hover --- */
+.leader-card {
+    transition: all 0.3s ease;
+}
+
+    .leader-card:hover {
+        transform: translateY(-4px);
+    }
+
+/* --- CTA Section Glow --- */
+.cta-glow {
+    position: relative;
+}
+
+    .cta-glow::before {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(135deg, rgba(185, 196, 255, 0.2), rgba(119, 142, 222, 0.1));
+        border-radius: inherit;
+        z-index: -1;
+        filter: blur(20px);
+    }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .grayscale-hover {
+        filter: grayscale(0%);
+    }
+}

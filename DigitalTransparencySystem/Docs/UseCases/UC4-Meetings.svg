@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820">
+<style>
+  .t { font-family: 'Times New Roman', Times, serif; fill: #000; }
+  .title { font-size: 22px; font-weight: bold; }
+  .sub { font-size: 13px; }
+  .sys { font-size: 14px; font-weight: bold; }
+  .uc { font-size: 12px; }
+  .act { font-size: 13px; font-weight: bold; }
+  .rel { font-size: 11px; font-style: italic; }
+  .note { font-size: 11px; }
+</style>
+<rect x="0" y="0" width="1400" height="820" fill="#fff"/>
+<text class="t title" x="700.0" y="36" text-anchor="middle">Figure UC-4. Meetings and Zoom rooms</text>
+<text class="t sub" x="700.0" y="58" text-anchor="middle">A meeting is hosted for an event. DTAS creates the Zoom room and closes it when duration ends.</text>
+<rect x="300" y="90" width="800" height="660" fill="#fff" stroke="#000" stroke-width="1.8"/>
+<text class="t sys" x="700.0" y="112" text-anchor="middle">DTAS Meetings</text>
+<circle cx="110" cy="260" r="10" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="270" x2="110" y2="298" stroke="#000" stroke-width="1.6"/>
+<line x1="94" y1="282" x2="126" y2="282" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="298" x2="96" y2="318" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="298" x2="124" y2="318" stroke="#000" stroke-width="1.6"/>
+<text class="t act" x="110" y="336" text-anchor="middle">Host</text>
+<circle cx="110" cy="540" r="10" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="550" x2="110" y2="578" stroke="#000" stroke-width="1.6"/>
+<line x1="94" y1="562" x2="126" y2="562" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="578" x2="96" y2="598" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="578" x2="124" y2="598" stroke="#000" stroke-width="1.6"/>
+<text class="t act" x="110" y="616" text-anchor="middle">Event member</text>
+<circle cx="1290" cy="400" r="10" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<line x1="1290" y1="410" x2="1290" y2="438" stroke="#000" stroke-width="1.6"/>
+<line x1="1274" y1="422" x2="1306" y2="422" stroke="#000" stroke-width="1.6"/>
+<line x1="1290" y1="438" x2="1276" y2="458" stroke="#000" stroke-width="1.6"/>
+<line x1="1290" y1="438" x2="1304" y2="458" stroke="#000" stroke-width="1.6"/>
+<text class="t act" x="1290" y="476" text-anchor="middle">Zoom API</text>
+<ellipse cx="520" cy="170" rx="145" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="520" y="163" text-anchor="middle">Schedule meeting</text>
+<text class="t uc" x="520" y="177" text-anchor="middle">for an event</text>
+<ellipse cx="520" cy="300" rx="145" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="520" y="300" text-anchor="middle">Start as host</text>
+<ellipse cx="520" cy="410" rx="145" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="520" y="410" text-anchor="middle">Write minutes</text>
+<ellipse cx="520" cy="530" rx="145" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="520" y="530" text-anchor="middle">Resend join link</text>
+<ellipse cx="800" cy="170" rx="145" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="800" y="170" text-anchor="middle">Create Zoom room</text>
+<ellipse cx="800" cy="300" rx="145" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="800" y="293" text-anchor="middle">Send join link to</text>
+<text class="t uc" x="800" y="307" text-anchor="middle">event members</text>
+<ellipse cx="800" cy="450" rx="145" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="800" y="450" text-anchor="middle">Join Zoom room</text>
+<ellipse cx="800" cy="580" rx="145" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="800" y="573" text-anchor="middle">Close room after</text>
+<text class="t uc" x="800" y="587" text-anchor="middle">scheduled duration</text>
+<line x1="128" y1="282" x2="375" y2="170" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="282" x2="375" y2="300" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="282" x2="375" y2="410" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="282" x2="375" y2="530" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="562" x2="655" y2="450" stroke="#000" stroke-width="1.15"/>
+<line x1="1272" y1="422" x2="945" y2="170" stroke="#000" stroke-width="1.15"/>
+<line x1="1272" y1="422" x2="945" y2="580" stroke="#000" stroke-width="1.15"/>
+<line x1="665" y1="170" x2="655" y2="170" stroke="#000" stroke-width="1.15" stroke-dasharray="6 4"/>
+<text class="t rel" x="660.0" y="162.0" text-anchor="middle">&lt;&lt;include&gt;&gt;</text>
+<line x1="665" y1="185" x2="655" y2="285" stroke="#000" stroke-width="1.15" stroke-dasharray="6 4"/>
+<text class="t rel" x="660.0" y="227.0" text-anchor="middle">&lt;&lt;include&gt;&gt;</text>
+<line x1="945" y1="580" x2="945" y2="470" stroke="#000" stroke-width="1.15" stroke-dasharray="6 4"/>
+<text class="t rel" x="945.0" y="517.0" text-anchor="middle">&lt;&lt;include&gt;&gt;</text>
+<rect x="40" y="700" width="340" height="80" fill="#fff" stroke="#000" stroke-width="1"/>
+<text class="t note" x="48" y="718">Only the host writes minutes.</text>
+<text class="t note" x="48" y="732">When start time + duration ends,</text>
+<text class="t note" x="48" y="746">Start and Join are removed and the</text>
+<text class="t note" x="48" y="760">Zoom room is ended and deleted.</text>
+</svg>

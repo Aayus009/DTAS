@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>DTAS Entity Relationship Diagrams (black and white)</title>
+  <style>
+    body { font-family: "Times New Roman", Times, serif; color: #000; background: #fff; margin: 24px; }
+    h1 { font-size: 22px; }
+    p, li { font-size: 13px; line-height: 1.45; }
+    figure { page-break-inside: avoid; margin: 0 0 28px; }
+    img { width: 100%; max-width: 1200px; border: 1px solid #000; }
+    figcaption { font-size: 12px; margin-top: 6px; }
+    @media print { body { margin: 12mm; } a { color: #000; text-decoration: none; } }
+  </style>
+</head>
+<body>
+  <h1>DTAS entity relationship diagrams</h1>
+  <p>Black-and-white crow's-foot ERDs from the live DigitalTransparencyDB schema. PNG, SVG, and draw.io files are in this folder.</p>
+  <ul>
+    <li>Faculty and staff create events. Students propose events. System Admin does not create events or clubs.</li>
+    <li>Public club and event join is a request (InviteStatus). An invite code joins immediately.</li>
+    <li>Meetings store ZoomMeetingId and join URL. The room is cleared when status becomes Completed.</li>
+    <li>ContributionScore is computed by sp_GetMemberContributionReport. It is not typed in.</li>
+  </ul>
+<figure><img src='ERD1-Overview.svg' alt='Figure ERD-1. Logical data model overview. Live DigitalTransparencyDB.'/><figcaption>Figure ERD-1. Logical data model overview. Live DigitalTransparencyDB.</figcaption></figure>
+<figure><img src='ERD2-Identity.svg' alt='Figure ERD-2. Users, roles, email OTP, and institutional ID.'/><figcaption>Figure ERD-2. Users, roles, email OTP, and institutional ID.</figcaption></figure>
+<figure><img src='ERD3-EventsMeetings.svg' alt='Figure ERD-3. Campus events, members, and Zoom meetings.'/><figcaption>Figure ERD-3. Campus events, members, and Zoom meetings.</figcaption></figure>
+<figure><img src='ERD4-ClubsConnect.svg' alt='Figure ERD-4. Clubs and Connect groups.'/><figcaption>Figure ERD-4. Clubs and Connect groups.</figcaption></figure>
+<figure><img src='ERD5-Assignments.svg' alt='Figure ERD-5. Faculty assignments and computed contribution.'/><figcaption>Figure ERD-5. Faculty assignments and computed contribution.</figcaption></figure>
+<figure><img src='ERD6-WorkGovernance.svg' alt='Figure ERD-6. Event tasks, decisions, and polls.'/><figcaption>Figure ERD-6. Event tasks, decisions, and polls.</figcaption></figure>
+<figure><img src='ERD7-Moderation.svg' alt='Figure ERD-7. Moderation, audit, feedback, and notifications.'/><figcaption>Figure ERD-7. Moderation, audit, feedback, and notifications.</figcaption></figure>
+</body></html>

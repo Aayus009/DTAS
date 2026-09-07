@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="820" viewBox="0 0 1500 820">
+<style>.t{font-family:'Times New Roman',Times,serif;fill:#000}.title{font-size:20px;font-weight:bold}.sub{font-size:12px}.en{font-size:13px;font-weight:bold}.at{font-size:11px}.pk{font-size:11px;font-weight:bold}.nt{font-size:11px}</style>
+<rect width="1500" height="820" fill="#fff"/>
+<text class="t title" x="750.0" y="28" text-anchor="middle">Figure ERD-4. Clubs and Connect</text>
+<text class="t sub" x="750.0" y="50" text-anchor="middle">Admin cannot create clubs. Public join is a request. A club or event may have a linked Connect group.</text>
+<polyline points="210.0,230.0 245.0,230.0 245.0,158.0 280.0,158.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="210.0" y1="235.0" x2="210.0" y2="225.0" stroke="#000" stroke-width="1.3"/>
+<line x1="270.0" y1="164.0" x2="280" y2="158.0" stroke="#000" stroke-width="1.2"/>
+<line x1="270.0" y1="158.0" x2="280" y2="158.0" stroke="#000" stroke-width="1.2"/>
+<line x1="270.0" y1="152.0" x2="280" y2="158.0" stroke="#000" stroke-width="1.2"/>
+<polyline points="395.0,236.0 395.0,288.0 395.0,288.0 395.0,340.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="390.0" y1="236.0" x2="400.0" y2="236.0" stroke="#000" stroke-width="1.3"/>
+<line x1="389.0" y1="330.0" x2="395.0" y2="340" stroke="#000" stroke-width="1.2"/>
+<line x1="395.0" y1="330.0" x2="395.0" y2="340" stroke="#000" stroke-width="1.2"/>
+<line x1="401.0" y1="330.0" x2="395.0" y2="340" stroke="#000" stroke-width="1.2"/>
+<polyline points="210.0,230.0 245.0,230.0 245.0,402.0 280.0,402.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="210.0" y1="235.0" x2="210.0" y2="225.0" stroke="#000" stroke-width="1.3"/>
+<line x1="270.0" y1="408.0" x2="280" y2="402.0" stroke="#000" stroke-width="1.2"/>
+<line x1="270.0" y1="402.0" x2="280" y2="402.0" stroke="#000" stroke-width="1.2"/>
+<line x1="270.0" y1="396.0" x2="280" y2="402.0" stroke="#000" stroke-width="1.2"/>
+<polyline points="510.0,158.0 545.0,158.0 545.0,134.0 580.0,134.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="510.0" y1="163.0" x2="510.0" y2="153.0" stroke="#000" stroke-width="1.3"/>
+<line x1="570.0" y1="140.0" x2="580" y2="134.0" stroke="#000" stroke-width="1.2"/>
+<line x1="570.0" y1="134.0" x2="580" y2="134.0" stroke="#000" stroke-width="1.2"/>
+<line x1="570.0" y1="128.0" x2="580" y2="134.0" stroke="#000" stroke-width="1.2"/>
+<polyline points="510.0,158.0 545.0,158.0 545.0,354.0 580.0,354.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="510.0" y1="163.0" x2="510.0" y2="153.0" stroke="#000" stroke-width="1.3"/>
+<line x1="570.0" y1="360.0" x2="580" y2="354.0" stroke="#000" stroke-width="1.2"/>
+<line x1="570.0" y1="354.0" x2="580" y2="354.0" stroke="#000" stroke-width="1.2"/>
+<line x1="570.0" y1="348.0" x2="580" y2="354.0" stroke="#000" stroke-width="1.2"/>
+<polyline points="510.0,158.0 545.0,158.0 545.0,574.0 580.0,574.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="510.0" y1="163.0" x2="510.0" y2="153.0" stroke="#000" stroke-width="1.3"/>
+<line x1="570.0" y1="580.0" x2="580" y2="574.0" stroke="#000" stroke-width="1.2"/>
+<line x1="570.0" y1="574.0" x2="580" y2="574.0" stroke="#000" stroke-width="1.2"/>
+<line x1="570.0" y1="568.0" x2="580" y2="574.0" stroke="#000" stroke-width="1.2"/>
+<polyline points="510.0,158.0 695.0,158.0 695.0,142.0 880.0,142.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="510.0" y1="163.0" x2="510.0" y2="153.0" stroke="#000" stroke-width="1.3"/>
+<line x1="870.0" y1="148.0" x2="880" y2="142.0" stroke="#000" stroke-width="1.2"/>
+<line x1="870.0" y1="142.0" x2="880" y2="142.0" stroke="#000" stroke-width="1.2"/>
+<line x1="870.0" y1="136.0" x2="880" y2="142.0" stroke="#000" stroke-width="1.2"/>
+<polyline points="1200.0,358.0 1160.0,358.0 1160.0,142.0 1120.0,142.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="1200.0" y1="353.0" x2="1200.0" y2="363.0" stroke="#000" stroke-width="1.3"/>
+<line x1="1130.0" y1="136.0" x2="1120" y2="142.0" stroke="#000" stroke-width="1.2"/>
+<line x1="1130.0" y1="142.0" x2="1120" y2="142.0" stroke="#000" stroke-width="1.2"/>
+<line x1="1130.0" y1="148.0" x2="1120" y2="142.0" stroke="#000" stroke-width="1.2"/>
+<polyline points="1000.0,204.0 1000.0,262.0 1000.0,262.0 1000.0,320.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="995.0" y1="204.0" x2="1005.0" y2="204.0" stroke="#000" stroke-width="1.3"/>
+<line x1="994.0" y1="310.0" x2="1000.0" y2="320" stroke="#000" stroke-width="1.2"/>
+<line x1="1000.0" y1="310.0" x2="1000.0" y2="320" stroke="#000" stroke-width="1.2"/>
+<line x1="1006.0" y1="310.0" x2="1000.0" y2="320" stroke="#000" stroke-width="1.2"/>
+<polyline points="1120.0,142.0 1160.0,142.0 1160.0,134.0 1200.0,134.0" fill="none" stroke="#000" stroke-width="1.15"/>
+<line x1="1120.0" y1="147.0" x2="1120.0" y2="137.0" stroke="#000" stroke-width="1.3"/>
+<line x1="1190.0" y1="140.0" x2="1200" y2="134.0" stroke="#000" stroke-width="1.2"/>
+<line x1="1190.0" y1="134.0" x2="1200" y2="134.0" stroke="#000" stroke-width="1.2"/>
+<line x1="1190.0" y1="128.0" x2="1200" y2="134.0" stroke="#000" stroke-width="1.2"/>
+<rect x="40" y="200" width="170" height="60" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="40" y="200" width="170" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="125.0" y="218" text-anchor="middle">Users</text>
+<text class="t pk" x="48" y="242" style=" text-decoration:underline;">PK  UserID</text>
+<text class="t at" x="48" y="258" style="">FullName</text>
+<rect x="280" y="80" width="230" height="156" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="280" y="80" width="230" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="395.0" y="98" text-anchor="middle">Clubs</text>
+<text class="t pk" x="288" y="122" style=" text-decoration:underline;">PK  ClubID</text>
+<text class="t at" x="288" y="138" style="">FK  LeadUserID</text>
+<text class="t at" x="288" y="154" style="">FK  CreatedBy</text>
+<text class="t at" x="288" y="170" style="">ClubName</text>
+<text class="t at" x="288" y="186" style="">IsPublic</text>
+<text class="t at" x="288" y="202" style="">InviteCode</text>
+<text class="t at" x="288" y="218" style="">IsRestricted</text>
+<text class="t at" x="288" y="234" style="">IsDeleted</text>
+<rect x="280" y="340" width="230" height="124" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="280" y="340" width="230" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="395.0" y="358" text-anchor="middle">ClubMembers</text>
+<text class="t pk" x="288" y="382" style=" text-decoration:underline;">PK  MembershipID</text>
+<text class="t at" x="288" y="398" style="">FK  ClubID</text>
+<text class="t at" x="288" y="414" style="">FK  UserID</text>
+<text class="t at" x="288" y="430" style="">Role</text>
+<text class="t at" x="288" y="446" style="">InviteStatus</text>
+<text class="t at" x="288" y="462" style="">IsActive</text>
+<rect x="580" y="80" width="230" height="108" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="580" y="80" width="230" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="695.0" y="98" text-anchor="middle">GroupInvitations</text>
+<text class="t pk" x="588" y="122" style=" text-decoration:underline;">PK  InvitationID</text>
+<text class="t at" x="588" y="138" style="">FK  ClubID</text>
+<text class="t at" x="588" y="154" style="">Email</text>
+<text class="t at" x="588" y="170" style="">FK  InvitedUserID</text>
+<text class="t at" x="588" y="186" style="">Status</text>
+<rect x="580" y="300" width="230" height="108" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="580" y="300" width="230" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="695.0" y="318" text-anchor="middle">GroupMessages</text>
+<text class="t pk" x="588" y="342" style=" text-decoration:underline;">PK  MessageID</text>
+<text class="t at" x="588" y="358" style="">FK  ClubID</text>
+<text class="t at" x="588" y="374" style="">FK  SenderID</text>
+<text class="t at" x="588" y="390" style="">MessageType</text>
+<text class="t at" x="588" y="406" style="">IsDeleted</text>
+<rect x="580" y="520" width="230" height="108" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="580" y="520" width="230" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="695.0" y="538" text-anchor="middle">GroupAnnouncements</text>
+<text class="t pk" x="588" y="562" style=" text-decoration:underline;">PK  AnnouncementID</text>
+<text class="t at" x="588" y="578" style="">FK  ClubID</text>
+<text class="t at" x="588" y="594" style="">FK  SenderID</text>
+<text class="t at" x="588" y="610" style="">Title</text>
+<text class="t at" x="588" y="626" style="">IsUrgent</text>
+<rect x="880" y="80" width="240" height="124" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="880" y="80" width="240" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="1000.0" y="98" text-anchor="middle">ConnectGroups</text>
+<text class="t pk" x="888" y="122" style=" text-decoration:underline;">PK  GroupID</text>
+<text class="t at" x="888" y="138" style="">FK  CreatedBy</text>
+<text class="t at" x="888" y="154" style="">FK  EventID</text>
+<text class="t at" x="888" y="170" style="">FK  ClubID</text>
+<text class="t at" x="888" y="186" style="">GroupName</text>
+<text class="t at" x="888" y="202" style="">InviteCode</text>
+<rect x="880" y="320" width="240" height="108" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="880" y="320" width="240" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="1000.0" y="338" text-anchor="middle">ConnectMembers</text>
+<text class="t pk" x="888" y="362" style=" text-decoration:underline;">PK  MemberID</text>
+<text class="t at" x="888" y="378" style="">FK  GroupID</text>
+<text class="t at" x="888" y="394" style="">FK  UserID</text>
+<text class="t at" x="888" y="410" style="">Role</text>
+<text class="t at" x="888" y="426" style="">IsArchived</text>
+<rect x="1200" y="80" width="240" height="108" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="1200" y="80" width="240" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="1320.0" y="98" text-anchor="middle">ConnectMessages</text>
+<text class="t pk" x="1208" y="122" style=" text-decoration:underline;">PK  MessageID</text>
+<text class="t at" x="1208" y="138" style="">FK  GroupID</text>
+<text class="t at" x="1208" y="154" style="">FK  SenderID</text>
+<text class="t at" x="1208" y="170" style="">MessageType</text>
+<text class="t at" x="1208" y="186" style="">Content</text>
+<rect x="1200" y="320" width="220" height="76" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="1200" y="320" width="220" height="26" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t en" x="1310.0" y="338" text-anchor="middle">Events</text>
+<text class="t pk" x="1208" y="362" style=" text-decoration:underline;">PK  EventID</text>
+<text class="t at" x="1208" y="378" style="">EventName</text>
+<text class="t at" x="1208" y="394" style="">FK  ClubID</text>
+</svg>

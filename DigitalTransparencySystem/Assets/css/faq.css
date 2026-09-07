@@ -1,0 +1,80 @@
+﻿/* ============================================
+   EDUTRANSPARENCY - FAQ PAGE STYLES
+   ============================================ */
+
+/* --- Material Symbols --- */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* --- FAQ Accordion Item Open State --- */
+.faq-accordion-item[open] {
+    background-color: rgb(var(--dt-secondary-container-rgb));
+    border-left: 4px solid rgb(var(--dt-primary-rgb));
+}
+
+/* --- Hide Default Details Marker --- */
+.faq-accordion-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-accordion-item summary::marker {
+    display: none;
+}
+
+/* --- Glass Header --- */
+.glass-header {
+    background: rgba(var(--dt-surface-rgb) / 0.9);
+    backdrop-filter: blur(12px);
+}
+
+/* --- Category Button Active State --- */
+.category-btn.active {
+    background-color: var(--dt-primary);
+    color: rgb(var(--dt-on-primary-rgb));
+}
+
+/* --- FAQ Search Focus --- */
+.faq-search:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(var(--dt-primary-fixed-dim-rgb));
+}
+
+/* --- Smooth Accordion Transition --- */
+.faq-accordion-item {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+    .faq-accordion-item:hover {
+        border-color: var(--dt-primary);
+    }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .faq-accordion-item summary {
+        padding: 1.25rem;
+    }
+
+    .faq-accordion-item[open] {
+        border-left-width: 3px;
+    }
+}
+
+/* --- Animation for Accordion Content --- */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.faq-accordion-item[open] > div {
+    animation: slideDown 0.3s ease-out;
+}

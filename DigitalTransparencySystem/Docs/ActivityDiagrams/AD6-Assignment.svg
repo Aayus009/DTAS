@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="996" height="1120" viewBox="0 0 996 1120">
+<style>.t{font-family:'Times New Roman',Times,serif;fill:#000}.title{font-size:20px;font-weight:bold}.sub{font-size:12px}.lane{font-size:13px;font-weight:bold}.lab{font-size:12px}.el{font-size:11px}</style>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#000"/></marker></defs>
+<rect width="996" height="1120" fill="#fff"/>
+<text class="t title" x="498.0" y="32" text-anchor="middle">Figure AD-6. Faculty assignment and computed contribution</text>
+<text class="t sub" x="498.0" y="54" text-anchor="middle">Contribution is calculated (completion, timeliness, activity, recency). It is not typed in.</text>
+<rect x="48" y="72" width="300" height="1032" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="48" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="198.0" y="91" text-anchor="middle">Faculty</text>
+<rect x="348" y="72" width="300" height="1032" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="348" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="498.0" y="91" text-anchor="middle">System</text>
+<rect x="648" y="72" width="300" height="1032" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="648" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="798.0" y="91" text-anchor="middle">Student</text>
+<polyline points="198.0,190.0 198.0,243.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="198.0,293.0 198.0,326.5 391.0,326.5 391.0,360.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,385.0 498.0,418.5 691.0,418.5 691.0,452.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="798.0,477.0 798.0,510.5 605.0,510.5 605.0,544.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,569.0 498.0,599.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,673.0 498.0,703.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="508.0" y="692.0">Yes</text>
+<polyline points="424.0,636.0 369.0,636.0 369.0,569.0 498.0,569.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="396.5" y="626.0">No</text>
+<polyline points="498.0,753.0 498.0,786.5 305.0,786.5 305.0,820.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,753.0 498.0,786.5 691.0,786.5 691.0,820.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="198.0,845.0 198.0,878.5 484.0,878.5 484.0,912.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="798.0,845.0 798.0,878.5 512.0,878.5 512.0,912.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<circle cx="198.0" cy="176.0" r="12" fill="#000"/>
+<rect x="91.0" y="243.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="268.0" text-anchor="middle">Create assignment and groups</text>
+<rect x="391.0" y="335.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="360.0" text-anchor="middle">Invite or place students in groups</text>
+<rect x="691.0" y="427.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="798.0" y="452.0" text-anchor="middle">Complete group tasks and submit</text>
+<rect x="391.0" y="519.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="544.0" text-anchor="middle">Record completion, dates, activity</text>
+<polygon points="498.0,599.0 572.0,636.0 498.0,673.0 424.0,636.0" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="629.0" text-anchor="middle">Deadline</text>
+<text class="t lab" x="498.0" y="643.0" text-anchor="middle">passed?</text>
+<rect x="391.0" y="703.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="728.0" text-anchor="middle">Run contribution formula</text>
+<rect x="91.0" y="795.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="820.0" text-anchor="middle">Open contribution report</text>
+<rect x="691.0" y="795.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="798.0" y="820.0" text-anchor="middle">View own contribution</text>
+<circle cx="498.0" cy="912.0" r="13" fill="#fff" stroke="#000" stroke-width="2"/>
+<circle cx="498.0" cy="912.0" r="7" fill="#000"/>
+</svg>

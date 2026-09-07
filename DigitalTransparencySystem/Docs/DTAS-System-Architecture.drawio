@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="dtas-arch" name="DTAS System Architecture">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="2050" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="c2" value="DTAS System Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=28;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200.0" y="16.0" width="1200.0" height="40.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c3" value="Digital Transparency and Accountability System. ASP.NET Web Forms 4.7.2, C#, Microsoft SQL Server." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="80.0" y="56.0" width="1440.0" height="28.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c4" value="1. Clients" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;fontStyle=1;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="40.0" y="118.0" width="1520.0" height="148.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c5" value="2. Presentation" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;fontStyle=1;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="40.0" y="300.0" width="1520.0" height="236.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c6" value="3. Access control" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;fontStyle=1;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="40.0" y="570.0" width="1520.0" height="126.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c7" value="4. Application services" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;fontStyle=1;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="40.0" y="730.0" width="1520.0" height="214.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c8" value="5. Data store" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;fontStyle=1;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="40.0" y="978.0" width="1520.0" height="168.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c9" value="6. External systems" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;fontStyle=1;align=left;verticalAlign=top;spacingLeft=12;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="40.0" y="1180.0" width="1520.0" height="120.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c10" value="&lt;b&gt;Guest&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="170.0" width="254.4" height="62.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c11" value="&lt;b&gt;Student&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="466.4" y="170.0" width="254.4" height="62.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c12" value="&lt;b&gt;Faculty&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="742.8" y="170.0" width="254.4" height="62.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c13" value="&lt;b&gt;Staff&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1019.2" y="170.0" width="254.4" height="62.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c14" value="&lt;b&gt;Admin&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1295.6" y="170.0" width="254.4" height="62.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c15" value="&lt;b&gt;IIS / IIS Express hosts ASP.NET Web Forms 4.7.2 and Site.Master&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="344.0" width="1360.0" height="44.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c16" value="Public site&lt;br&gt;Home, FAQ, sign-in popup" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="410.0" width="323.5" height="86.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c17" value="User portal&lt;br&gt;Dashboard, workspaces,&lt;br&gt;assignments, meetings" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="535.5" y="410.0" width="323.5" height="86.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c18" value="Admin portal&lt;br&gt;Users, identity review,&lt;br&gt;poll results" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="881.0" y="410.0" width="323.5" height="86.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c19" value="Transparency&lt;br&gt;Public gist of events,&lt;br&gt;decisions, progress" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1226.5" y="410.0" width="323.5" height="86.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c20" value="&lt;b&gt;AccessGuard&lt;/b&gt;&lt;br&gt;Session and page gate" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="612.0" width="438.7" height="58.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c21" value="&lt;b&gt;Identity check&lt;/b&gt;&lt;br&gt;ID required for modules" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="650.7" y="612.0" width="438.7" height="58.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c22" value="&lt;b&gt;RoleAccess&lt;/b&gt;&lt;br&gt;Admin, Faculty, Staff, Student" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1111.3" y="612.0" width="438.7" height="58.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c23" value="AuthService&lt;br&gt;Password, Google, OTP" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="774.0" width="323.5" height="66.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c24" value="EventService&lt;br&gt;Create and propose events" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="535.5" y="774.0" width="323.5" height="66.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c25" value="AssignmentService&lt;br&gt;Faculty assignments, groups" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="881.0" y="774.0" width="323.5" height="66.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c26" value="MeetingService&lt;br&gt;Zoom meetings, recordings" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1226.5" y="774.0" width="323.5" height="66.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c27" value="Task workspaces&lt;br&gt;Works, teams, updates" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="856.0" width="323.5" height="66.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c28" value="ConnectService&lt;br&gt;Group messaging" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="535.5" y="856.0" width="323.5" height="66.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c29" value="NotificationService&lt;br&gt;In-app notices" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="881.0" y="856.0" width="323.5" height="66.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c30" value="Identity / moderation&lt;br&gt;Verify, restrict, restore" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1226.5" y="856.0" width="323.5" height="66.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c31" value="&lt;b&gt;DigitalTransparencyDB on SQL Server Express (parameterized SqlClient)&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="1020.0" width="1360.0" height="50.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c32" value="Users, Roles" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="1086.0" width="254.4" height="40.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c33" value="Events, Meetings" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="466.4" y="1086.0" width="254.4" height="40.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c34" value="Decisions, Tasks" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="742.8" y="1086.0" width="254.4" height="40.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c35" value="Assignments, Polls" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1019.2" y="1086.0" width="254.4" height="40.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c36" value="Connect, Audit" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1295.6" y="1086.0" width="254.4" height="40.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c37" value="&lt;b&gt;Google OAuth&lt;/b&gt;&lt;br&gt;Sign-in code flow" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="1222.0" width="438.7" height="56.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c38" value="&lt;b&gt;Zoom API&lt;/b&gt;&lt;br&gt;Online meeting, recordings" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="650.7" y="1222.0" width="438.7" height="56.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c39" value="&lt;b&gt;Gmail SMTP&lt;/b&gt;&lt;br&gt;OTP and email notices" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fontSize=14;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1111.3" y="1222.0" width="438.7" height="56.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c40" value="Web browser" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="52.0" y="162.0" width="130.0" height="20.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c41" value="IIS host" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="52.0" y="340.0" width="130.0" height="20.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c42" value="Every page" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="52.0" y="610.0" width="130.0" height="20.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c43" value="Helpers" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="52.0" y="770.0" width="130.0" height="20.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c44" value="SQL Server" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="52.0" y="1018.0" width="130.0" height="20.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c45" value="Outbound" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="52.0" y="1220.0" width="130.0" height="20.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c46" value="Signed-out guest uses public pages. Signed-in roles use a portal." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="230.0" width="1360.0" height="22.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c47" value="Site.Master shows public chrome only when the user is not signed in." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="494.0" width="1360.0" height="22.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c48" value="Request path: Browser to IIS to Web Forms page to AccessGuard to a helper service to SQL Server." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="1324.0" width="1360.0" height="22.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c49" value="Outbound path: AuthService calls Google. MeetingService calls Zoom. Notification and OTP call SMTP." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="1352.0" width="1360.0" height="22.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c50" value="Governance flow: Event to Meeting to Decision to workspace Task to public Transparency gist." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="1380.0" width="1360.0" height="22.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c51" value="Academic assignments sit beside that path. System admin does not create assignments or events." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Times New Roman;fontColor=#000000;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="190.0" y="1408.0" width="1360.0" height="22.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="c52" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.4;fontFamily=Times New Roman;fontColor=#000000;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="870.0" y="232.0" as="sourcePoint"/>
+            <mxPoint x="870.0" y="344.0" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c53" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.4;fontFamily=Times New Roman;fontColor=#000000;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="870.0" y="388.0" as="sourcePoint"/>
+            <mxPoint x="870.0" y="410.0" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c54" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.4;fontFamily=Times New Roman;fontColor=#000000;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="870.0" y="524.0" as="sourcePoint"/>
+            <mxPoint x="870.0" y="612.0" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c55" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.4;fontFamily=Times New Roman;fontColor=#000000;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="870.0" y="670.0" as="sourcePoint"/>
+            <mxPoint x="870.0" y="774.0" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c56" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.4;fontFamily=Times New Roman;fontColor=#000000;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="870.0" y="944.0" as="sourcePoint"/>
+            <mxPoint x="870.0" y="1020.0" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

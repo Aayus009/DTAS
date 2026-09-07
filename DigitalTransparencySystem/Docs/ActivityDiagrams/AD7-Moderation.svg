@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="996" height="1100" viewBox="0 0 996 1100">
+<style>.t{font-family:'Times New Roman',Times,serif;fill:#000}.title{font-size:20px;font-weight:bold}.sub{font-size:12px}.lane{font-size:13px;font-weight:bold}.lab{font-size:12px}.el{font-size:11px}</style>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#000"/></marker></defs>
+<rect width="996" height="1100" fill="#fff"/>
+<text class="t title" x="498.0" y="32" text-anchor="middle">Figure AD-7. Flag content and admin moderation</text>
+<text class="t sub" x="498.0" y="54" text-anchor="middle">Users flag content. Admin reviews the queue. Admin cannot moderate another admin.</text>
+<rect x="48" y="72" width="300" height="1012" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="48" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="198.0" y="91" text-anchor="middle">Campus user</text>
+<rect x="348" y="72" width="300" height="1012" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="348" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="498.0" y="91" text-anchor="middle">System</text>
+<rect x="648" y="72" width="300" height="1012" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="648" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="798.0" y="91" text-anchor="middle">System Admin</text>
+<polyline points="198.0,190.0 198.0,243.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="198.0,293.0 198.0,326.5 391.0,326.5 391.0,360.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,385.0 498.0,418.5 691.0,418.5 691.0,452.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="798.0,477.0 798.0,507.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="724.0,544.0 724.0,590.0 605.0,590.0 605.0,636.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="734.0" y="571.0">Dismiss</text>
+<polyline points="798.0,581.0 798.0,611.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="808.0" y="600.0">Restrict</text>
+<polyline points="724.0,544.0 724.0,590.0 305.0,590.0 305.0,636.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="734.0" y="571.0">Suspend</text>
+<polyline points="498.0,661.0 498.0,703.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="798.0,661.0 798.0,694.5 605.0,694.5 605.0,728.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="198.0,661.0 198.0,694.5 391.0,694.5 391.0,728.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,753.0 498.0,806.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<circle cx="198.0" cy="176.0" r="12" fill="#000"/>
+<rect x="91.0" y="243.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="268.0" text-anchor="middle">Submit content flag</text>
+<rect x="391.0" y="335.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="360.0" text-anchor="middle">Store in content-report queue</text>
+<rect x="691.0" y="427.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="798.0" y="452.0" text-anchor="middle">Review flag</text>
+<polygon points="798.0,507.0 872.0,544.0 798.0,581.0 724.0,544.0" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="798.0" y="544.0" text-anchor="middle">Action?</text>
+<rect x="91.0" y="611.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="636.0" text-anchor="middle">Suspend or ban reported user</text>
+<rect x="391.0" y="611.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="636.0" text-anchor="middle">Dismiss flag</text>
+<rect x="691.0" y="611.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="798.0" y="636.0" text-anchor="middle">Restrict event, club, task, or decision</text>
+<rect x="391.0" y="703.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="728.0" text-anchor="middle">Write audit log</text>
+<circle cx="498.0" cy="820.0" r="13" fill="#fff" stroke="#000" stroke-width="2"/>
+<circle cx="498.0" cy="820.0" r="7" fill="#000"/>
+</svg>

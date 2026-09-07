@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1078" height="742" viewBox="0 0 1078 742">
+<style>.t{font-family:'Times New Roman',Times,serif;fill:#000}.title{font-size:20px;font-weight:bold}.sub{font-size:12px}.act{font-size:13px;font-weight:bold}.lab{font-size:12px}.fr{font-size:11px;font-style:italic}.kind{font-size:11px;font-weight:bold}</style>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#000"/></marker></defs>
+<rect width="1078" height="742" fill="#fff"/>
+<text class="t title" x="539.0" y="28" text-anchor="middle">Figure SD-3. Join a public campus event</text>
+<text class="t sub" x="539.0" y="50" text-anchor="middle">Public join is a request. Invite code joins immediately.</text>
+<rect x="80" y="108" width="168" height="42" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t act" x="164.0" y="134" text-anchor="middle">Campus user</text>
+<line x1="164.0" y1="150" x2="164.0" y2="718" stroke="#000" stroke-width="1" stroke-dasharray="5 4"/>
+<rect x="330" y="108" width="168" height="42" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t act" x="414.0" y="134" text-anchor="middle">EventService</text>
+<line x1="414.0" y1="150" x2="414.0" y2="718" stroke="#000" stroke-width="1" stroke-dasharray="5 4"/>
+<rect x="580" y="108" width="168" height="42" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t act" x="664.0" y="134" text-anchor="middle">SQL Server</text>
+<line x1="664.0" y1="150" x2="664.0" y2="718" stroke="#000" stroke-width="1" stroke-dasharray="5 4"/>
+<rect x="830" y="108" width="168" height="42" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t act" x="914.0" y="134" text-anchor="middle">Event Admin</text>
+<line x1="914.0" y1="150" x2="914.0" y2="718" stroke="#000" stroke-width="1" stroke-dasharray="5 4"/>
+<rect x="62" y="222" width="954" height="434" fill="none" stroke="#000" stroke-width="1.15"/>
+<polygon points="62,222 106,222 98,238 62,238" fill="#fff" stroke="#000" stroke-width="1.15"/>
+<text class="t kind" x="68" y="235">alt</text>
+<text class="t fr" x="118" y="236">[Has invite code]</text>
+<line x1="62" y1="376" x2="1016" y2="376" stroke="#000" stroke-width="1" stroke-dasharray="6 4"/>
+<text class="t fr" x="118" y="390">[No code: request]</text>
+<line x1="164.0" y1="186" x2="414.0" y2="186" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="289.0" y="179" text-anchor="middle">Open public event</text>
+<line x1="164.0" y1="244" x2="414.0" y2="244" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="289.0" y="237" text-anchor="middle">JoinByCode(code)</text>
+<line x1="414.0" y1="292" x2="664.0" y2="292" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="539.0" y="285" text-anchor="middle">Add member InviteStatus = Accepted</text>
+<line x1="414.0" y1="340" x2="164.0" y2="340" stroke="#000" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+<text class="t lab" x="289.0" y="333" text-anchor="middle">Joined</text>
+<line x1="164.0" y1="398" x2="414.0" y2="398" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="289.0" y="391" text-anchor="middle">JoinPublic(eventId)</text>
+<line x1="414.0" y1="446" x2="664.0" y2="446" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="539.0" y="439" text-anchor="middle">InviteStatus = Requested</text>
+<line x1="414.0" y1="494" x2="914.0" y2="494" stroke="#000" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+<text class="t lab" x="664.0" y="487" text-anchor="middle">Join request</text>
+<line x1="914.0" y1="542" x2="414.0" y2="542" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="664.0" y="535" text-anchor="middle">AcceptJoinRequest() or DeclineJoinRequest()</text>
+<line x1="414.0" y1="590" x2="664.0" y2="590" stroke="#000" stroke-width="1.2" marker-end="url(#arr)"/>
+<text class="t lab" x="539.0" y="583" text-anchor="middle">Set Accepted or Declined</text>
+<line x1="414.0" y1="638" x2="164.0" y2="638" stroke="#000" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+<text class="t lab" x="289.0" y="631" text-anchor="middle">Notify decision</text>
+</svg>

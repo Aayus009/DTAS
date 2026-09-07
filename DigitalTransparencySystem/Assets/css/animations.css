@@ -1,0 +1,180 @@
+/* ============================================
+   EDUTRANSPARENCY - ANIMATIONS & MOTION
+   ============================================ */
+
+/* --- Page entrance fade --- */
+@keyframes dtPageFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+body {
+    animation: dtPageFade 0.55s ease both;
+}
+
+/* --- Navbar / topbar entrance --- */
+@keyframes dtNavIn {
+    from { opacity: 0; transform: translateY(-14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+nav.sticky,
+.dashboard-topbar {
+    animation: dtNavIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* --- Brand / logo --- */
+.brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.brand-icon,
+.brand-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    object-fit: contain;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: dtBrandPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.brand-link:hover .brand-icon,
+.brand-link:hover .brand-logo {
+    transform: scale(1.08);
+}
+
+.brand-icon-inline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: -4px;
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+    border-radius: 6px;
+    font-size: 16px;
+    line-height: 1;
+    color: var(--dt-on-primary);
+    background: var(--dt-primary);
+}
+
+.brand-gradient {
+    background: linear-gradient(90deg, rgb(var(--dt-primary-rgb)), rgb(var(--dt-tertiary-rgb)) 50%, rgb(var(--dt-primary-rgb)));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: dtGradientFlow 8s linear infinite;
+}
+
+.dtas-wordmark {
+    display: inline-block;
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 1.55rem;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    color: #0e2238;
+    white-space: nowrap;
+}
+
+.brand-link:hover .dtas-wordmark {
+    transform: none;
+    opacity: 0.82;
+}
+
+.dtas-wordmark-light {
+    color: #f3ead8;
+}
+
+.dtas-wordmark-sm {
+    font-size: 1.2rem;
+    letter-spacing: 0.03em;
+}
+
+.dark .dtas-wordmark {
+    color: #f3ead8;
+}
+
+@keyframes dtBrandPop {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes dtGradientFlow {
+    to { background-position: 200% center; }
+}
+
+/* --- Scroll reveal (classes are added by main.js) --- */
+.reveal-up,
+.reveal-left,
+.reveal-right,
+.reveal-scale {
+    opacity: 0;
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+}
+
+.reveal-up { transform: translateY(26px); }
+.reveal-left { transform: translateX(-30px); }
+.reveal-right { transform: translateX(30px); }
+.reveal-scale { transform: scale(0.94); }
+
+.reveal-up.revealed,
+.reveal-left.revealed,
+.reveal-right.revealed,
+.reveal-scale.revealed {
+    opacity: 1;
+    transform: none;
+}
+
+/* --- Button shine sweep --- */
+.dt-shine {
+    position: relative;
+    overflow: hidden;
+}
+
+.dt-shine::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: skewX(-25deg);
+    transition: left 0.6s ease;
+}
+
+.dt-shine:hover::after {
+    left: 125%;
+}
+
+/* --- Reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+    body,
+    nav.sticky,
+    .dashboard-topbar,
+    .reveal-up,
+    .reveal-left,
+    .reveal-right,
+    .reveal-scale,
+    .brand-icon,
+    .brand-gradient,
+    .dt-shine::after {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

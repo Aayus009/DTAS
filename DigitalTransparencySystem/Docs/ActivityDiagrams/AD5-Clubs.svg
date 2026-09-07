@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="996" height="1488" viewBox="0 0 996 1488">
+<style>.t{font-family:'Times New Roman',Times,serif;fill:#000}.title{font-size:20px;font-weight:bold}.sub{font-size:12px}.lane{font-size:13px;font-weight:bold}.lab{font-size:12px}.el{font-size:11px}</style>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#000"/></marker></defs>
+<rect width="996" height="1488" fill="#fff"/>
+<text class="t title" x="498.0" y="32" text-anchor="middle">Figure AD-5. Create a club or request to join</text>
+<text class="t sub" x="498.0" y="54" text-anchor="middle">Admin cannot create clubs. Public join is a request. Invite code joins immediately.</text>
+<rect x="48" y="72" width="300" height="1400" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="48" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="198.0" y="91" text-anchor="middle">Campus user</text>
+<rect x="348" y="72" width="300" height="1400" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="348" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="498.0" y="91" text-anchor="middle">System</text>
+<rect x="648" y="72" width="300" height="1400" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="648" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="798.0" y="91" text-anchor="middle">Club lead</text>
+<polyline points="198.0,190.0 198.0,231.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="198.0,305.0 198.0,335.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="208.0" y="324.0">Create</text>
+<polyline points="124.0,268.0 62.0,268.0 62.0,507.0 198.0,507.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="93.0" y="258.0">Join</text>
+<polyline points="198.0,385.0 198.0,418.5 391.0,418.5 391.0,452.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,477.0 498.0,530.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="198.0,581.0 198.0,611.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="208.0" y="600.0">Yes</text>
+<polyline points="124.0,544.0 62.0,544.0 62.0,795.0 198.0,795.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="93.0" y="534.0">No</text>
+<polyline points="198.0,661.0 198.0,694.5 391.0,694.5 391.0,728.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="198.0,845.0 198.0,878.5 391.0,878.5 391.0,912.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,753.0 362.0,753.0 362.0,1266.0 498.0,1266.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,937.0 498.0,970.5 691.0,970.5 691.0,1004.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="798.0,1029.0 798.0,1059.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="724.0,1096.0 724.0,1142.0 605.0,1142.0 605.0,1188.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="734.0" y="1123.0">Yes</text>
+<polyline points="724.0,1096.0 724.0,1188.0 512.0,1188.0 512.0,1280.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="734.0" y="1146.0">No</text>
+<polyline points="498.0,1213.0 498.0,1266.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<circle cx="198.0" cy="176.0" r="12" fill="#000"/>
+<polygon points="198.0,231.0 272.0,268.0 198.0,305.0 124.0,268.0" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="261.0" text-anchor="middle">Create or</text>
+<text class="t lab" x="198.0" y="275.0" text-anchor="middle">join?</text>
+<rect x="91.0" y="335.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="360.0" text-anchor="middle">Enter name and visibility</text>
+<rect x="391.0" y="427.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="452.0" text-anchor="middle">Create club; user becomes lead</text>
+<circle cx="498.0" cy="544.0" r="13" fill="#fff" stroke="#000" stroke-width="2"/>
+<circle cx="498.0" cy="544.0" r="7" fill="#000"/>
+<polygon points="198.0,507.0 272.0,544.0 198.0,581.0 124.0,544.0" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="537.0" text-anchor="middle">Has invite</text>
+<text class="t lab" x="198.0" y="551.0" text-anchor="middle">code?</text>
+<rect x="91.0" y="611.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="636.0" text-anchor="middle">Enter invitation code</text>
+<rect x="391.0" y="703.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="728.0" text-anchor="middle">Add as active member</text>
+<rect x="91.0" y="795.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="820.0" text-anchor="middle">Request to join public club</text>
+<rect x="391.0" y="887.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="912.0" text-anchor="middle">Store pending request</text>
+<rect x="691.0" y="979.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="798.0" y="1004.0" text-anchor="middle">Accept or decline</text>
+<polygon points="798.0,1059.0 872.0,1096.0 798.0,1133.0 724.0,1096.0" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="798.0" y="1096.0" text-anchor="middle">Accept?</text>
+<rect x="391.0" y="1163.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="1188.0" text-anchor="middle">Activate membership</text>
+<circle cx="498.0" cy="1280.0" r="13" fill="#fff" stroke="#000" stroke-width="2"/>
+<circle cx="498.0" cy="1280.0" r="7" fill="#000"/>
+</svg>

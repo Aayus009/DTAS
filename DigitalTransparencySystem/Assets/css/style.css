@@ -1,0 +1,476 @@
+/* ============================================
+   EDUTRANSPARENCY - GLOBAL STYLES (style.css)
+   Theme: Pacific Professional
+   ============================================ */
+
+/* -----------------------------------------------
+   0. THEME TOKENS
+   Material Design 3 color scheme exposed as CSS
+   custom properties. Values flip automatically
+   when the `dark` class is applied to <html>.
+   ----------------------------------------------- */
+
+:root {
+    /* Primary - Pacific Blue */
+    --dt-primary-rgb: 0 93 144;
+    --dt-on-primary-rgb: 255 255 255;
+    --dt-primary-container-rgb: 0 119 182;
+    --dt-on-primary-container-rgb: 243 247 255;
+    --dt-primary-fixed-rgb: 205 229 255;
+    --dt-on-primary-fixed-rgb: 0 29 50;
+    --dt-primary-fixed-dim-rgb: 148 204 255;
+    --dt-on-primary-fixed-variant-rgb: 0 75 116;
+    --dt-inverse-primary-rgb: 148 204 255;
+
+    /* Secondary - Institutional Slate */
+    --dt-secondary-rgb: 49 92 169;
+    --dt-on-secondary-rgb: 255 255 255;
+    --dt-secondary-container-rgb: 134 173 255;
+    --dt-on-secondary-container-rgb: 3 62 138;
+    --dt-secondary-fixed-rgb: 216 226 255;
+    --dt-on-secondary-fixed-rgb: 0 26 66;
+    --dt-secondary-fixed-dim-rgb: 174 198 255;
+    --dt-on-secondary-fixed-variant-rgb: 15 68 144;
+
+    /* Tertiary - Archival Sepia (warm accent) */
+    --dt-tertiary-rgb: 134 74 0;
+    --dt-on-tertiary-rgb: 255 255 255;
+    --dt-tertiary-container-rgb: 169 95 0;
+    --dt-on-tertiary-container-rgb: 255 246 241;
+    --dt-tertiary-fixed-rgb: 255 220 192;
+    --dt-on-tertiary-fixed-rgb: 46 22 0;
+    --dt-tertiary-fixed-dim-rgb: 255 184 119;
+    --dt-on-tertiary-fixed-variant-rgb: 108 58 0;
+
+    /* Surface / Background - Cool Paper */
+    --dt-background-rgb: 249 249 255;
+    --dt-on-background-rgb: 17 28 45;
+    --dt-surface-rgb: 249 249 255;
+    --dt-on-surface-rgb: 17 28 45;
+    --dt-surface-variant-rgb: 216 227 251;
+    --dt-on-surface-variant-rgb: 64 72 80;
+    --dt-inverse-surface-rgb: 38 49 67;
+    --dt-inverse-on-surface-rgb: 236 241 255;
+    --dt-surface-tint-rgb: 0 99 153;
+    --dt-surface-dim-rgb: 207 218 242;
+    --dt-surface-bright-rgb: 249 249 255;
+    --dt-surface-container-lowest-rgb: 255 255 255;
+    --dt-surface-container-low-rgb: 240 243 255;
+    --dt-surface-container-rgb: 231 238 255;
+    --dt-surface-container-high-rgb: 222 232 255;
+    --dt-surface-container-highest-rgb: 216 227 251;
+
+    /* Outline */
+    --dt-outline-rgb: 112 120 129;
+    --dt-outline-variant-rgb: 191 199 209;
+
+    /* Error */
+    --dt-error-rgb: 186 26 26;
+    --dt-on-error-rgb: 255 255 255;
+    --dt-error-container-rgb: 255 218 214;
+    --dt-on-error-container-rgb: 147 0 10;
+
+    /* Hex aliases (used by custom CSS / charts) */
+    --dt-primary: #005d90;
+    --dt-on-primary: #ffffff;
+    --dt-primary-container: #0077b6;
+    --dt-on-primary-container: #f3f7ff;
+    --dt-primary-fixed-dim: #94ccff;
+    --dt-secondary: #315ca9;
+    --dt-secondary-container: #86adff;
+    --dt-on-secondary-container: #033e8a;
+    --dt-tertiary: #864a00;
+    --dt-tertiary-container: #a95f00;
+    --dt-on-tertiary-container: #fff6f1;
+    --dt-surface: #f9f9ff;
+    --dt-on-surface: #111c2d;
+    --dt-surface-variant: #d8e3fb;
+    --dt-on-surface-variant: #404850;
+    --dt-surface-container-lowest: #ffffff;
+    --dt-surface-container-low: #f0f3ff;
+    --dt-surface-container: #e7eeff;
+    --dt-surface-container-high: #dee8ff;
+    --dt-surface-container-highest: #d8e3fb;
+    --dt-outline: #707881;
+    --dt-outline-variant: #bfc7d1;
+    --dt-error: #ba1a1a;
+    --dt-error-container: #ffdad6;
+    --dt-on-error-container: #93000a;
+    --dt-surface-tint: #006399;
+}
+
+/* Tailwind theme aliases referenced by page stylesheets.
+   `:root:root` raises specificity above the Tailwind CDN's
+   own :root variables so these always resolve to valid colors. */
+:root:root {
+    --primary: rgb(var(--dt-primary-rgb));
+    --on-surface: rgb(var(--dt-on-surface-rgb));
+    --on-surface-variant: rgb(var(--dt-on-surface-variant-rgb));
+    --primary-container: rgb(var(--dt-primary-container-rgb));
+    --on-primary-container: rgb(var(--dt-on-primary-container-rgb));
+    --surface-container: rgb(var(--dt-surface-container-rgb));
+    --surface-container-low: rgb(var(--dt-surface-container-low-rgb));
+    --surface-container-high: rgb(var(--dt-surface-container-high-rgb));
+    --outline-variant: rgb(var(--dt-outline-variant-rgb));
+    --secondary-container: rgb(var(--dt-secondary-container-rgb));
+    --on-secondary-container: rgb(var(--dt-on-secondary-container-rgb));
+}
+
+/* --- Dark theme token overrides --- */
+.dark {
+    /* Primary - Bright Sky */
+    --dt-primary-rgb: 148 204 255;
+    --dt-on-primary-rgb: 0 29 50;
+    --dt-primary-container-rgb: 0 75 116;
+    --dt-on-primary-container-rgb: 205 229 255;
+    --dt-primary-fixed-rgb: 205 229 255;
+    --dt-on-primary-fixed-rgb: 0 29 50;
+    --dt-primary-fixed-dim-rgb: 148 204 255;
+    --dt-on-primary-fixed-variant-rgb: 0 75 116;
+    --dt-inverse-primary-rgb: 0 93 144;
+
+    /* Secondary - Bright Periwinkle */
+    --dt-secondary-rgb: 174 198 255;
+    --dt-on-secondary-rgb: 0 26 66;
+    --dt-secondary-container-rgb: 15 68 144;
+    --dt-on-secondary-container-rgb: 216 226 255;
+    --dt-secondary-fixed-rgb: 216 226 255;
+    --dt-on-secondary-fixed-rgb: 0 26 66;
+    --dt-secondary-fixed-dim-rgb: 174 198 255;
+    --dt-on-secondary-fixed-variant-rgb: 15 68 144;
+
+    /* Tertiary - Bright Sepia */
+    --dt-tertiary-rgb: 255 184 119;
+    --dt-on-tertiary-rgb: 46 22 0;
+    --dt-tertiary-container-rgb: 108 58 0;
+    --dt-on-tertiary-container-rgb: 255 220 192;
+    --dt-tertiary-fixed-rgb: 255 220 192;
+    --dt-on-tertiary-fixed-rgb: 46 22 0;
+    --dt-tertiary-fixed-dim-rgb: 255 184 119;
+    --dt-on-tertiary-fixed-variant-rgb: 108 58 0;
+
+    --dt-background-rgb: 13 22 38;
+    --dt-on-background-rgb: 236 241 255;
+    --dt-surface-rgb: 13 22 38;
+    --dt-on-surface-rgb: 236 241 255;
+    --dt-surface-variant-rgb: 38 49 67;
+    --dt-on-surface-variant-rgb: 191 199 209;
+    --dt-inverse-surface-rgb: 236 241 255;
+    --dt-inverse-on-surface-rgb: 38 49 67;
+    --dt-surface-tint-rgb: 148 204 255;
+    --dt-surface-dim-rgb: 13 22 38;
+    --dt-surface-bright-rgb: 38 49 67;
+    --dt-surface-container-lowest-rgb: 9 17 30;
+    --dt-surface-container-low-rgb: 26 35 52;
+    --dt-surface-container-rgb: 31 42 62;
+    --dt-surface-container-high-rgb: 39 51 74;
+    --dt-surface-container-highest-rgb: 49 63 89;
+
+    --dt-outline-rgb: 148 163 184;
+    --dt-outline-variant-rgb: 51 63 84;
+
+    --dt-error-rgb: 255 180 171;
+    --dt-on-error-rgb: 122 0 0;
+    --dt-error-container-rgb: 147 0 10;
+    --dt-on-error-container-rgb: 255 218 214;
+
+    --dt-primary: #94ccff;
+    --dt-on-primary: #001d32;
+    --dt-primary-container: #004b74;
+    --dt-on-primary-container: #cde5ff;
+    --dt-primary-fixed-dim: #94ccff;
+    --dt-secondary: #aec6ff;
+    --dt-secondary-container: #0f4490;
+    --dt-on-secondary-container: #d8e2ff;
+    --dt-tertiary: #ffb877;
+    --dt-tertiary-container: #6c3a00;
+    --dt-on-tertiary-container: #ffdcc0;
+    --dt-surface: #0d1626;
+    --dt-on-surface: #ecf1ff;
+    --dt-surface-variant: #263143;
+    --dt-on-surface-variant: #bfc7d1;
+    --dt-surface-container-lowest: #09111e;
+    --dt-surface-container-low: #1a2334;
+    --dt-surface-container: #1f2a3e;
+    --dt-surface-container-high: #27334a;
+    --dt-surface-container-highest: #313f59;
+    --dt-outline: #94a3b8;
+    --dt-outline-variant: #333f54;
+    --dt-error: #ffb4ab;
+    --dt-error-container: #93000a;
+    --dt-on-error-container: #ffdad6;
+    --dt-surface-tint: #94ccff;
+}
+
+html.dark {
+    color-scheme: dark;
+}
+
+/* -----------------------------------------------
+   1. BASE
+   ----------------------------------------------- */
+
+/* Smooth color transitions when switching themes */
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, fill 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+/* --- Material Symbols Base --- */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+}
+
+/* --- Glass Card Effect --- */
+.glass-card {
+    background: rgba(var(--dt-surface-container-lowest-rgb) / 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(var(--dt-outline-variant-rgb) / 0.35);
+}
+
+/* --- Technical Shadow (Pacific) --- */
+.technical-shadow {
+    box-shadow: 0px 4px 12px rgba(2, 62, 138, 0.08);
+}
+
+/* --- Nav Active State --- */
+.nav-active {
+    color: var(--dt-primary);
+    font-weight: 700;
+    border-bottom: 2px solid var(--dt-primary);
+    padding-bottom: 4px;
+}
+
+/* --- Link Transitions --- */
+a {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+    /* --- Focus States --- */
+    a:focus-visible,
+    button:focus-visible {
+        outline: 2px solid var(--dt-surface-tint);
+        outline-offset: 3px;
+        border-radius: 4px;
+    }
+
+/* --- Smooth Scroll --- */
+html.scroll-smooth {
+    scroll-behavior: smooth;
+}
+
+/* --- Base Font --- */
+html, body {
+    font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Form Elements --- */
+input, select, textarea {
+    font-family: 'Hanken Grotesk', 'Segoe UI', sans-serif;
+    border-radius: 4px !important;
+}
+
+/* --- Soft Scrollbar --- */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dt-surface-container-low);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--dt-outline-variant);
+    border-radius: 4px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--dt-outline);
+    }
+
+/* --- Print Styles --- */
+@media print {
+    nav, footer, .no-print {
+        display: none !important;
+    }
+}
+
+/* -----------------------------------------------
+   2. DARK MODE POLISH (signed-in app chrome)
+   Public marketing pages stay on the original
+   light brand colors and do not use these rules.
+   ----------------------------------------------- */
+
+html.dark .technical-shadow {
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+}
+
+html.dark .glass-card {
+    background: rgba(var(--dt-surface-container-low-rgb) / 0.72);
+    border-color: rgba(var(--dt-outline-variant-rgb) / 0.7);
+}
+
+html.dark [type='text'],
+html.dark [type='email'],
+html.dark [type='url'],
+html.dark [type='password'],
+html.dark [type='number'],
+html.dark [type='date'],
+html.dark [type='datetime-local'],
+html.dark [type='month'],
+html.dark [type='search'],
+html.dark [type='tel'],
+html.dark [type='time'],
+html.dark [type='week'],
+html.dark [multiple],
+html.dark textarea,
+html.dark select {
+    background-color: rgb(var(--dt-surface-container-high-rgb));
+    color: rgb(var(--dt-on-surface-rgb));
+    border-color: rgb(var(--dt-outline-rgb));
+}
+
+html.dark [type='text']:focus,
+html.dark [type='email']:focus,
+html.dark [type='url']:focus,
+html.dark [type='password']:focus,
+html.dark [type='number']:focus,
+html.dark [type='search']:focus,
+html.dark [type='tel']:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+    border-color: rgb(var(--dt-primary-rgb));
+    --tw-ring-color: rgb(var(--dt-primary-rgb) / 0.45);
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+    color: rgb(var(--dt-on-surface-variant-rgb) / 0.72);
+}
+
+html.dark input:-webkit-autofill,
+html.dark input:-webkit-autofill:hover,
+html.dark input:-webkit-autofill:focus,
+html.dark textarea:-webkit-autofill,
+html.dark select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px rgb(var(--dt-surface-container-high-rgb)) inset;
+    -webkit-text-fill-color: rgb(var(--dt-on-surface-rgb));
+    caret-color: rgb(var(--dt-on-surface-rgb));
+    transition: background-color 9999s ease-out 0s;
+}
+
+html.dark .theme-toggle {
+    color: rgb(var(--dt-on-surface-rgb));
+}
+
+html.dark .theme-toggle .material-symbols-outlined {
+    color: rgb(var(--dt-primary-rgb));
+}
+
+.dtas-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: rgba(15, 23, 42, 0.45);
+}
+
+.dtas-dialog-overlay[hidden] {
+    display: none !important;
+}
+
+.dtas-dialog-card {
+    width: 100%;
+    max-width: 26rem;
+    background: #fff;
+    color: #1a1c1e;
+    border: 1px solid #c4c6d0;
+    border-radius: 1rem;
+    padding: 1.35rem 1.4rem 1.2rem;
+    box-shadow: 0 18px 40px rgba(0, 17, 66, 0.18);
+}
+
+.dtas-dialog-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #00236f;
+    margin: 0 0 0.5rem;
+}
+
+.dtas-dialog-message {
+    margin: 0 0 1rem;
+    line-height: 1.45;
+    color: #44474f;
+}
+
+.dtas-dialog-input {
+    width: 100%;
+    margin-bottom: 0.75rem;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid #757682;
+    border-radius: 0.75rem;
+    resize: vertical;
+}
+
+.dtas-dialog-error {
+    margin: -0.35rem 0 0.75rem;
+    color: #ba1a1a;
+    font-size: 0.85rem;
+}
+
+.dtas-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+}
+
+.dtas-dialog-cancel,
+.dtas-dialog-ok {
+    min-width: 5.5rem;
+    padding: 0.55rem 1rem;
+    border-radius: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.dtas-dialog-cancel {
+    border: 1px solid #757682;
+    background: transparent;
+}
+
+.dtas-dialog-ok {
+    border: 0;
+    background: #00236f;
+    color: #fff;
+}
+
+/* Pinned dashboard header on every page */
+.dashboard-topbar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 50;
+}
+
+body:has(.dashboard-topbar):not(:has(.connect-main)) form > main {
+    padding-top: 4.25rem;
+}
+
+body:has(.connect-main) .dashboard-topbar {
+    position: relative !important;
+}
+
+body:has(.connect-main) form > main {
+    padding-top: 0;
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1296" height="1304" viewBox="0 0 1296 1304">
+<style>.t{font-family:'Times New Roman',Times,serif;fill:#000}.title{font-size:20px;font-weight:bold}.sub{font-size:12px}.lane{font-size:13px;font-weight:bold}.lab{font-size:12px}.el{font-size:11px}</style>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#000"/></marker></defs>
+<rect width="1296" height="1304" fill="#fff"/>
+<text class="t title" x="648.0" y="32" text-anchor="middle">Figure AD-4. Schedule a Zoom meeting for an event</text>
+<text class="t sub" x="648.0" y="54" text-anchor="middle">DTAS creates the Zoom room, sends the join link, and closes the room when duration ends.</text>
+<rect x="48" y="72" width="300" height="1216" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="48" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="198.0" y="91" text-anchor="middle">Host</text>
+<rect x="348" y="72" width="300" height="1216" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="348" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="498.0" y="91" text-anchor="middle">System</text>
+<rect x="648" y="72" width="300" height="1216" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="648" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="798.0" y="91" text-anchor="middle">Zoom API</text>
+<rect x="948" y="72" width="300" height="1216" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<rect x="948" y="72" width="300" height="28" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lane" x="1098.0" y="91" text-anchor="middle">Event members</text>
+<polyline points="198.0,190.0 198.0,243.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="198.0,293.0 198.0,326.5 691.0,326.5 691.0,360.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="798.0,385.0 798.0,418.5 572.0,418.5 572.0,452.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,489.0 498.0,519.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="508.0" y="508.0">Yes</text>
+<polyline points="424.0,452.0 424.0,498.0 305.0,498.0 305.0,544.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<text class="t el" x="434.0" y="479.0">No</text>
+<polyline points="198.0,569.0 198.0,622.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,569.0 498.0,602.5 991.0,602.5 991.0,636.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="1098.0,661.0 1098.0,694.5 305.0,694.5 305.0,728.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="198.0,753.0 198.0,786.5 391.0,786.5 391.0,820.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,845.0 498.0,878.5 691.0,878.5 691.0,912.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="798.0,937.0 798.0,970.5 605.0,970.5 605.0,1004.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<polyline points="498.0,1029.0 498.0,1082.0" fill="none" stroke="#000" stroke-width="1.25" marker-end="url(#arr)"/>
+<circle cx="198.0" cy="176.0" r="12" fill="#000"/>
+<rect x="91.0" y="243.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="261.0" text-anchor="middle">Choose event, title,</text>
+<text class="t lab" x="198.0" y="275.0" text-anchor="middle">time, duration</text>
+<rect x="691.0" y="335.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="798.0" y="360.0" text-anchor="middle">Create scheduled Zoom room</text>
+<polygon points="498.0,415.0 572.0,452.0 498.0,489.0 424.0,452.0" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="445.0" text-anchor="middle">Room</text>
+<text class="t lab" x="498.0" y="459.0" text-anchor="middle">created?</text>
+<rect x="91.0" y="519.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="544.0" text-anchor="middle">Show Zoom error and stop</text>
+<rect x="391.0" y="519.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="544.0" text-anchor="middle">Save meeting and add accepted members</text>
+<circle cx="198.0" cy="636.0" r="13" fill="#fff" stroke="#000" stroke-width="2"/>
+<circle cx="198.0" cy="636.0" r="7" fill="#000"/>
+<rect x="991.0" y="611.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="1098.0" y="636.0" text-anchor="middle">Notify members with join link</text>
+<rect x="91.0" y="703.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="198.0" y="728.0" text-anchor="middle">Start as host / members join</text>
+<rect x="391.0" y="795.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="820.0" text-anchor="middle">Wait until start + duration</text>
+<rect x="691.0" y="887.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="798.0" y="912.0" text-anchor="middle">End and delete Zoom room</text>
+<rect x="391.0" y="979.0" width="214" height="50" rx="14" ry="14" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<text class="t lab" x="498.0" y="1004.0" text-anchor="middle">Mark Ended, clear Start/Join</text>
+<circle cx="498.0" cy="1096.0" r="13" fill="#fff" stroke="#000" stroke-width="2"/>
+<circle cx="498.0" cy="1096.0" r="7" fill="#000"/>
+</svg>

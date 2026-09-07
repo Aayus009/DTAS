@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>DTAS Use Case Diagrams (black and white)</title>
+  <style>
+    body { font-family: "Times New Roman", Times, serif; color: #000; background: #fff; margin: 24px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 16px; margin-top: 28px; }
+    p, li { font-size: 13px; line-height: 1.45; }
+    figure { page-break-inside: avoid; margin: 0 0 28px; }
+    img { width: 100%; max-width: 1100px; border: 1px solid #000; }
+    figcaption { font-size: 12px; margin-top: 6px; }
+    @media print { body { margin: 12mm; } a { color: #000; text-decoration: none; } }
+  </style>
+</head>
+<body>
+  <h1>DTAS use case diagrams</h1>
+  <p>Black-and-white UML use case diagrams for the Digital Transparency and Accountability System. Open this file in a browser and print to PDF if you need a report copy.</p>
+  <ul>
+    <li>Faculty and staff create events. Students propose events. System Admin does not create events or clubs.</li>
+    <li>Public club and event join is a request. The lead accepts or declines.</li>
+    <li>Meeting host writes minutes. The Zoom room closes when start time plus duration ends.</li>
+    <li>Contribution percentage is computed. It is not entered by hand.</li>
+  </ul>
+
+  <figure>
+    <img src="UC1-HighLevel.svg" alt="DTAS high-level use case diagram" />
+    <figcaption>Figure UC-1. High-level use cases. Student, Faculty, and Staff specialise Campus user.</figcaption>
+  </figure>
+  <figure>
+    <img src="UC2-Authentication.svg" alt="Authentication and identity use cases" />
+    <figcaption>Figure UC-2. Register, sign in, email OTP, and institutional ID review.</figcaption>
+  </figure>
+  <figure>
+    <img src="UC3-Events.svg" alt="Campus events use cases" />
+    <figcaption>Figure UC-3. Create, propose, join, and restrict campus events.</figcaption>
+  </figure>
+  <figure>
+    <img src="UC4-Meetings.svg" alt="Meetings and Zoom use cases" />
+    <figcaption>Figure UC-4. Schedule a meeting for an event, send the Zoom join link, close the room after duration.</figcaption>
+  </figure>
+  <figure>
+    <img src="UC5-ClubsConnect.svg" alt="Clubs and Connect use cases" />
+    <figcaption>Figure UC-5. Clubs and Connect. Admin may restrict a club but cannot create one.</figcaption>
+  </figure>
+  <figure>
+    <img src="UC6-WorkGovernance.svg" alt="Tasks, assignments, decisions, and polls" />
+    <figcaption>Figure UC-6. Tasks, assignments, decisions, and polls.</figcaption>
+  </figure>
+  <figure>
+    <img src="UC7-TransparencyAdmin.svg" alt="Transparency and administration use cases" />
+    <figcaption>Figure UC-7. Community portal, live admin dashboard, feedback, and moderation.</figcaption>
+  </figure>
+</body>
+</html>

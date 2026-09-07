@@ -1,0 +1,68 @@
+﻿/* ============================================
+   EDUTRANSPARENCY - CONTACT PAGE STYLES
+   ============================================ */
+
+/* --- Glass Card Effect --- */
+.glass-card {
+    background: rgba(var(--dt-surface-container-lowest-rgb) / 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(var(--dt-primary-rgb) / 0.08);
+}
+
+/* --- Status Pulse Animation --- */
+.status-pulse {
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-ring {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.1);
+    }
+}
+
+/* --- Form Input Focus States --- */
+.form-input:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: var(--dt-primary) !important;
+    border-width: 2px !important;
+}
+
+    /* --- Form Label Focus State --- */
+    .form-input:focus + label,
+    .form-input:focus ~ label,
+    input:focus + label,
+    select:focus + label,
+    textarea:focus + label {
+        color: var(--dt-primary);
+    }
+
+/* --- Newsletter Input --- */
+.newsletter-input:focus {
+    outline: none;
+    border-color: var(--dt-primary);
+}
+
+/* --- Smooth Transitions --- */
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .glass-card {
+        padding: 1.5rem;
+    }
+}

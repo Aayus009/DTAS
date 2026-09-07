@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="900" viewBox="0 0 1500 900">
+<style>
+  .t { font-family: 'Times New Roman', Times, serif; fill: #000; }
+  .title { font-size: 22px; font-weight: bold; }
+  .sub { font-size: 13px; }
+  .sys { font-size: 14px; font-weight: bold; }
+  .uc { font-size: 12px; }
+  .act { font-size: 13px; font-weight: bold; }
+  .rel { font-size: 11px; font-style: italic; }
+  .note { font-size: 11px; }
+</style>
+<rect x="0" y="0" width="1500" height="900" fill="#fff"/>
+<text class="t title" x="750.0" y="36" text-anchor="middle">Figure UC-6. Tasks, assignments, decisions, and polls</text>
+<text class="t sub" x="750.0" y="58" text-anchor="middle">Contribution percentage is computed by the system. Admin does not invent scores.</text>
+<rect x="300" y="90" width="900" height="740" fill="#fff" stroke="#000" stroke-width="1.8"/>
+<text class="t sys" x="750.0" y="112" text-anchor="middle">DTAS Work and governance</text>
+<circle cx="110" cy="180" r="10" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="190" x2="110" y2="218" stroke="#000" stroke-width="1.6"/>
+<line x1="94" y1="202" x2="126" y2="202" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="218" x2="96" y2="238" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="218" x2="124" y2="238" stroke="#000" stroke-width="1.6"/>
+<text class="t act" x="110" y="256" text-anchor="middle">Event Manager</text>
+<circle cx="110" cy="400" r="10" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="410" x2="110" y2="438" stroke="#000" stroke-width="1.6"/>
+<line x1="94" y1="422" x2="126" y2="422" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="438" x2="96" y2="458" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="438" x2="124" y2="458" stroke="#000" stroke-width="1.6"/>
+<text class="t act" x="110" y="476" text-anchor="middle">Faculty</text>
+<circle cx="110" cy="620" r="10" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="630" x2="110" y2="658" stroke="#000" stroke-width="1.6"/>
+<line x1="94" y1="642" x2="126" y2="642" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="658" x2="96" y2="678" stroke="#000" stroke-width="1.6"/>
+<line x1="110" y1="658" x2="124" y2="678" stroke="#000" stroke-width="1.6"/>
+<text class="t act" x="110" y="696" text-anchor="middle">Student</text>
+<circle cx="1390" cy="400" r="10" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<line x1="1390" y1="410" x2="1390" y2="438" stroke="#000" stroke-width="1.6"/>
+<line x1="1374" y1="422" x2="1406" y2="422" stroke="#000" stroke-width="1.6"/>
+<line x1="1390" y1="438" x2="1376" y2="458" stroke="#000" stroke-width="1.6"/>
+<line x1="1390" y1="438" x2="1404" y2="458" stroke="#000" stroke-width="1.6"/>
+<text class="t act" x="1390" y="476" text-anchor="middle">System Admin</text>
+<ellipse cx="530" cy="170" rx="145" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="530" y="170" text-anchor="middle">Create event task</text>
+<ellipse cx="530" cy="260" rx="145" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="530" y="260" text-anchor="middle">Assign task members</text>
+<ellipse cx="530" cy="350" rx="145" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="530" y="350" text-anchor="middle">Work in task workspace</text>
+<ellipse cx="530" cy="450" rx="145" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="530" y="450" text-anchor="middle">Create assignment</text>
+<ellipse cx="530" cy="540" rx="145" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="530" y="533" text-anchor="middle">Complete assignment</text>
+<text class="t uc" x="530" y="547" text-anchor="middle">group work</text>
+<ellipse cx="530" cy="650" rx="145" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="530" y="650" text-anchor="middle">Vote on open poll</text>
+<ellipse cx="850" cy="260" rx="150" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="850" y="253" text-anchor="middle">View contribution</text>
+<text class="t uc" x="850" y="267" text-anchor="middle">report</text>
+<ellipse cx="850" cy="400" rx="150" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="850" y="400" text-anchor="middle">View published decision</text>
+<ellipse cx="850" cy="540" rx="150" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="850" y="540" text-anchor="middle">Extend task deadline</text>
+<ellipse cx="1150" cy="220" rx="145" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="1150" y="220" text-anchor="middle">Create or edit decision</text>
+<ellipse cx="1150" cy="340" rx="145" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="1150" y="340" text-anchor="middle">Create and close poll</text>
+<ellipse cx="1150" cy="460" rx="145" ry="30" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="1150" y="453" text-anchor="middle">Restrict task or</text>
+<text class="t uc" x="1150" y="467" text-anchor="middle">decision</text>
+<ellipse cx="1150" cy="600" rx="145" ry="28" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text class="t uc" x="1150" y="600" text-anchor="middle">Oversee task list</text>
+<line x1="128" y1="202" x2="385" y2="170" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="202" x2="385" y2="260" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="202" x2="385" y2="350" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="202" x2="700" y2="540" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="422" x2="385" y2="450" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="422" x2="700" y2="260" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="422" x2="700" y2="540" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="642" x2="385" y2="350" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="642" x2="385" y2="540" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="642" x2="385" y2="650" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="642" x2="700" y2="260" stroke="#000" stroke-width="1.15"/>
+<line x1="128" y1="642" x2="700" y2="400" stroke="#000" stroke-width="1.15"/>
+<line x1="1372" y1="422" x2="1295" y2="220" stroke="#000" stroke-width="1.15"/>
+<line x1="1372" y1="422" x2="1295" y2="340" stroke="#000" stroke-width="1.15"/>
+<line x1="1372" y1="422" x2="1295" y2="460" stroke="#000" stroke-width="1.15"/>
+<line x1="1372" y1="422" x2="1295" y2="600" stroke="#000" stroke-width="1.15"/>
+<rect x="40" y="800" width="360" height="70" fill="#fff" stroke="#000" stroke-width="1"/>
+<text class="t note" x="48" y="818">Faculty create assignments. Staff do not.</text>
+<text class="t note" x="48" y="832">Contribution uses stored formula</text>
+<text class="t note" x="48" y="846">(completion, timeliness, activity, recency).</text>
+</svg>

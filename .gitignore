@@ -1,0 +1,43 @@
+# Local SQL data files
+*.mdf
+*.ldf
+App_Data/*.mdf
+App_Data/*.ldf
+
+# Build
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+*.dll
+*.pdb
+*.cache
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio / NuGet
+.vs/
+packages/
+*.nupkg
+
+# Secrets and local config
+DigitalTransparencySystem/Web.config
+client_secret*.json
+*.pfx
+*.p12
+
+# User uploads (keep folder web.config files)
+Uploads/**
+!Uploads/**/web.config
+DigitalTransparencySystem/Uploads/**
+!DigitalTransparencySystem/Uploads/**/web.config
+
+# Office lock files and archives
+~$*
+*.zip
+
+# OS
+Thumbs.db
+Desktop.ini

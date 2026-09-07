@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>DTAS Sequence Diagrams (black and white)</title>
+  <style>
+    body { font-family: "Times New Roman", Times, serif; color: #000; background: #fff; margin: 24px; }
+    h1 { font-size: 22px; }
+    p, li { font-size: 13px; line-height: 1.45; }
+    figure { page-break-inside: avoid; margin: 0 0 28px; }
+    img { width: 100%; max-width: 1200px; border: 1px solid #000; }
+    figcaption { font-size: 12px; margin-top: 6px; }
+    @media print { body { margin: 12mm; } a { color: #000; text-decoration: none; } }
+  </style>
+</head>
+<body>
+  <h1>DTAS sequence diagrams</h1>
+  <p>Black-and-white UML sequence diagrams for the Digital Transparency and Accountability System. PNG, SVG, and draw.io files are in this folder. Open this file in a browser and print to PDF if you need a report copy.</p>
+  <ul>
+    <li>Faculty and staff create events. Students propose events. System Admin does not create events or clubs.</li>
+    <li>Public club and event join is a request. An invite code joins immediately.</li>
+    <li>The Zoom room closes when start time plus duration ends.</li>
+    <li>Contribution percentage is computed. It is not entered by hand.</li>
+  </ul>
+<figure><img src='SD1-Identity.svg' alt='Figure SD-1. Register, email OTP, and institutional ID review.'/><figcaption>Figure SD-1. Register, email OTP, and institutional ID review.</figcaption></figure>
+<figure><img src='SD2-ProposeEvent.svg' alt='Figure SD-2. Student proposes an event. Admin approves or rejects.'/><figcaption>Figure SD-2. Student proposes an event. Admin approves or rejects.</figcaption></figure>
+<figure><img src='SD3-JoinEvent.svg' alt='Figure SD-3. Join a public event by request or invitation code.'/><figcaption>Figure SD-3. Join a public event by request or invitation code.</figcaption></figure>
+<figure><img src='SD4-MeetingZoom.svg' alt='Figure SD-4. Schedule a Zoom meeting, send the join link, close the room after duration.'/><figcaption>Figure SD-4. Schedule a Zoom meeting, send the join link, close the room after duration.</figcaption></figure>
+<figure><img src='SD5-Clubs.svg' alt='Figure SD-5. Create a club or request to join. Admin cannot create clubs.'/><figcaption>Figure SD-5. Create a club or request to join. Admin cannot create clubs.</figcaption></figure>
+<figure><img src='SD6-Assignment.svg' alt='Figure SD-6. Faculty assignment. Contribution is computed, not typed in.'/><figcaption>Figure SD-6. Faculty assignment. Contribution is computed, not typed in.</figcaption></figure>
+<figure><img src='SD7-Moderation.svg' alt='Figure SD-7. Flag content and admin moderation.'/><figcaption>Figure SD-7. Flag content and admin moderation.</figcaption></figure>
+</body></html>
