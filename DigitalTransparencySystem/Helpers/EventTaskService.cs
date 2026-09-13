@@ -287,7 +287,7 @@ namespace DigitalTransparencySystem.Helpers
             string message = approve
                 ? "Faculty approved \"" + title + "\"."
                 : "Faculty asked for changes on \"" + title + "\": " + comment;
-            NotifyAssignees(taskId, actorId, approve ? "Task approved" : "Task needs changes", message);
+            NotifyAssignees(taskId, actorId, approve ? "Task approved" : "Task needs changes", message, true);
 
             bool concluded = approve && access.Event != null && AllOpenTasksApproved(access.Event.EventID);
             return concluded ? "approved-concluded" : null;
@@ -493,7 +493,16 @@ namespace DigitalTransparencySystem.Helpers
             if (selected.Count == 0)
                 return "Select at least one member to assign.";
 
+            HashSet<int> previous = new HashSet<int>(ListAssigneeIds(taskId));
             ApplyAssignees(taskId, selected);
+
+            var newly = new List<int>();
+            foreach (int userId in selected)
+            {
+                if (!previous.Contains(userId))
+                    newly.Add(userId);
+            }
+            NotifyNewAssignees(taskId, newly, actorId);
             return null;
         }
 
@@ -735,9 +744,93 @@ namespace DigitalTransparencySystem.Helpers
             SyncEventStatusForTask(taskId, userId);
         }
 
-        private static void NotifyAssignees(int taskId, int exceptUserId, string title, string message)
+        public static void NotifyNewAssignees(int taskId, IEnumerable<int> userIds, int exceptUserId)
         {
-            NotificationService.NotifyUsers(ListAssigneeIds(taskId), exceptUserId, title, message, "TaskReview", taskId, "Task");
+            if (userIds == null)
+                return;
+
+            string taskTitle = "a task";
+            string eventName = "an event";
+            DateTime? dueDate = null;
+            int eventId = 0;
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            using (var cmd = new SqlCommand(
+                @"SELECT t.TaskTitle, t.DueDate, t.EventID, ISNULL(e.EventName, N'Event') AS EventName
+                  FROM Tasks t
+                  LEFT JOIN Events e ON e.EventID = t.EventID
+                  WHERE t.TaskID = @TaskID", con))
+            {
+                cmd.Parameters.AddWithValue("@TaskID", taskId);
+                con.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        taskTitle = Convert.ToString(reader["TaskTitle"]);
+                        eventName = Convert.ToString(reader["EventName"]);
+                        if (reader["DueDate"] != DBNull.Value)
+                            dueDate = Convert.ToDateTime(reader["DueDate"]);
+                        if (reader["EventID"] != DBNull.Value)
+                            eventId = Convert.ToInt32(reader["EventID"]);
+                    }
+                }
+            }
+
+            var details = new List<MailDetail>();
+            if (dueDate.HasValue)
+                details.Add(new MailDetail("Due", dueDate.Value.ToString("MMM dd, yyyy")));
+
+            string inApp = "You were assigned a task for " + eventName + ": " + taskTitle;
+            string taskUrl = MailSender.AbsoluteUrl("~/Modules/TaskWorkspaces/TaskWorkspace.aspx?TaskID=" + taskId);
+
+            foreach (int userId in userIds)
+            {
+                if (userId == exceptUserId)
+                    continue;
+
+                NotificationService.Send(userId, "Event task assigned", inApp, "TaskAssignment", taskId, "Task");
+
+                UserAccount user = AuthService.FindById(userId);
+                if (user == null || string.IsNullOrWhiteSpace(user.Email))
+                    continue;
+
+                MailSender.Send(user.Email, "Assigned: " + taskTitle,
+                    MailComposer.Build(
+                        null,
+                        "You were assigned \"" + taskTitle + "\" for " + eventName + ".",
+                        null,
+                        details,
+                        "Open the task",
+                        taskUrl,
+                        MailComposer.FirstName(user.FullName)));
+            }
+        }
+
+        private static void NotifyAssignees(int taskId, int exceptUserId, string title, string message, bool sendEmail = false)
+        {
+            List<int> ids = ListAssigneeIds(taskId);
+            NotificationService.NotifyUsers(ids, exceptUserId, title, message, "TaskReview", taskId, "Task");
+            if (!sendEmail)
+                return;
+
+            string taskUrl = MailSender.AbsoluteUrl("~/Modules/TaskWorkspaces/TaskWorkspace.aspx?TaskID=" + taskId);
+            foreach (int userId in ids)
+            {
+                if (userId == exceptUserId)
+                    continue;
+                UserAccount user = AuthService.FindById(userId);
+                if (user == null || string.IsNullOrWhiteSpace(user.Email))
+                    continue;
+                MailSender.Send(user.Email, title,
+                    MailComposer.Build(
+                        null,
+                        message,
+                        null,
+                        null,
+                        "Open the task",
+                        taskUrl,
+                        MailComposer.FirstName(user.FullName)));
+            }
         }
 
         private static void NotifyEventMembers(int eventId, int exceptUserId, string title, string message)
@@ -1145,6 +1238,33 @@ namespace DigitalTransparencySystem.Helpers
                     return 4;
                 default:
                     return 0;
+            }
+        }
+
+        public static bool CountsTowardInstitutionProgress(string statusKey)
+        {
+            string key = NormalizeStatusKey(statusKey ?? "").ToLowerInvariant();
+            return key != "proposed" && key != "rejected" && key != "cancelled";
+        }
+
+        public static int InstitutionDecisionPercent()
+        {
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            using (var cmd = new SqlCommand(
+                @"SELECT COUNT(*) AS Total,
+                         SUM(CASE WHEN REPLACE(LTRIM(RTRIM(ISNULL(Status, N''))), N' ', N'')
+                             IN (N'Approved', N'Implemented', N'Completed', N'Closed') THEN 1 ELSE 0 END) AS Progressed
+                  FROM Decisions", con))
+            {
+                con.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                        return 0;
+                    int total = reader["Total"] == DBNull.Value ? 0 : Convert.ToInt32(reader["Total"]);
+                    int progressed = reader["Progressed"] == DBNull.Value ? 0 : Convert.ToInt32(reader["Progressed"]);
+                    return PercentFromCounts(progressed, total);
+                }
             }
         }
 

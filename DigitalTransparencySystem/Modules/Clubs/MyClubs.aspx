@@ -22,7 +22,7 @@
                     </p>
                 </header>
 
-                <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md block mb-4"></asp:Label>
+                <asp:Label ID="lblMessage" runat="server" CssClass="dtas-notice"></asp:Label>
 
                 <div class="club-hub-grid">
                     <asp:Panel ID="pnlCreate" runat="server" CssClass="club-card club-tile">

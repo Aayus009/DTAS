@@ -3,7 +3,7 @@
 <%@ Register TagPrefix="uc" TagName="AdminTopbar" Src="~/MasterPages/AdminTopbar.ascx" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>" />
+    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=trailscroll1" />
 </asp:Content>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -95,7 +95,7 @@
                         <h3 class="font-title-lg text-title-lg text-primary">Decision Audit Trail</h3>
                         <p class="font-body-md text-body-md text-on-surface-variant mt-1">Immutable log of every status change on institutional decisions.</p>
                     </div>
-                    <div class="overflow-x-auto">
+                    <div class="report-table-scroll">
                         <table class="w-full text-left font-body-md">
                             <thead>
                                 <tr class="bg-surface-container-low text-on-surface-variant border-b border-surface-container-high">
@@ -135,7 +135,7 @@
                     <div class="px-6 py-4 border-b border-surface-container-high">
                         <h3 class="font-title-lg text-title-lg text-primary">Recent Sign-ins</h3>
                     </div>
-                    <div class="p-4 space-y-4">
+                    <div class="report-table-scroll p-4 space-y-4">
                         <asp:Repeater ID="rptLogins" runat="server">
                             <ItemTemplate>
                                 <div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant/30 flex items-center gap-4">
@@ -154,6 +154,8 @@
                                 <p class="text-on-surface-variant font-body-md text-center py-10">No sign-ins recorded yet.</p>
                             </EmptyDataTemplate>
                         </asp:Repeater>
+                    </div>
+                    <div class="px-4 pb-4">
                         <asp:HyperLink ID="lnkUserActivity" runat="server" NavigateUrl="~/Modules/Users/UserActivity.aspx" CssClass="block w-full mt-2 py-2 border border-primary text-primary rounded-lg font-label-md text-label-md font-bold text-center hover:bg-primary-fixed-dim/10 transition-colors">View Full Activity</asp:HyperLink>
                     </div>
                 </section>

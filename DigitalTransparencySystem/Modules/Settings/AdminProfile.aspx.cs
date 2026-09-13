@@ -151,6 +151,7 @@ lblProfileInitial.InnerText = initials;
                     }
 
                     Session["ProfileImage"] = fileName;
+                    Session.Remove("ProfileImageUrl");
                     ShowMessage("Profile image updated successfully.", true);
                     LoadProfile();
                 }
@@ -293,6 +294,7 @@ lblProfileInitial.InnerText = initials;
                 }
 
                 Session.Remove("ProfileImage");
+                Session.Remove("ProfileImageUrl");
                 ShowMessage("Profile image removed.", true);
                 LoadProfile();
             }
@@ -315,16 +317,11 @@ lblProfileInitial.InnerText = initials;
         {
             pnlMessage.Visible = true;
             lblMessage.Text = message;
-            if (isSuccess)
-            {
-                divMessage.Attributes["class"] = "px-4 py-3 rounded-xl flex items-center gap-3 text-label-md bg-tertiary-container/30 text-on-tertiary-container";
-                msgIcon.InnerText = "check_circle";
-            }
-            else
-            {
-                divMessage.Attributes["class"] = "px-4 py-3 rounded-xl flex items-center gap-3 text-label-md bg-error-container/40 text-on-error-container";
-                msgIcon.InnerText = "error";
-            }
+            pnlMessage.CssClass = isSuccess
+                ? UiNotice.ToastSuccess + " dtas-notice-rich"
+                : UiNotice.StickyDanger + " dtas-notice-rich";
+            divMessage.Attributes["class"] = "flex items-start gap-3";
+            msgIcon.InnerText = isSuccess ? "check_circle" : "error";
         }
     }
 }

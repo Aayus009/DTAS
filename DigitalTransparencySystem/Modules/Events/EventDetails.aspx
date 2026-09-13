@@ -55,11 +55,12 @@
             <!-- Status Timeline -->
             <section class="standard-card rounded-xl p-6 mb-6" id="eventLifecycleRoot"
                 data-api="<%= ResolveUrl("~/Modules/Events/EventsProgressApi.ashx") %>"
-                data-event-id="<%= Request.QueryString["EventID"] %>">
+                data-event-id="<%= Request.QueryString["EventID"] %>"
+                data-lifecycle-index="<%= CurrentLifecycleIndex %>">
                 <h3 class="font-title-lg text-title-lg text-primary mb-6">Event Lifecycle</h3>
                 <div class="flex items-center justify-between relative">
                     <div class="absolute top-4 left-0 right-0 h-1 bg-surface-container-high rounded-full"></div>
-                    <div id="timelineFill" runat="server" class="js-progress-fill absolute top-4 left-0 h-1 rounded-full z-[1] transition-all duration-500" style="width: 0%; background-color: #0077b6;"></div>
+                    <div id="timelineFill" runat="server" class="absolute top-4 left-0 h-1 rounded-full z-[1]" style="width: 0%; background-color: #0077b6;"></div>
                     <asp:Repeater ID="rptTimeline" runat="server">
                         <ItemTemplate>
                             <div class="relative flex flex-col items-center z-10 js-lifecycle-step" data-stage-index="<%# Container.ItemIndex %>">
@@ -80,7 +81,7 @@
                     <span id="eventCompletionPercent" class="font-label-lg text-label-lg font-bold text-on-surface-variant"><asp:Literal ID="litCompletionPercent" runat="server" Text="0%"></asp:Literal></span>
                 </div>
                 <div class="h-3 bg-surface-container-high rounded-full overflow-hidden">
-                    <div id="completionBarFill" runat="server" class="js-progress-fill h-full rounded-full transition-all duration-700" style="width: 0%; background-color: #2e7d32;"></div>
+                    <div id="completionBarFill" runat="server" class="h-full rounded-full" style="width: 0%; background-color: #2e7d32;"></div>
                 </div>
                 <p id="eventCompletionMeta" class="mt-2 text-xs text-on-surface-variant"><asp:Literal ID="litCompletionMeta" runat="server" Text="No tasks yet"></asp:Literal></p>
             </section>
@@ -248,7 +249,7 @@
     <footer class="dashboard-footer bg-on-secondary-fixed text-on-primary py-20 px-8 ml-64">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
             <div class="md:col-span-1">
-                <h2 class="font-headline-md text-headline-md font-bold mb-4">DTAS</h2>
+                <h2 class="font-headline-md text-headline-md font-bold mb-4"><a href="<%= ResolveUrl("~/Default.aspx") %>" class="hover:text-white">DTAS</a></h2>
                 <p class="font-body-md text-surface-container-high/60">The authoritative platform for educational accountability and data transparency.</p>
             </div>
             <div>
@@ -292,7 +293,6 @@
 </asp:Content>
 
 <asp:Content ID="ScriptContent" ContentPlaceHolderID="ScriptContent" runat="server">
-    <script type="text/javascript" src="<%= ResolveUrl("~/Assets/js/dashboard.js") %>"></script>
     <script type="text/javascript">
         (function () {
             var root = document.getElementById('eventLifecycleRoot');
@@ -300,8 +300,13 @@
             var api = root.getAttribute('data-api');
             var eventId = root.getAttribute('data-event-id');
             if (!api || !eventId) return;
+            var lastLifecycle = parseInt(root.getAttribute('data-lifecycle-index'), 10);
+            if (isNaN(lastLifecycle)) lastLifecycle = -1;
 
             function applyLifecycle(index) {
+                if (typeof index !== 'number' || index < 0) return;
+                if (index === lastLifecycle) return;
+                lastLifecycle = index;
                 var fill = document.getElementById('<%= timelineFill.ClientID %>');
                 var steps = document.querySelectorAll('.js-lifecycle-step');
                 var max = Math.max(steps.length - 1, 1);
@@ -324,18 +329,13 @@
                 var percentEl = document.getElementById('eventCompletionPercent');
                 var metaEl = document.getElementById('eventCompletionMeta');
                 var bar = document.getElementById('<%= completionBarFill.ClientID %>');
-                var badge = document.getElementById('eventStatusBadge');
                 if (percentEl) percentEl.textContent = pct + '%';
                 if (metaEl) metaEl.textContent = row.label || 'No tasks yet';
                 if (bar) {
                     bar.style.width = pct + '%';
                     bar.style.backgroundColor = pct > 0 ? '#2e7d32' : '#c5d0c8';
                 }
-                if (badge && row.statusLabel) {
-                    badge.innerHTML = '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-badge-cap text-badge-cap" style="background-color: rgba(0,119,182,0.12);color:#0077b6;">' +
-                        '<span class="material-symbols-outlined text-[14px]">pending</span>' + row.statusLabel + '</span>';
-                }
-                applyLifecycle(typeof row.lifecycleIndex === 'number' ? row.lifecycleIndex : 0);
+                if (typeof row.lifecycleIndex === 'number') applyLifecycle(row.lifecycleIndex);
             }
 
             function poll() {

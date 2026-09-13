@@ -95,19 +95,18 @@
      * Classes are added dynamically so nothing is hidden if JS is disabled.
      */
     function initScrollReveal() {
-        if (!('IntersectionObserver' in window)) return;
-
         var selector = '.glass-card, .standard-card, .decision-card, .vault-card, .event-card, .bento-card-hover, .feature-card, .stat-card';
         var els = [];
 
         document.querySelectorAll('main ' + selector).forEach(function (el) {
             if (el.classList.contains('animate-in') || el.classList.contains('section-enter')) return;
             if (el.closest('.step-card')) return;
-            el.classList.add('reveal-up');
+            el.classList.add('reveal-up', 'revealed');
             els.push(el);
         });
 
-        // Stagger siblings so grids cascade nicely.
+        if (!els.length) return;
+
         var buckets = {};
         els.forEach(function (el) {
             var key = el.parentNode;
@@ -119,17 +118,6 @@
                 el.style.transitionDelay = Math.min(i * 90, 450) + 'ms';
             });
         });
-
-        var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-
-        els.forEach(function (el) { observer.observe(el); });
     }
 
 

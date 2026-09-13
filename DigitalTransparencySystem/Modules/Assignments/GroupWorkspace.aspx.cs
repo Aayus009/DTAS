@@ -48,6 +48,28 @@ namespace DigitalTransparencySystem.Modules.Assignments
             }
         }
 
+        public string EncodeComment(object value)
+        {
+            return HttpUtility.HtmlEncode(Convert.ToString(value) ?? "");
+        }
+
+        public string AssigneeLabel(object name)
+        {
+            string value = Convert.ToString(name);
+            return string.IsNullOrWhiteSpace(value) ? "Unassigned" : value;
+        }
+
+        public string Initials(object name)
+        {
+            string value = Convert.ToString(name) ?? "";
+            string[] parts = value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 0)
+                return "?";
+            if (parts.Length == 1)
+                return parts[0].Substring(0, Math.Min(2, parts[0].Length)).ToUpperInvariant();
+            return (char.ToUpperInvariant(parts[0][0]).ToString() + char.ToUpperInvariant(parts[parts.Length - 1][0]));
+        }
+
         protected void Page_Init(object sender, EventArgs e)
         {
             HtmlForm form = Master.FindControl("form1") as HtmlForm;
@@ -63,6 +85,7 @@ namespace DigitalTransparencySystem.Modules.Assignments
                 return;
             }
 
+            AssignmentService.EnsureSchema();
             access = AssignmentService.GetAccess(groupId, Convert.ToInt32(Session["UserID"]), Session["Role"] as string);
             ApplyChrome();
 
@@ -103,42 +126,61 @@ namespace DigitalTransparencySystem.Modules.Assignments
             Reload();
         }
 
-        protected void btnLookup_Click(object sender, EventArgs e)
+        protected void btnInviteSearch_Click(object sender, EventArgs e)
         {
-            EmailLookupResult result = EventService.LookupByExactEmail(txtInviteEmail.Text);
-            lblLookup.CssClass = result.Found ? "font-label-md block mt-3 text-tertiary" : "font-label-md block mt-3 text-error";
-            lblLookup.Text = result.Found
-                ? result.Message + " " + result.FullName + " (" + result.Role + ")."
-                : result.Message;
-            BindAll();
+            BindInviteResults();
+            txtInviteSearch.Focus();
         }
 
-        protected void btnInvite_Click(object sender, EventArgs e)
+        protected void rptInviteResults_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            Show(AssignmentService.InviteMember(groupId, Convert.ToInt32(Session["UserID"]), Session["Role"] as string, txtInviteEmail.Text), "Invitation sent.");
+            int inviteeId;
+            if (e.CommandName != "Invite" || !int.TryParse(Convert.ToString(e.CommandArgument), out inviteeId))
+                return;
+
+            Show(AssignmentService.InviteMemberByUserId(
+                groupId,
+                Convert.ToInt32(Session["UserID"]),
+                Session["Role"] as string,
+                inviteeId), "Invitation sent.");
             Reload();
+            BindInviteResults();
         }
 
         protected void btnAddTask_Click(object sender, EventArgs e)
         {
             int parent;
             int? parentId = int.TryParse(ddlParent.SelectedValue, out parent) && parent > 0 ? parent : (int?)null;
-            int assignee;
-            int? assigneeId = int.TryParse(ddlAssignee.SelectedValue, out assignee) && assignee > 0 ? assignee : (int?)null;
             DateTime due;
             DateTime? dueDate = DateTime.TryParse(txtDue.Text, out due) ? due : (DateTime?)null;
 
-            Show(AssignmentService.AddTask(
+            var titles = new List<string>();
+            foreach (string line in (txtTaskTitles.Text ?? "").Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (!string.IsNullOrWhiteSpace(line))
+                    titles.Add(line.Trim());
+            }
+
+            var assignees = new List<int>();
+            foreach (ListItem item in cblAssignees.Items)
+            {
+                int assigneeId;
+                if (item.Selected && int.TryParse(item.Value, out assigneeId) && assigneeId > 0)
+                    assignees.Add(assigneeId);
+            }
+
+            string error = AssignmentService.AddTasks(
                 groupId,
                 Convert.ToInt32(Session["UserID"]),
                 Session["Role"] as string,
-                txtTaskTitle.Text,
-                null,
+                titles,
+                assignees,
                 parentId,
-                assigneeId,
-                dueDate), "Task added.");
-            if (lblMessage.CssClass.IndexOf("error", StringComparison.OrdinalIgnoreCase) < 0)
-                txtTaskTitle.Text = "";
+                dueDate);
+            int created = titles.Count * Math.Max(assignees.Count, 1);
+            Show(error, created == 1 ? "Task allocated." : "Allocated " + created + " tasks.");
+            if (!UiNotice.HasError(lblMessage))
+                txtTaskTitles.Text = "";
             Reload();
         }
 
@@ -148,46 +190,68 @@ namespace DigitalTransparencySystem.Modules.Assignments
             if (!int.TryParse(Convert.ToString(e.CommandArgument), out taskId))
                 return;
 
+            ViewState["OpenTaskId"] = taskId;
             int userId = Convert.ToInt32(Session["UserID"]);
             string role = Session["Role"] as string;
 
-            if (e.CommandName == "SubmitWork")
+            if (e.CommandName == "Comment")
             {
-                TextBox note = e.Item.FindControl("txtWorkNote") as TextBox;
-                string links;
-                string linkError = CollectWorkLinks(e.Item, out links);
-                if (linkError != null)
-                {
-                    Show(linkError, null);
-                    BindAll();
-                    return;
-                }
-
-                IList<HttpPostedFile> files;
-                string fileError = CollectTypedUploads(e.Item, out files);
-                if (fileError != null)
-                {
-                    Show(fileError, null);
-                    BindAll();
-                    return;
-                }
-
-                Show(AssignmentService.SubmitWork(
+                TextBox comment = e.Item.FindControl("txtTaskComment") as TextBox;
+                Show(AssignmentService.AddTaskComment(
                     taskId,
                     userId,
                     role,
-                    note == null ? null : note.Text,
-                    links,
-                    files,
-                    Server), "Work saved.");
+                    comment == null ? "" : comment.Text), "Comment added.");
                 Reload();
                 return;
             }
 
+            string workError;
+            bool savedWork = TrySaveAttachedWork(e.Item, taskId, userId, role, out workError);
+
             DropDownList ddl = e.Item.FindControl("ddlStatus") as DropDownList;
             string status = ddl == null ? null : ddl.SelectedValue;
-            Show(AssignmentService.UpdateTask(taskId, userId, role, null, status), "Task updated.");
+            string statusError = AssignmentService.UpdateTask(taskId, userId, role, null, status);
+            if (!string.IsNullOrEmpty(statusError))
+                Show(statusError, null);
+            else if (!string.IsNullOrEmpty(workError))
+                Show(workError, null);
+            else if (savedWork)
+                Show(null, "Status and file saved. The file is under Work files and in your Updates.");
+            else
+                Show(null, "Task updated.");
             Reload();
+        }
+
+        private bool TrySaveAttachedWork(RepeaterItem item, int taskId, int userId, string role, out string error)
+        {
+            error = null;
+            TextBox note = item.FindControl("txtWorkNote") as TextBox;
+            string links;
+            error = CollectWorkLinks(item, out links);
+            if (error != null)
+                return false;
+
+            IList<HttpPostedFile> files;
+            error = CollectTypedUploads(item, out files);
+            if (error != null)
+                return false;
+
+            bool hasNote = note != null && !string.IsNullOrWhiteSpace(note.Text);
+            bool hasLinks = !string.IsNullOrWhiteSpace(links);
+            bool hasFiles = files != null && files.Count > 0;
+            if (!hasNote && !hasLinks && !hasFiles)
+                return false;
+
+            error = AssignmentService.SubmitWork(
+                taskId,
+                userId,
+                role,
+                hasNote ? note.Text : null,
+                links,
+                files,
+                Server);
+            return error == null;
         }
 
         protected void rptMembers_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -265,6 +329,9 @@ namespace DigitalTransparencySystem.Modules.Assignments
             int? assignee = row["AssignedUserID"] == DBNull.Value ? (int?)null : Convert.ToInt32(row["AssignedUserID"]);
             string note = row["SubmissionNote"] == DBNull.Value ? null : Convert.ToString(row["SubmissionNote"]);
             int currentTaskId = Convert.ToInt32(row["TaskID"]);
+            HtmlGenericControl details = e.Item.FindControl("taskDetails") as HtmlGenericControl;
+            if (details != null && ViewState["OpenTaskId"] != null && Convert.ToInt32(ViewState["OpenTaskId"]) == currentTaskId)
+                details.Attributes["open"] = "open";
             DataView files = FilesForTask(currentTaskId);
             DataView links = LinksForTask(currentTaskId);
             bool hasWork = !string.IsNullOrWhiteSpace(note) || files.Count > 0 || links.Count > 0;
@@ -272,7 +339,6 @@ namespace DigitalTransparencySystem.Modules.Assignments
             Panel pnlWork = e.Item.FindControl("pnlWork") as Panel;
             if (pnlWork != null)
             {
-                pnlWork.Visible = hasWork;
                 Literal litNote = e.Item.FindControl("litWorkNote") as Literal;
                 if (litNote != null)
                     litNote.Text = AssignmentService.FormatNoteHtml(note);
@@ -288,6 +354,9 @@ namespace DigitalTransparencySystem.Modules.Assignments
                     rptWorkFiles.DataSource = files;
                     rptWorkFiles.DataBind();
                 }
+                Label lblNoFiles = e.Item.FindControl("lblNoFiles") as Label;
+                if (lblNoFiles != null)
+                    lblNoFiles.Visible = !hasWork;
             }
 
             Panel pnlSubmit = e.Item.FindControl("pnlSubmit") as Panel;
@@ -298,6 +367,20 @@ namespace DigitalTransparencySystem.Modules.Assignments
                 if (txtNote != null && !string.IsNullOrWhiteSpace(note))
                     txtNote.Text = note;
             }
+
+            Repeater rptTaskComments = e.Item.FindControl("rptTaskComments") as Repeater;
+            Label lblNoComments = e.Item.FindControl("lblNoComments") as Label;
+            Panel pnlAddComment = e.Item.FindControl("pnlAddComment") as Panel;
+            DataTable comments = AssignmentService.ListTaskComments(currentTaskId);
+            if (rptTaskComments != null)
+            {
+                rptTaskComments.DataSource = comments;
+                rptTaskComments.DataBind();
+            }
+            if (lblNoComments != null)
+                lblNoComments.Visible = comments.Rows.Count == 0;
+            if (pnlAddComment != null)
+                pnlAddComment.Visible = access != null && access.CanComment;
         }
 
         private void Reload()
@@ -310,6 +393,12 @@ namespace DigitalTransparencySystem.Modules.Assignments
         {
             AssignmentGroupRecord group = access.Group;
             lnkScheduleMeeting.NavigateUrl = "~/Modules/UserMeetings/UserMeetings.aspx?GroupID=" + groupId;
+            int connectId;
+            ConnectService.CreateGroupForAssignmentSubgroup(groupId, out connectId);
+            lnkGroupConnect.Visible = connectId > 0;
+            lnkGroupConnect.NavigateUrl = connectId > 0
+                ? "~/Modules/Connect/ConnectRoom.aspx?GroupID=" + connectId
+                : "";
             lnkBack.NavigateUrl = access.IsFacultyOwner
                 ? "~/Modules/Assignments/AssignmentDetails.aspx?AssignmentID=" + group.AssignmentID
                 : "~/Modules/Assignments/MyAssignments.aspx";
@@ -335,13 +424,12 @@ namespace DigitalTransparencySystem.Modules.Assignments
             pnlAddTask.Visible = access.CanManageStructure;
             pnlInvite.Visible = access.CanInvite;
 
-            DataSet progress = AssignmentService.GetProgress(groupId);
-            if (progress.Tables.Count > 0 && progress.Tables[0].Rows.Count > 0)
-                litProgress.Text = AssignmentService.FormatPercent(progress.Tables[0].Rows[0]["CompletionPercentage"]);
-            else
-                litProgress.Text = "0%";
-
             DataTable tasks = AssignmentService.ListTasks(groupId);
+            decimal pct = AssignmentService.ComputeGroupProgress(tasks);
+            litProgress.Text = AssignmentService.FormatPercent(pct);
+            if (pct < 0) pct = 0;
+            if (pct > 100) pct = 100;
+            progressFill.Style["width"] = pct.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture) + "%";
             rptTasks.DataSource = tasks;
             rptTasks.DataBind();
             pnlNoTasks.Visible = tasks.Rows.Count == 0;
@@ -363,14 +451,50 @@ namespace DigitalTransparencySystem.Modules.Assignments
                         ddlParent.Items.Add(new ListItem("Under: " + Convert.ToString(row["Title"]), Convert.ToString(row["TaskID"])));
                 }
 
-                ddlAssignee.Items.Clear();
-                ddlAssignee.Items.Add(new ListItem("Unassigned", "0"));
+                var selectedIds = new List<string>();
+                foreach (ListItem item in cblAssignees.Items)
+                {
+                    if (item.Selected)
+                        selectedIds.Add(item.Value);
+                }
+                cblAssignees.Items.Clear();
                 foreach (DataRow row in members.Rows)
-                    ddlAssignee.Items.Add(new ListItem(Convert.ToString(row["FullName"]), Convert.ToString(row["UserID"])));
+                {
+                    var item = new ListItem(Convert.ToString(row["FullName"]), Convert.ToString(row["UserID"]));
+                    item.Selected = selectedIds.Contains(item.Value);
+                    cblAssignees.Items.Add(item);
+                }
             }
 
             rptContribution.DataSource = AssignmentService.GetContribution(groupId);
             rptContribution.DataBind();
+        }
+
+        private void BindInviteResults()
+        {
+            string query = txtInviteSearch == null ? "" : txtInviteSearch.Text;
+            DataTable results = AssignmentService.SearchStudentsForInvite(
+                groupId,
+                Convert.ToInt32(Session["UserID"]),
+                Session["Role"] as string,
+                query);
+            rptInviteResults.DataSource = results;
+            rptInviteResults.DataBind();
+
+            string term = (query ?? "").Trim();
+            if (term.Length < 2)
+            {
+                pnlInviteEmpty.Visible = false;
+                lblLookup.CssClass = "font-label-md block mb-3 text-on-surface-variant";
+                lblLookup.Text = "Type at least 2 characters to search.";
+                return;
+            }
+
+            pnlInviteEmpty.Visible = results.Rows.Count == 0;
+            lblLookup.Text = results.Rows.Count == 0
+                ? ""
+                : results.Rows.Count + " student" + (results.Rows.Count == 1 ? "" : "s") + " found.";
+            lblLookup.CssClass = "font-label-md block mb-3 text-on-surface-variant";
         }
 
         private static string CollectWorkLinks(RepeaterItem item, out string links)
@@ -406,7 +530,10 @@ namespace DigitalTransparencySystem.Modules.Assignments
             error = AddTypedFiles(item.FindControl("fuWord") as FileUpload, new[] { ".doc", ".docx" }, "Word", files);
             if (error != null)
                 return error;
-            return AddTypedFiles(item.FindControl("fuImage") as FileUpload, new[] { ".jpg", ".jpeg", ".png" }, "image", files);
+            error = AddTypedFiles(item.FindControl("fuImage") as FileUpload, new[] { ".jpg", ".jpeg", ".png" }, "image", files);
+            if (error != null)
+                return error;
+            return AddTypedFiles(item.FindControl("fuZip") as FileUpload, new[] { ".zip" }, "ZIP", files);
         }
 
         private static string AddTypedFiles(FileUpload upload, string[] allowed, string label, IList<HttpPostedFile> files)
@@ -492,10 +619,7 @@ namespace DigitalTransparencySystem.Modules.Assignments
 
         private void Show(string error, string ok)
         {
-            lblMessage.Text = error ?? ok;
-            lblMessage.CssClass = error != null
-                ? "font-label-md block mb-4 text-error"
-                : "font-label-md block mb-4 text-tertiary";
+            UiNotice.Bind(lblMessage, error, ok);
         }
     }
 }

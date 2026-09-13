@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, observerOptions);
 
     document.querySelectorAll('section > div').forEach(el => {
-        el.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-8');
+        el.classList.add('transition-all', 'duration-700', 'opacity-100', 'translate-y-0');
         observer.observe(el);
     });
 

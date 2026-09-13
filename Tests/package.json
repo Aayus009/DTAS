@@ -1,0 +1,8 @@
+{
+  "name": "dtas-tests",
+  "private": true,
+  "description": "Newman runner for DTAS interface and security HTTP tests",
+  "devDependencies": {
+    "newman": "^6.2.1"
+  }
+}

@@ -94,7 +94,12 @@ namespace DigitalTransparencySystem.Helpers
                 return false;
             if (!IsMember || !assignedUserId.HasValue || assignedUserId.Value != actorId)
                 return false;
-            return string.Equals(status, "Completed", StringComparison.OrdinalIgnoreCase);
+            return true;
+        }
+
+        public bool CanComment
+        {
+            get { return CanView && (IsMember || IsFacultyOwner || IsSystemAdmin); }
         }
     }
 
@@ -123,7 +128,15 @@ namespace DigitalTransparencySystem.Helpers
 
     public static class AssignmentService
     {
+        private static readonly object SchemaLock = new object();
         private static bool schemaReady;
+        private static bool assignmentCodesRefreshed;
+        private const string TaskProgressWeightSql = @"CASE
+                            WHEN t.Status = N'Completed' THEN 1.0
+                            WHEN t.Status = N'UnderReview' THEN 0.75
+                            WHEN t.Status = N'InProgress' THEN 0.50
+                            ELSE 0.0
+                        END";
         private const string AssignmentSelectColumns =
             "AssignmentID, AssignmentName, Description, Deadline, AssignmentCode, Status, CreatedBy, IsDeleted, ISNULL(AssignmentType, N'College') AS AssignmentType";
 
@@ -131,16 +144,314 @@ namespace DigitalTransparencySystem.Helpers
         {
             if (schemaReady)
                 return;
-            using (var con = new SqlConnection(AuthService.ConnectionString))
+            lock (SchemaLock)
             {
-                con.Open();
-                new SqlCommand(@"
+                if (schemaReady)
+                    return;
+                using (var con = new SqlConnection(AuthService.ConnectionString))
+                {
+                    con.Open();
+                    new SqlCommand(@"
                     IF COL_LENGTH('dbo.Assignments', 'AssignmentType') IS NULL
                         ALTER TABLE dbo.Assignments ADD AssignmentType NVARCHAR(20) NOT NULL
                             CONSTRAINT DF_Assignments_AssignmentType DEFAULT N'College';
+                    IF OBJECT_ID('dbo.AssignmentTaskFiles', 'U') IS NULL
+                    BEGIN
+                        CREATE TABLE dbo.AssignmentTaskFiles (
+                            FileID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                            TaskID INT NOT NULL,
+                            FilePath NVARCHAR(500) NOT NULL,
+                            FileName NVARCHAR(260) NOT NULL,
+                            UploadedBy INT NOT NULL,
+                            UploadedAt DATETIME NOT NULL CONSTRAINT DF_AssignmentTaskFiles_UploadedAt DEFAULT GETDATE(),
+                            CONSTRAINT FK_AssignmentTaskFiles_Task FOREIGN KEY (TaskID) REFERENCES dbo.AssignmentTasks(TaskID),
+                            CONSTRAINT FK_AssignmentTaskFiles_User FOREIGN KEY (UploadedBy) REFERENCES dbo.Users(UserID)
+                        );
+                        CREATE INDEX IX_AssignmentTaskFiles_Task ON dbo.AssignmentTaskFiles(TaskID);
+                    END
+                    IF OBJECT_ID('dbo.AssignmentTaskComments', 'U') IS NULL
+                    BEGIN
+                        CREATE TABLE dbo.AssignmentTaskComments (
+                            CommentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                            TaskID INT NOT NULL,
+                            UserID INT NOT NULL,
+                            Comment NVARCHAR(2000) NOT NULL,
+                            CreatedAt DATETIME NOT NULL CONSTRAINT DF_AssignmentTaskComments_CreatedAt DEFAULT GETDATE(),
+                            CONSTRAINT FK_ATC_Task FOREIGN KEY (TaskID) REFERENCES dbo.AssignmentTasks(TaskID),
+                            CONSTRAINT FK_ATC_User FOREIGN KEY (UserID) REFERENCES dbo.Users(UserID)
+                        );
+                        CREATE INDEX IX_AssignmentTaskComments_Task ON dbo.AssignmentTaskComments(TaskID, CreatedAt);
+                    END
                 ", con).ExecuteNonQuery();
+                    try
+                    {
+                        RefreshProgressProcedures(con);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Assignment progress procedures: " + ex.Message);
+                    }
+                }
+                schemaReady = true;
             }
-            schemaReady = true;
+            RefreshSnaAssignmentCodes();
+        }
+
+        private static void RefreshProgressProcedures(SqlConnection con)
+        {
+            new SqlCommand(@"
+CREATE OR ALTER PROCEDURE dbo.sp_GetAssignmentProgress
+    @GroupID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        g.GroupID,
+        g.GroupName,
+        g.LeaderID,
+        g.IsFinalized,
+        a.AssignmentID,
+        a.AssignmentName,
+        a.Deadline,
+        a.AssignmentCode,
+        COUNT(t.TaskID) AS TotalTasks,
+        SUM(CASE WHEN t.Status = N'Completed' THEN 1 ELSE 0 END) AS CompletedTasks,
+        SUM(CASE WHEN t.Status = N'InProgress' THEN 1 ELSE 0 END) AS InProgressTasks,
+        SUM(CASE WHEN t.Status = N'UnderReview' THEN 1 ELSE 0 END) AS UnderReviewTasks,
+        SUM(CASE WHEN t.Status = N'Blocked' THEN 1 ELSE 0 END) AS BlockedTasks,
+        SUM(CASE WHEN t.DueDate IS NOT NULL AND t.DueDate < GETDATE() AND t.Status <> N'Completed' THEN 1 ELSE 0 END) AS OverdueTasks,
+        CAST(
+            SUM(" + TaskProgressWeightSql + @") * 100.0
+            / NULLIF(COUNT(t.TaskID), 0)
+            AS DECIMAL(5,2)
+        ) AS CompletionPercentage
+    FROM dbo.AssignmentGroups g
+    INNER JOIN dbo.Assignments a ON a.AssignmentID = g.AssignmentID
+    LEFT JOIN dbo.AssignmentTasks t ON t.GroupID = g.GroupID AND t.IsDeleted = 0
+    WHERE g.GroupID = @GroupID AND g.IsDeleted = 0
+    GROUP BY
+        g.GroupID, g.GroupName, g.LeaderID, g.IsFinalized,
+        a.AssignmentID, a.AssignmentName, a.Deadline, a.AssignmentCode;
+
+    SELECT
+        m.UserID,
+        u.FullName,
+        m.Responsibility,
+        COUNT(t.TaskID) AS AssignedTasks,
+        SUM(CASE WHEN t.Status = N'Completed' THEN 1 ELSE 0 END) AS CompletedTasks,
+        SUM(CASE WHEN t.Status <> N'Completed' THEN 1 ELSE 0 END) AS PendingTasks,
+        SUM(CASE WHEN t.DueDate IS NOT NULL AND t.DueDate < GETDATE() AND t.Status <> N'Completed' THEN 1 ELSE 0 END) AS OverdueTasks,
+        ISNULL(CAST(
+            SUM(" + TaskProgressWeightSql + @") * 100.0
+            / NULLIF(COUNT(t.TaskID), 0)
+            AS DECIMAL(5,2)
+        ), 0) AS CompletionPercentage
+    FROM dbo.AssignmentMembers m
+    INNER JOIN dbo.Users u ON u.UserID = m.UserID
+    LEFT JOIN dbo.AssignmentTasks t
+        ON t.GroupID = m.GroupID
+       AND t.AssignedUserID = m.UserID
+       AND t.IsDeleted = 0
+    WHERE m.GroupID = @GroupID
+    GROUP BY m.UserID, u.FullName, m.Responsibility
+    ORDER BY m.Responsibility, u.FullName;
+END", con).ExecuteNonQuery();
+
+            new SqlCommand(@"
+CREATE OR ALTER PROCEDURE dbo.sp_GetMemberContributionReport
+    @GroupID INT,
+    @UserID INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    ;WITH MemberBase AS (
+        SELECT m.GroupID, m.UserID
+        FROM dbo.AssignmentMembers m
+        WHERE m.GroupID = @GroupID
+          AND (@UserID IS NULL OR m.UserID = @UserID)
+    ),
+    TaskStats AS (
+        SELECT
+            b.GroupID,
+            b.UserID,
+            AssignedTasks = COUNT(t.TaskID),
+            CompletedTasks = SUM(CASE WHEN t.Status = N'Completed' THEN 1 ELSE 0 END),
+            PendingTasks = SUM(CASE WHEN t.Status <> N'Completed' THEN 1 ELSE 0 END),
+            OverdueTasks = SUM(CASE WHEN t.DueDate IS NOT NULL AND t.DueDate < GETDATE() AND t.Status <> N'Completed' THEN 1 ELSE 0 END),
+            ProgressWeight = SUM(CASE
+                WHEN t.Status = N'Completed' THEN 1.0
+                WHEN t.Status = N'UnderReview' THEN 0.75
+                WHEN t.Status = N'InProgress' THEN 0.50
+                ELSE 0.0
+            END),
+            LastTaskActivity = MAX(t.UpdatedAt)
+        FROM MemberBase b
+        LEFT JOIN dbo.AssignmentTasks t
+            ON t.GroupID = b.GroupID
+           AND t.AssignedUserID = b.UserID
+           AND t.IsDeleted = 0
+        GROUP BY b.GroupID, b.UserID
+    ),
+    UpdateStats AS (
+        SELECT
+            b.GroupID,
+            b.UserID,
+            ProgressUpdates = COUNT(h.HistoryID),
+            LastHistory = MAX(h.ChangedAt)
+        FROM MemberBase b
+        LEFT JOIN dbo.AssignmentTasks t
+            ON t.GroupID = b.GroupID AND t.IsDeleted = 0
+        LEFT JOIN dbo.AssignmentTaskHistory h
+            ON h.TaskID = t.TaskID AND h.ChangedBy = b.UserID
+        GROUP BY b.GroupID, b.UserID
+    ),
+    Scored AS (
+        SELECT
+            ts.GroupID,
+            ts.UserID,
+            ts.AssignedTasks,
+            ts.CompletedTasks,
+            ts.PendingTasks,
+            ts.OverdueTasks,
+            us.ProgressUpdates,
+            LastActivity = CASE
+                WHEN ts.LastTaskActivity IS NULL THEN us.LastHistory
+                WHEN us.LastHistory IS NULL THEN ts.LastTaskActivity
+                WHEN us.LastHistory > ts.LastTaskActivity THEN us.LastHistory
+                ELSE ts.LastTaskActivity
+            END,
+            CompletionPercentage = CAST(
+                CASE WHEN ts.AssignedTasks = 0 THEN 0
+                     ELSE ISNULL(ts.ProgressWeight, 0) * 100.0 / ts.AssignedTasks
+                END AS DECIMAL(5,2)
+            ),
+            ContributionScore = CAST(
+                CASE WHEN ts.AssignedTasks = 0 THEN 0
+                     ELSE
+                        (50.0 * ISNULL(ts.ProgressWeight, 0) / ts.AssignedTasks)
+                      + (20.0 * (1.0 - (ts.OverdueTasks * 1.0 / ts.AssignedTasks)))
+                      + (20.0 * (CASE WHEN us.ProgressUpdates * 20.0 > 100 THEN 100 ELSE us.ProgressUpdates * 20.0 END) / 100.0)
+                      + (10.0 * CASE WHEN COALESCE(
+                            CASE
+                                WHEN ts.LastTaskActivity IS NULL THEN us.LastHistory
+                                WHEN us.LastHistory IS NULL THEN ts.LastTaskActivity
+                                WHEN us.LastHistory > ts.LastTaskActivity THEN us.LastHistory
+                                ELSE ts.LastTaskActivity
+                            END, '19000101') >= DATEADD(DAY, -14, GETDATE()) THEN 1 ELSE 0 END)
+                END AS DECIMAL(5,2)
+            )
+        FROM TaskStats ts
+        INNER JOIN UpdateStats us ON us.GroupID = ts.GroupID AND us.UserID = ts.UserID
+    )
+    MERGE dbo.ContributionRecords AS target
+    USING Scored AS src
+        ON target.GroupID = src.GroupID AND target.UserID = src.UserID
+    WHEN MATCHED THEN
+        UPDATE SET
+            AssignedTasks = src.AssignedTasks,
+            CompletedTasks = src.CompletedTasks,
+            PendingTasks = src.PendingTasks,
+            OverdueTasks = src.OverdueTasks,
+            ProgressUpdates = src.ProgressUpdates,
+            LastActivity = src.LastActivity,
+            CompletionPercentage = src.CompletionPercentage,
+            ContributionScore = src.ContributionScore,
+            CalculatedAt = GETDATE()
+    WHEN NOT MATCHED THEN
+        INSERT (GroupID, UserID, AssignedTasks, CompletedTasks, PendingTasks, OverdueTasks, ProgressUpdates, LastActivity, CompletionPercentage, ContributionScore, CalculatedAt)
+        VALUES (src.GroupID, src.UserID, src.AssignedTasks, src.CompletedTasks, src.PendingTasks, src.OverdueTasks, src.ProgressUpdates, src.LastActivity, src.CompletionPercentage, src.ContributionScore, GETDATE());
+
+    SELECT
+        cr.RecordID,
+        cr.GroupID,
+        cr.UserID,
+        u.FullName,
+        m.Responsibility,
+        cr.AssignedTasks,
+        cr.CompletedTasks,
+        cr.PendingTasks,
+        cr.OverdueTasks,
+        cr.ProgressUpdates,
+        cr.LastActivity,
+        cr.CompletionPercentage,
+        cr.ContributionScore,
+        cr.CalculatedAt
+    FROM dbo.ContributionRecords cr
+    INNER JOIN dbo.Users u ON u.UserID = cr.UserID
+    INNER JOIN dbo.AssignmentMembers m ON m.GroupID = cr.GroupID AND m.UserID = cr.UserID
+    WHERE cr.GroupID = @GroupID
+      AND (@UserID IS NULL OR cr.UserID = @UserID)
+    ORDER BY cr.ContributionScore DESC, u.FullName;
+END", con).ExecuteNonQuery();
+        }
+
+        public static decimal TaskProgressWeight(string status)
+        {
+            if (string.Equals(status, "Completed", StringComparison.OrdinalIgnoreCase))
+                return 1m;
+            if (string.Equals(status, "UnderReview", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(status, "Under Review", StringComparison.OrdinalIgnoreCase))
+                return 0.75m;
+            if (string.Equals(status, "InProgress", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(status, "In Progress", StringComparison.OrdinalIgnoreCase))
+                return 0.50m;
+            return 0m;
+        }
+
+        public static decimal ComputeGroupProgress(DataTable tasks)
+        {
+            if (tasks == null || tasks.Rows.Count == 0)
+                return 0m;
+            decimal sum = 0m;
+            foreach (DataRow row in tasks.Rows)
+                sum += TaskProgressWeight(Convert.ToString(row["Status"]));
+            return Math.Round(sum * 100m / tasks.Rows.Count, 2, MidpointRounding.AwayFromZero);
+        }
+
+        private static void RefreshSnaAssignmentCodes()
+        {
+            if (assignmentCodesRefreshed)
+                return;
+            lock (SchemaLock)
+            {
+                if (assignmentCodesRefreshed)
+                    return;
+                try
+                {
+                    using (var con = new SqlConnection(AuthService.ConnectionString))
+                    {
+                        con.Open();
+                        var pending = new DataTable();
+                        using (var cmd = new SqlCommand(@"
+                            SELECT AssignmentID, AssignmentName
+                            FROM Assignments
+                            WHERE IsDeleted = 0
+                              AND AssignmentCode LIKE N'SNA-ASSIGN-%'
+                              AND ISNULL(AssignmentType, N'College') <> N'Personal'", con))
+                        {
+                            new SqlDataAdapter(cmd).Fill(pending);
+                        }
+                        foreach (DataRow row in pending.Rows)
+                        {
+                            string next = NextCollegeCode(Convert.ToString(row["AssignmentName"]), con);
+                            using (var upd = new SqlCommand(
+                                "UPDATE Assignments SET AssignmentCode = @Code WHERE AssignmentID = @ID", con))
+                            {
+                                upd.Parameters.AddWithValue("@Code", next);
+                                upd.Parameters.AddWithValue("@ID", Convert.ToInt32(row["AssignmentID"]));
+                                upd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Assignment codes: " + ex.Message);
+                }
+                assignmentCodesRefreshed = true;
+            }
         }
 
         public static string CreateAssignment(int creatorId, string name, string description, DateTime deadline, out int assignmentId, out string code)
@@ -153,23 +464,27 @@ namespace DigitalTransparencySystem.Helpers
                 return "Only Faculty can create an academic assignment.";
             try
             {
+                string generated = NextCollegeCode(name.Trim());
                 using (var con = new SqlConnection(AuthService.ConnectionString))
-                using (var cmd = new SqlCommand("dbo.sp_CreateAssignmentGroup", con))
+                using (var cmd = new SqlCommand(@"
+                    INSERT INTO Assignments
+                        (AssignmentName, Description, Deadline, AssignmentCode, CreatedBy, CreatedAt, Status, IsDeleted, AssignmentType)
+                    VALUES
+                        (@Name, @Description, @Deadline, @Code, @CreatedBy, GETDATE(), N'Active', 0, N'College');
+                    SELECT CAST(SCOPE_IDENTITY() AS INT);", con))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@AssignmentName", name.Trim());
-                    cmd.Parameters.AddWithValue("@Description", (object)description ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Name", name.Trim());
+                    cmd.Parameters.AddWithValue("@Description", string.IsNullOrWhiteSpace(description) ? (object)DBNull.Value : description.Trim());
                     cmd.Parameters.AddWithValue("@Deadline", deadline);
+                    cmd.Parameters.AddWithValue("@Code", generated);
                     cmd.Parameters.AddWithValue("@CreatedBy", creatorId);
-                    SqlParameter idParam = cmd.Parameters.Add("@AssignmentID", SqlDbType.Int);
-                    idParam.Direction = ParameterDirection.Output;
-                    SqlParameter codeParam = cmd.Parameters.Add("@AssignmentCode", SqlDbType.NVarChar, 50);
-                    codeParam.Direction = ParameterDirection.Output;
                     con.Open();
-                    cmd.ExecuteNonQuery();
-                    assignmentId = Convert.ToInt32(idParam.Value);
-                    code = Convert.ToString(codeParam.Value);
+                    assignmentId = Convert.ToInt32(cmd.ExecuteScalar());
+                    code = generated;
                 }
+                AuthService.WriteAudit(creatorId, "AssignmentCreated", "Assignment", assignmentId, name.Trim() + " (" + code + ")", null);
+                int connectId;
+                ConnectService.CreateGroupForAssignment(assignmentId, out connectId);
                 return null;
             }
             catch (SqlException ex)
@@ -317,7 +632,12 @@ namespace DigitalTransparencySystem.Helpers
                          COUNT(t.TaskID) AS TotalTasks,
                          SUM(CASE WHEN t.Status = N'Completed' THEN 1 ELSE 0 END) AS CompletedTasks,
                          CAST(
-                            SUM(CASE WHEN t.Status = N'Completed' THEN 1 ELSE 0 END) * 100.0
+                            SUM(CASE
+                                WHEN t.Status = N'Completed' THEN 1.0
+                                WHEN t.Status = N'UnderReview' THEN 0.75
+                                WHEN t.Status = N'InProgress' THEN 0.50
+                                ELSE 0.0
+                            END) * 100.0
                             / NULLIF(COUNT(t.TaskID), 0)
                             AS DECIMAL(5,2)
                          ) AS CompletionPercentage
@@ -349,7 +669,17 @@ namespace DigitalTransparencySystem.Helpers
                 @"SELECT g.GroupID, g.GroupName, g.IsFinalized, a.AssignmentID, a.AssignmentName, a.AssignmentCode, a.Deadline,
                          m.Responsibility, ISNULL(a.AssignmentType, N'College') AS AssignmentType,
                          COUNT(t.TaskID) AS TotalTasks,
-                         SUM(CASE WHEN t.Status = N'Completed' THEN 1 ELSE 0 END) AS CompletedTasks
+                         SUM(CASE WHEN t.Status = N'Completed' THEN 1 ELSE 0 END) AS CompletedTasks,
+                         CAST(
+                            SUM(CASE
+                                WHEN t.Status = N'Completed' THEN 1.0
+                                WHEN t.Status = N'UnderReview' THEN 0.75
+                                WHEN t.Status = N'InProgress' THEN 0.50
+                                ELSE 0.0
+                            END) * 100.0
+                            / NULLIF(COUNT(t.TaskID), 0)
+                            AS DECIMAL(5,2)
+                         ) AS CompletionPercentage
                   FROM AssignmentMembers m
                   INNER JOIN AssignmentGroups g ON g.GroupID = m.GroupID AND g.IsDeleted = 0
                   INNER JOIN Assignments a ON a.AssignmentID = g.AssignmentID AND a.IsDeleted = 0
@@ -452,6 +782,8 @@ namespace DigitalTransparencySystem.Helpers
             }
 
             AuthService.WriteAudit(userId, "PersonalAssignmentGroupCreated", "AssignmentGroup", groupId, groupName.Trim(), null);
+            int connectId;
+            ConnectService.CreateGroupForAssignmentSubgroup(groupId, out connectId);
             return null;
         }
 
@@ -470,6 +802,71 @@ namespace DigitalTransparencySystem.Helpers
                 }
             }
             return "PERS-ASSIGN-" + DateTime.UtcNow.Ticks.ToString().Substring(10, 4);
+        }
+
+        private static string NextCollegeCode(string assignmentName)
+        {
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            {
+                con.Open();
+                return NextCollegeCode(assignmentName, con);
+            }
+        }
+
+        private static string NextCollegeCode(string assignmentName, SqlConnection con)
+        {
+            string prefix = CodePrefixFromName(assignmentName);
+            for (int attempt = 0; attempt < 40; attempt++)
+            {
+                string code = prefix + "-" + (Math.Abs(Guid.NewGuid().GetHashCode()) % 10000).ToString("0000");
+                using (var check = new SqlCommand("SELECT COUNT(*) FROM Assignments WHERE AssignmentCode = @Code", con))
+                {
+                    check.Parameters.AddWithValue("@Code", code);
+                    if (Convert.ToInt32(check.ExecuteScalar()) == 0)
+                        return code;
+                }
+            }
+            string ticks = DateTime.UtcNow.Ticks.ToString();
+            return prefix + "-" + ticks.Substring(Math.Max(0, ticks.Length - 4));
+        }
+
+        internal static string CodePrefixFromName(string name)
+        {
+            string raw = (name ?? "").Trim().ToUpperInvariant();
+            var tokens = new List<string>();
+            foreach (string part in Regex.Split(raw, @"[^A-Z0-9]+"))
+            {
+                if (string.IsNullOrEmpty(part))
+                    continue;
+                if (part == "A" || part == "AN" || part == "THE" || part == "OF" || part == "FOR"
+                    || part == "AND" || part == "TO" || part == "IN" || part == "ON"
+                    || part == "ASSIGNMENT" || part == "ASSIGNMENTS" || part == "GROUP" || part == "GROUPS")
+                    continue;
+                tokens.Add(part);
+            }
+
+            if (tokens.Count == 0)
+            {
+                string letters = Regex.Replace(raw, @"[^A-Z0-9]", "");
+                if (letters.Length >= 2)
+                    return letters.Length <= 6 ? letters : letters.Substring(0, 6);
+                return "ASN";
+            }
+
+            if (tokens[0].Length >= 2 && tokens[0].Length <= 5)
+                return tokens[0];
+
+            if (tokens.Count >= 2)
+            {
+                var prefix = new StringBuilder();
+                for (int i = 0; i < tokens.Count && prefix.Length < 6; i++)
+                    prefix.Append(tokens[i][0]);
+                if (prefix.Length >= 2)
+                    return prefix.ToString();
+            }
+
+            string token = tokens[0];
+            return token.Length <= 6 ? token : token.Substring(0, 4);
         }
 
         public static string CreateSubgroup(int userId, string code, string groupName, out int groupId)
@@ -513,6 +910,8 @@ namespace DigitalTransparencySystem.Helpers
             }
 
             AuthService.WriteAudit(userId, "AssignmentGroupCreated", "AssignmentGroup", groupId, groupName.Trim(), null);
+            int connectId;
+            ConnectService.CreateGroupForAssignmentSubgroup(groupId, out connectId);
             return null;
         }
 
@@ -560,6 +959,20 @@ namespace DigitalTransparencySystem.Helpers
             Notify(lookup.UserID.Value, "Assignment group invitation",
                 "You were invited to " + access.Group.GroupName + " for " + access.Group.Assignment.AssignmentName + ".",
                 groupId);
+
+            UserAccount invitee = AuthService.FindById(lookup.UserID.Value);
+            if (invitee != null && !string.IsNullOrWhiteSpace(invitee.Email))
+            {
+                MailSender.Send(invitee.Email, "Invited to " + access.Group.GroupName,
+                    MailComposer.Build(
+                        null,
+                        "You were invited to " + access.Group.GroupName + " for " + access.Group.Assignment.AssignmentName + ".",
+                        null,
+                        null,
+                        "Open My Assignments",
+                        MailSender.AbsoluteUrl("~/Modules/Assignments/MyAssignments.aspx"),
+                        MailComposer.FirstName(invitee.FullName)));
+            }
             return null;
         }
 
@@ -587,6 +1000,7 @@ namespace DigitalTransparencySystem.Helpers
 
         public static string AcceptInvitation(int invitationId, int userId)
         {
+            int groupId;
             using (var con = new SqlConnection(AuthService.ConnectionString))
             {
                 con.Open();
@@ -595,7 +1009,6 @@ namespace DigitalTransparencySystem.Helpers
                       FROM AssignmentInvitations WHERE InvitationID = @ID", con);
                 read.Parameters.AddWithValue("@ID", invitationId);
                 int assignmentId;
-                int groupId;
                 using (SqlDataReader reader = read.ExecuteReader())
                 {
                     if (!reader.Read())
@@ -628,6 +1041,7 @@ namespace DigitalTransparencySystem.Helpers
                 member.ExecuteNonQuery();
             }
 
+            ConnectService.SyncUserToAssignmentConnect(groupId, userId);
             return null;
         }
 
@@ -704,6 +1118,9 @@ namespace DigitalTransparencySystem.Helpers
             }
 
             AuthService.WriteAudit(actorId, "AssignmentLeaderChanged", "AssignmentGroup", groupId, newLeaderId.ToString(), null);
+            int? connectId = ConnectService.FindGroupIdByAssignmentGroup(groupId);
+            if (connectId.HasValue)
+                ConnectService.TransferOwner(connectId.Value, newLeaderId);
             return null;
         }
 
@@ -723,6 +1140,7 @@ namespace DigitalTransparencySystem.Helpers
             }
 
             AuthService.WriteAudit(actorId, "AssignmentGroupDeleted", "AssignmentGroup", groupId, null, null);
+            ConnectService.CloseAssignmentConnect(groupId);
             return null;
         }
 
@@ -743,6 +1161,7 @@ namespace DigitalTransparencySystem.Helpers
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
+            ConnectService.RenameAssignmentSubgroupConnect(groupId, name.Trim());
             return null;
         }
 
@@ -785,6 +1204,161 @@ namespace DigitalTransparencySystem.Helpers
             }
 
             return null;
+        }
+
+        public static string AddTasks(int groupId, int actorId, string actorRole, IList<string> titles, IList<int> assigneeIds, int? parentTaskId, DateTime? dueDate)
+        {
+            AssignmentAccess access = GetAccess(groupId, actorId, actorRole);
+            if (!access.CanManageStructure)
+                return access.IsDeadlineLocked
+                    ? "The assignment deadline has passed. Students cannot add tasks unless faculty extends it."
+                    : (access.Group != null && access.Group.IsFinalized
+                        ? "Finalized groups cannot add tasks. Ask Faculty."
+                        : "Only the group leader can add tasks.");
+
+            var cleanTitles = new List<string>();
+            if (titles != null)
+            {
+                foreach (string raw in titles)
+                {
+                    if (string.IsNullOrWhiteSpace(raw))
+                        continue;
+                    string title = raw.Trim();
+                    if (title.Length > 200)
+                        return "Keep each task title to 200 characters or fewer.";
+                    cleanTitles.Add(title);
+                    if (cleanTitles.Count > 20)
+                        return "Allocate at most 20 tasks at a time.";
+                }
+            }
+            if (cleanTitles.Count == 0)
+                return "Enter at least one task title. Put each title on its own line.";
+
+            var assignees = new List<int>();
+            if (assigneeIds != null)
+            {
+                foreach (int assigneeId in assigneeIds)
+                {
+                    if (assigneeId <= 0 || assignees.Contains(assigneeId))
+                        continue;
+                    if (!IsMember(groupId, assigneeId))
+                        return "Tasks can only be assigned to group members.";
+                    assignees.Add(assigneeId);
+                }
+            }
+            if (assignees.Count == 0)
+                assignees.Add(0);
+
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            {
+                con.Open();
+                foreach (string title in cleanTitles)
+                {
+                    foreach (int assigneeId in assignees)
+                    {
+                        var max = new SqlCommand(
+                            "SELECT ISNULL(MAX(SortOrder), 0) + 1 FROM AssignmentTasks WHERE GroupID = @GroupID AND ISNULL(ParentTaskID, 0) = ISNULL(@Parent, 0)", con);
+                        max.Parameters.AddWithValue("@GroupID", groupId);
+                        max.Parameters.AddWithValue("@Parent", (object)parentTaskId ?? 0);
+                        int sort = Convert.ToInt32(max.ExecuteScalar());
+
+                        var insert = new SqlCommand(
+                            @"INSERT INTO AssignmentTasks (GroupID, Title, Description, AssignedUserID, SortOrder, Status, DueDate, CreatedAt, UpdatedAt, ParentTaskID, LastChangedBy, IsDeleted)
+                              VALUES (@GroupID, @Title, NULL, @Assignee, @Sort, N'ToDo', @Due, GETDATE(), GETDATE(), @Parent, @Actor, 0)", con);
+                        insert.Parameters.AddWithValue("@GroupID", groupId);
+                        insert.Parameters.AddWithValue("@Title", title);
+                        insert.Parameters.AddWithValue("@Assignee", assigneeId > 0 ? (object)assigneeId : DBNull.Value);
+                        insert.Parameters.AddWithValue("@Sort", sort);
+                        insert.Parameters.AddWithValue("@Due", (object)dueDate ?? DBNull.Value);
+                        insert.Parameters.AddWithValue("@Parent", (object)parentTaskId ?? DBNull.Value);
+                        insert.Parameters.AddWithValue("@Actor", actorId);
+                        insert.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static DataTable SearchStudentsForInvite(int groupId, int actorId, string actorRole, string query)
+        {
+            var table = new DataTable();
+            AssignmentAccess access = GetAccess(groupId, actorId, actorRole);
+            if (!access.CanInvite || access.Group == null)
+                return table;
+
+            string term = (query ?? "").Trim();
+            if (term.Length < 2)
+                return table;
+
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            using (var cmd = new SqlCommand(
+                @"SELECT TOP 20 u.UserID, u.FullName, u.Email, u.Username,
+                         ISNULL(u.InstitutionalID, N'') AS InstitutionalID,
+                         CASE WHEN EXISTS (
+                                SELECT 1 FROM AssignmentInvitations i
+                                WHERE i.AssignmentID = @AssignmentID AND i.Status = N'Pending'
+                                  AND (i.InvitedUserID = u.UserID OR LOWER(i.Email) = LOWER(u.Email))
+                             )
+                             THEN N'Pending' ELSE N'Available' END AS InviteStatus
+                  FROM Users u
+                  INNER JOIN Roles r ON r.RoleID = u.RoleID
+                  WHERE ISNULL(u.IsDeleted, 0) = 0
+                    AND ISNULL(u.IsActive, 1) = 1
+                    AND r.RoleName = N'Student'
+                    AND (
+                        u.FullName LIKE @Q OR
+                        u.Email LIKE @Q OR
+                        u.Username LIKE @Q OR
+                        ISNULL(u.InstitutionalID, N'') LIKE @Q
+                    )
+                    AND NOT EXISTS (
+                        SELECT 1
+                        FROM AssignmentMembers m
+                        INNER JOIN AssignmentGroups g ON g.GroupID = m.GroupID AND g.IsDeleted = 0
+                        WHERE g.AssignmentID = @AssignmentID AND m.UserID = u.UserID
+                    )
+                  ORDER BY
+                    CASE WHEN u.Email = @Exact OR u.Username = @Exact THEN 0
+                         WHEN u.FullName LIKE @Prefix THEN 1
+                         ELSE 2 END,
+                    u.FullName", con))
+            {
+                string like = LikeContains(term);
+                cmd.Parameters.AddWithValue("@AssignmentID", access.Group.AssignmentID);
+                cmd.Parameters.AddWithValue("@Q", like);
+                cmd.Parameters.AddWithValue("@Exact", term);
+                cmd.Parameters.AddWithValue("@Prefix", LikePrefix(term));
+                new SqlDataAdapter(cmd).Fill(table);
+            }
+            return table;
+        }
+
+        public static string InviteMemberByUserId(int groupId, int actorId, string actorRole, int inviteeUserId)
+        {
+            UserAccount user = AuthService.FindById(inviteeUserId);
+            if (user == null || user.IsDeleted)
+                return "No DTAS user available.";
+            if (string.IsNullOrWhiteSpace(user.Email))
+                return "That student does not have an email on file.";
+            return InviteMember(groupId, actorId, actorRole, user.Email);
+        }
+
+        private static string LikeContains(string query)
+        {
+            return "%" + EscapeLike(query) + "%";
+        }
+
+        private static string LikePrefix(string query)
+        {
+            return EscapeLike(query) + "%";
+        }
+
+        private static string EscapeLike(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return "";
+            return value.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
         }
 
         public static string UpdateTask(int taskId, int actorId, string actorRole, int? assigneeId, string status)
@@ -898,7 +1472,7 @@ namespace DigitalTransparencySystem.Helpers
 
             AssignmentAccess access = GetAccess(task.GroupID, actorId, actorRole);
             if (!access.CanSubmitWork(task.AssignedUserID, actorId, task.Status))
-                return "Upload a file, note, or link after you mark your own task completed.";
+                return "Only the assigned member can add files, notes, or links to this task.";
 
             note = string.IsNullOrWhiteSpace(note) ? null : note.Trim();
             if (note != null && note.Length > 2000)
@@ -962,7 +1536,7 @@ namespace DigitalTransparencySystem.Helpers
                 con.Open();
                 using (var cmd = new SqlCommand(
                     @"UPDATE AssignmentTasks
-                      SET SubmissionNote = @Note,
+                      SET SubmissionNote = CASE WHEN @Note IS NULL THEN SubmissionNote ELSE @Note END,
                           SubmissionFilePath = COALESCE(@Path, SubmissionFilePath),
                           SubmissionFileName = COALESCE(@FileName, SubmissionFileName),
                           SubmittedAt = GETDATE(),
@@ -1021,6 +1595,83 @@ namespace DigitalTransparencySystem.Helpers
                 }
             }
 
+            return null;
+        }
+
+        public static DataTable ListTaskComments(int taskId)
+        {
+            EnsureSchema();
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            using (var cmd = new SqlCommand(
+                @"SELECT c.CommentID, c.Comment, c.CreatedAt, ISNULL(u.FullName, u.Username) AS FullName
+                  FROM AssignmentTaskComments c
+                  INNER JOIN Users u ON u.UserID = c.UserID
+                  WHERE c.TaskID = @TaskID
+                  ORDER BY c.CreatedAt ASC, c.CommentID ASC", con))
+            {
+                cmd.Parameters.AddWithValue("@TaskID", taskId);
+                var table = new DataTable();
+                new SqlDataAdapter(cmd).Fill(table);
+                return table;
+            }
+        }
+
+        public static string AddTaskComment(int taskId, int actorId, string actorRole, string comment)
+        {
+            AssignmentTaskRecord task = GetTask(taskId);
+            if (task == null)
+                return "Task not found.";
+
+            AssignmentAccess access = GetAccess(task.GroupID, actorId, actorRole);
+            if (!access.CanComment)
+                return "Only group members can comment on this task.";
+
+            comment = (comment ?? "").Trim();
+            if (comment.Length == 0)
+                return "Enter a comment.";
+            if (comment.Length > 2000)
+                return "The comment must be 2000 characters or fewer.";
+
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            {
+                con.Open();
+                using (var cmd = new SqlCommand(
+                    @"INSERT INTO AssignmentTaskComments (TaskID, UserID, Comment, CreatedAt)
+                      VALUES (@TaskID, @UserID, @Comment, GETDATE())", con))
+                {
+                    cmd.Parameters.AddWithValue("@TaskID", taskId);
+                    cmd.Parameters.AddWithValue("@UserID", actorId);
+                    cmd.Parameters.AddWithValue("@Comment", comment);
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var hist = new SqlCommand(
+                    @"INSERT INTO AssignmentTaskHistory
+                        (TaskID, OldStatus, NewStatus, PreviousAssignee, NewAssignee, ChangedBy, ChangedAt, Description)
+                      VALUES
+                        (@TaskID, @Status, @Status, @Assignee, @Assignee, @Actor, GETDATE(), @Description)", con))
+                {
+                    string history = "Comment: " + (comment.Length > 200 ? comment.Substring(0, 200) : comment);
+                    hist.Parameters.AddWithValue("@TaskID", taskId);
+                    hist.Parameters.AddWithValue("@Status", (object)task.Status ?? DBNull.Value);
+                    hist.Parameters.AddWithValue("@Assignee", (object)task.AssignedUserID ?? DBNull.Value);
+                    hist.Parameters.AddWithValue("@Actor", actorId);
+                    hist.Parameters.AddWithValue("@Description", history);
+                    hist.ExecuteNonQuery();
+                }
+            }
+
+            if (task.AssignedUserID.HasValue)
+            {
+                NotificationService.NotifyUsers(
+                    new[] { task.AssignedUserID.Value },
+                    actorId,
+                    "New comment on assignment task",
+                    "A comment was added on \"" + task.Title + "\".",
+                    "Assignment",
+                    task.GroupID,
+                    "Assignment");
+            }
             return null;
         }
 
@@ -1418,6 +2069,14 @@ namespace DigitalTransparencySystem.Helpers
                 return string.IsNullOrEmpty(extra)
                     ? "Submitted work on \"" + title + "\""
                     : "Submitted work on \"" + title + "\" - " + extra;
+            }
+            if (!string.IsNullOrWhiteSpace(description) && description.StartsWith("Comment:", StringComparison.OrdinalIgnoreCase))
+            {
+                string extra = description.Substring("Comment:".Length).Trim();
+                extra = HttpUtility.HtmlEncode(extra);
+                return string.IsNullOrEmpty(extra)
+                    ? "Commented on \"" + title + "\""
+                    : "Commented on \"" + title + "\" - " + extra;
             }
             if (string.IsNullOrWhiteSpace(description))
                 return title;

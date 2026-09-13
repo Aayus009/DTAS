@@ -372,11 +372,7 @@ namespace DigitalTransparencySystem.Modules.Users
 
         private void ShowMessage(string message, bool isSuccess)
         {
-            pnlMessage.Visible = true;
-            lblMessage.Text = message;
-            pnlMessage.CssClass = isSuccess
-                ? "mb-4 p-4 rounded-lg bg-tertiary-container/10 border border-tertiary-container text-on-tertiary-container"
-                : "mb-4 p-4 rounded-lg bg-error-container border border-error text-error";
+            UiNotice.BindPanel(pnlMessage, lblMessage, message, isSuccess);
         }
 
         private void ClearCreateForm()

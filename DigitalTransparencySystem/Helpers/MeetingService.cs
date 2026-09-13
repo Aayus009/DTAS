@@ -8,17 +8,25 @@ namespace DigitalTransparencySystem.Helpers
 {
     public static class MeetingService
     {
+        private static readonly object SchemaLock = new object();
         private static bool schemaReady;
+        private static readonly object ReminderLock = new object();
+        private static DateTime lastReminderSweep = DateTime.MinValue;
+        private static bool hostAdmissionReady;
 
         public static void EnsureSchema()
         {
             if (schemaReady)
                 return;
-
-            using (SqlConnection con = new SqlConnection(AuthService.ConnectionString))
+            lock (SchemaLock)
             {
-                con.Open();
-                new SqlCommand(@"
+                if (schemaReady)
+                    return;
+
+                using (SqlConnection con = new SqlConnection(AuthService.ConnectionString))
+                {
+                    con.Open();
+                    new SqlCommand(@"
                     IF COL_LENGTH('dbo.Meetings', 'ZoomMeetingId') IS NULL
                         ALTER TABLE dbo.Meetings ADD ZoomMeetingId BIGINT NULL;
                     IF COL_LENGTH('dbo.Meetings', 'ZoomJoinUrl') IS NULL
@@ -37,6 +45,8 @@ namespace DigitalTransparencySystem.Helpers
                         ALTER TABLE dbo.Meetings ADD GroupID INT NULL;
                     IF COL_LENGTH('dbo.Meetings', 'EventID') IS NULL
                         ALTER TABLE dbo.Meetings ADD EventID INT NULL;
+                    IF COL_LENGTH('dbo.Meetings', 'ReminderSentAt') IS NULL
+                        ALTER TABLE dbo.Meetings ADD ReminderSentAt DATETIME NULL;
                     IF OBJECT_ID('dbo.MeetingRecordings', 'U') IS NULL
                     BEGIN
                         CREATE TABLE dbo.MeetingRecordings (
@@ -54,9 +64,60 @@ namespace DigitalTransparencySystem.Helpers
                         );
                     END
                 ", con).ExecuteNonQuery();
+                }
+                schemaReady = true;
             }
+            EnsureHostAdmission();
+        }
 
-            schemaReady = true;
+        public static void EnsureHostAdmission()
+        {
+            if (hostAdmissionReady)
+                return;
+            lock (SchemaLock)
+            {
+                if (hostAdmissionReady)
+                    return;
+                hostAdmissionReady = true;
+                var worker = new System.Threading.Thread(ApplyHostAdmissionToOpenMeetings);
+                worker.IsBackground = true;
+                worker.Name = "DTAS-ZoomAdmission";
+                worker.Start();
+            }
+        }
+
+        private static void ApplyHostAdmissionToOpenMeetings()
+        {
+            try
+            {
+                ZoomService zoom = new ZoomService();
+                if (!zoom.IsConfigured)
+                    return;
+
+                var open = new DataTable();
+                using (SqlConnection con = new SqlConnection(AuthService.ConnectionString))
+                using (SqlCommand cmd = new SqlCommand(@"
+                    SELECT ZoomMeetingId
+                    FROM Meetings
+                    WHERE ZoomMeetingId IS NOT NULL
+                      AND Status IN (N'Scheduled', N'InProgress')
+                      AND DATEADD(MINUTE, CASE WHEN ISNULL(Duration, 0) <= 0 THEN 60 ELSE Duration END, ScheduledDate) > GETDATE()", con))
+                {
+                    cmd.CommandTimeout = 8;
+                    new SqlDataAdapter(cmd).Fill(open);
+                }
+
+                foreach (DataRow row in open.Rows)
+                {
+                    if (row["ZoomMeetingId"] == DBNull.Value)
+                        continue;
+                    zoom.ApplyHostAdmission(Convert.ToInt64(row["ZoomMeetingId"]));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Zoom host admission: " + ex.Message);
+            }
         }
 
         public static bool IsClosedStatus(string status)
@@ -85,6 +146,11 @@ namespace DigitalTransparencySystem.Helpers
 
         public static void CloseExpiredMeetings()
         {
+            CloseExpiredMeetings(true);
+        }
+
+        public static void CloseExpiredMeetings(bool closeZoomRooms)
+        {
             EnsureSchema();
             DataTable expired = new DataTable();
             using (SqlConnection con = new SqlConnection(AuthService.ConnectionString))
@@ -94,31 +160,46 @@ namespace DigitalTransparencySystem.Helpers
                 WHERE Status IN (N'Scheduled', N'InProgress')
                   AND DATEADD(MINUTE, CASE WHEN ISNULL(Duration, 0) <= 0 THEN 60 ELSE Duration END, ScheduledDate) <= GETDATE()", con))
             {
+                cmd.CommandTimeout = 8;
                 new SqlDataAdapter(cmd).Fill(expired);
             }
 
             if (expired.Rows.Count == 0)
                 return;
 
+            using (SqlConnection con = new SqlConnection(AuthService.ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(@"
+                UPDATE Meetings
+                SET Status = N'Completed',
+                    ZoomJoinUrl = NULL,
+                    ZoomStartUrl = NULL,
+                    ZoomPasscode = NULL
+                WHERE Status IN (N'Scheduled', N'InProgress')
+                  AND DATEADD(MINUTE, CASE WHEN ISNULL(Duration, 0) <= 0 THEN 60 ELSE Duration END, ScheduledDate) <= GETDATE()", con))
+            {
+                cmd.CommandTimeout = 8;
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+            if (!closeZoomRooms)
+                return;
+
             ZoomService zoom = new ZoomService();
+            if (!zoom.IsConfigured)
+                return;
+
             foreach (DataRow row in expired.Rows)
             {
-                if (row["ZoomMeetingId"] != DBNull.Value && zoom.IsConfigured)
-                    zoom.EndAndDeleteMeeting(Convert.ToInt64(row["ZoomMeetingId"]));
-
-                using (SqlConnection con = new SqlConnection(AuthService.ConnectionString))
-                using (SqlCommand cmd = new SqlCommand(@"
-                    UPDATE Meetings
-                    SET Status = N'Completed',
-                        ZoomJoinUrl = NULL,
-                        ZoomStartUrl = NULL,
-                        ZoomPasscode = NULL
-                    WHERE MeetingID = @MeetingID
-                      AND Status IN (N'Scheduled', N'InProgress')", con))
+                if (row["ZoomMeetingId"] == DBNull.Value)
+                    continue;
+                try
                 {
-                    cmd.Parameters.AddWithValue("@MeetingID", Convert.ToInt32(row["MeetingID"]));
-                    con.Open();
-                    cmd.ExecuteNonQuery();
+                    zoom.EndAndDeleteMeeting(Convert.ToInt64(row["ZoomMeetingId"]));
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Zoom close failed: " + ex.Message);
                 }
             }
         }
@@ -378,7 +459,7 @@ namespace DigitalTransparencySystem.Helpers
                 && (!taskId.HasValue || taskId.Value <= 0)
                 && (!groupId.HasValue || groupId.Value <= 0)
                 && (!assignmentId.HasValue || assignmentId.Value <= 0))
-                return "Choose the event this meeting is for. The Zoom join link is sent to that event's accepted members.";
+                return "Choose an event or an assignment group. The Zoom join link is sent to that group's members.";
 
             joinUrl = (joinUrl ?? "").Trim();
             bool hasManualLink = joinUrl.Length > 0;
@@ -398,6 +479,8 @@ namespace DigitalTransparencySystem.Helpers
                         return zoom != null && !string.IsNullOrWhiteSpace(zoom.Error)
                             ? zoom.Error
                             : "The Zoom room could not be created. Check the Zoom app credentials and scopes.";
+                    if (zoom.MeetingId > 0)
+                        zoomService.ApplyHostAdmission(zoom.MeetingId);
                 }
                 else if (hasManualLink)
                 {
@@ -465,6 +548,7 @@ namespace DigitalTransparencySystem.Helpers
             }
 
             NotifyMeetingCreated(meetingId, creatorId);
+            SendDueReminders(true);
             return null;
         }
 
@@ -516,10 +600,10 @@ namespace DigitalTransparencySystem.Helpers
             string title = Convert.ToString(meeting["MeetingTitle"]);
             string when = Convert.ToDateTime(meeting["ScheduledDate"]).ToString("MMM dd, yyyy hh:mm tt");
             string eventName = meeting.Table.Columns.Contains("EventName") ? Convert.ToString(meeting["EventName"]) : "";
-            string joinUrl = meeting["ZoomJoinUrl"] == DBNull.Value ? "" : Convert.ToString(meeting["ZoomJoinUrl"]);
-            string passcode = meeting["ZoomPasscode"] == DBNull.Value ? "" : Convert.ToString(meeting["ZoomPasscode"]);
+            string joinUrl = MeetingText(meeting, "ZoomJoinUrl");
+            string passcode = MeetingText(meeting, "ZoomPasscode");
 
-            string message = "A Zoom meeting was scheduled";
+            string message = "A meeting was scheduled";
             if (!string.IsNullOrWhiteSpace(eventName))
                 message += " for \"" + eventName + "\"";
             message += ": " + title + " on " + when + ".";
@@ -534,15 +618,108 @@ namespace DigitalTransparencySystem.Helpers
                 message += " Open My Meetings for details.";
             }
 
-            string emailBody = title + Environment.NewLine
-                + (string.IsNullOrWhiteSpace(eventName) ? "" : "Event: " + eventName + Environment.NewLine)
-                + "When: " + when + Environment.NewLine
-                + (string.IsNullOrWhiteSpace(joinUrl) ? "Venue: " + Convert.ToString(meeting["Venue"]) : "Join Zoom: " + joinUrl)
-                + (string.IsNullOrWhiteSpace(passcode) ? "" : Environment.NewLine + "Passcode: " + passcode)
-                + Environment.NewLine + Environment.NewLine
-                + "Open DTAS My Meetings to view this meeting.";
+            List<int> ids = ListParticipantIds(meetingId);
+            NotificationService.NotifyUsers(ids, creatorId, "Meeting scheduled", message, "Meeting", meetingId, "Meeting");
 
-            List<int> ids = new List<int>();
+            foreach (int userId in ids)
+            {
+                UserAccount user = AuthService.FindById(userId);
+                if (user == null || string.IsNullOrWhiteSpace(user.Email))
+                    continue;
+                MailSender.Send(
+                    user.Email,
+                    "Meeting scheduled: " + title,
+                    BuildParticipantMail(meeting, false, MailComposer.FirstName(user.FullName)));
+            }
+        }
+
+        public static void SendDueReminders(bool force = false)
+        {
+            lock (ReminderLock)
+            {
+                if (!force && (DateTime.UtcNow - lastReminderSweep).TotalSeconds < 45)
+                    return;
+                lastReminderSweep = DateTime.UtcNow;
+            }
+
+            try
+            {
+                EnsureSchema();
+                CloseExpiredMeetings(false);
+
+                var due = new DataTable();
+                using (SqlConnection con = new SqlConnection(AuthService.ConnectionString))
+                using (SqlCommand cmd = new SqlCommand(@"
+                    SELECT MeetingID
+                    FROM Meetings
+                    WHERE Status IN (N'Scheduled', N'InProgress')
+                      AND ScheduledDate > GETDATE()
+                      AND ScheduledDate <= DATEADD(HOUR, 2, GETDATE())
+                      AND ReminderSentAt IS NULL", con))
+                {
+                    cmd.CommandTimeout = 8;
+                    new SqlDataAdapter(cmd).Fill(due);
+                }
+
+                foreach (DataRow row in due.Rows)
+                    SendReminderForMeeting(Convert.ToInt32(row["MeetingID"]));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Meeting reminders: " + ex.Message);
+            }
+        }
+
+        private static void SendReminderForMeeting(int meetingId)
+        {
+            using (SqlConnection con = new SqlConnection(AuthService.ConnectionString))
+            {
+                con.Open();
+                SqlCommand claim = new SqlCommand(@"
+                    UPDATE Meetings
+                    SET ReminderSentAt = GETDATE()
+                    WHERE MeetingID = @MeetingID
+                      AND ReminderSentAt IS NULL
+                      AND Status IN (N'Scheduled', N'InProgress')
+                      AND ScheduledDate > GETDATE()
+                      AND ScheduledDate <= DATEADD(HOUR, 2, GETDATE())", con);
+                claim.Parameters.AddWithValue("@MeetingID", meetingId);
+                if (claim.ExecuteNonQuery() <= 0)
+                    return;
+            }
+
+            DataRow meeting = GetMeeting(meetingId);
+            if (meeting == null)
+                return;
+
+            string title = Convert.ToString(meeting["MeetingTitle"]);
+            string when = Convert.ToDateTime(meeting["ScheduledDate"]).ToString("MMM dd, yyyy hh:mm tt");
+            string notice = "Reminder: \"" + title + "\" starts at " + when + ".";
+            List<int> ids = ListParticipantIds(meetingId);
+            NotificationService.NotifyUsers(ids, null, "Meeting starts in 2 hours", notice, "MeetingReminder", meetingId, "Meeting");
+
+            foreach (int userId in ids)
+            {
+                UserAccount user = AuthService.FindById(userId);
+                if (user == null || string.IsNullOrWhiteSpace(user.Email))
+                    continue;
+                MailSender.Send(
+                    user.Email,
+                    "Reminder: " + title + " starts soon",
+                    BuildParticipantMail(meeting, true, MailComposer.FirstName(user.FullName)));
+            }
+        }
+
+        private static string MeetingText(DataRow meeting, string column)
+        {
+            if (meeting == null || !meeting.Table.Columns.Contains(column) || meeting[column] == DBNull.Value)
+                return "";
+            return Convert.ToString(meeting[column]) ?? "";
+        }
+
+        private static List<int> ListParticipantIds(int meetingId)
+        {
+            var ids = new List<int>();
             using (SqlConnection con = new SqlConnection(AuthService.ConnectionString))
             using (SqlCommand cmd = new SqlCommand(
                 "SELECT UserID FROM MeetingParticipants WHERE MeetingID = @MeetingID", con))
@@ -555,18 +732,52 @@ namespace DigitalTransparencySystem.Helpers
                         ids.Add(Convert.ToInt32(reader["UserID"]));
                 }
             }
+            return ids;
+        }
 
-            NotificationService.NotifyUsers(ids, creatorId, "Meeting scheduled", message, "Meeting", meetingId, "Meeting");
+        private static MailContent BuildParticipantMail(DataRow meeting, bool reminder, string greetingName)
+        {
+            string title = Convert.ToString(meeting["MeetingTitle"]);
+            DateTime start = Convert.ToDateTime(meeting["ScheduledDate"]);
+            string when = start.ToString("MMM dd, yyyy hh:mm tt");
+            string eventName = MeetingText(meeting, "EventName");
+            string joinUrl = MeetingText(meeting, "ZoomJoinUrl");
+            string passcode = MeetingText(meeting, "ZoomPasscode");
+            int duration = meeting["Duration"] == DBNull.Value ? 60 : Convert.ToInt32(meeting["Duration"]);
+            if (duration <= 0)
+                duration = 60;
 
-            foreach (int userId in ids)
+            string intro = reminder
+                ? "This is a reminder. Your DTAS meeting starts in about 2 hours."
+                : "A DTAS meeting was scheduled and you are on the participant list.";
+
+            var details = new List<MailDetail>
             {
-                if (userId == creatorId)
-                    continue;
-                UserAccount user = AuthService.FindById(userId);
-                if (user == null || string.IsNullOrWhiteSpace(user.Email))
-                    continue;
-                MailSender.Send(user.Email, "DTAS meeting: " + title, emailBody);
-            }
+                new MailDetail("Meeting", title),
+                new MailDetail("When", when),
+                new MailDetail("Duration", duration + " minutes")
+            };
+            if (!string.IsNullOrWhiteSpace(eventName))
+                details.Insert(1, new MailDetail("Event", eventName));
+            string venue = MeetingText(meeting, "Venue");
+            if (!string.IsNullOrWhiteSpace(venue))
+                details.Add(new MailDetail("Venue", venue));
+            if (!string.IsNullOrWhiteSpace(joinUrl))
+                details.Add(new MailDetail("Zoom", joinUrl));
+            if (!string.IsNullOrWhiteSpace(passcode))
+                details.Add(new MailDetail("Passcode", passcode));
+
+            string meetingUrl = MailSender.AbsoluteUrl("~/Modules/UserMeetings/UserMeetings.aspx");
+            return MailComposer.Build(
+                null,
+                intro,
+                reminder
+                    ? "Please wait for the host to start the Zoom room. After that, the host must admit you from the waiting room."
+                    : "The host must start the Zoom room first. Members cannot enter until the host starts it and admits them from the waiting room.",
+                details,
+                string.IsNullOrWhiteSpace(joinUrl) ? "Open My Meetings" : "Join Zoom",
+                string.IsNullOrWhiteSpace(joinUrl) ? meetingUrl : joinUrl,
+                greetingName);
         }
 
         private static IEnumerable<int> CollectLinkedMembers(SqlConnection con, SqlTransaction tx, int? taskId, int? assignmentId, int? groupId, int? eventId)

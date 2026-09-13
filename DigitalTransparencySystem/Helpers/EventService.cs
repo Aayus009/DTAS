@@ -542,12 +542,16 @@ namespace DigitalTransparencySystem.Helpers
                     eventId);
             }
 
-            MailSender.Send(email, "DTAS event invitation",
-                "You have been invited to the DTAS event \"" + access.Event.EventName + "\".\r\n\r\n" +
-                (string.IsNullOrEmpty(access.Event.InviteCode)
-                    ? "Sign in to DTAS to accept the invitation."
-                    : "Sign in to DTAS, or join with code " + access.Event.InviteCode + ".") +
-                "\r\n\r\nDTAS");
+            MailSender.Send(email, "Invited to " + access.Event.EventName,
+                MailComposer.Build(
+                    null,
+                    "You were invited to " + access.Event.EventName + " as " + DisplayRole(inviteRole) + ".",
+                    string.IsNullOrEmpty(access.Event.InviteCode)
+                        ? null
+                        : "Join code: " + access.Event.InviteCode,
+                    null,
+                    "Open My Events",
+                    MailSender.AbsoluteUrl("~/Modules/Events/MyEvents.aspx")));
 
             AuthService.WriteAudit(actorId, "EventInvited", "Event", eventId, email, null);
             return null;
@@ -727,6 +731,14 @@ namespace DigitalTransparencySystem.Helpers
             Notify(targetUserId, "Join request accepted",
                 "You were accepted into \"" + access.Event.EventName + "\". You can now work in the event workplace.",
                 eventId);
+            MailSender.SendToUser(targetUserId, "Accepted: " + access.Event.EventName,
+                MailComposer.Build(
+                    null,
+                    "Your request to join " + access.Event.EventName + " was accepted.",
+                    null,
+                    null,
+                    "Open the event",
+                    MailSender.AbsoluteUrl("~/Modules/Events/EventWorkspace.aspx?EventID=" + eventId)));
             AuthService.WriteAudit(actorId, "EventJoinAccepted", "Event", eventId, "UserID " + targetUserId, null);
             return null;
         }
@@ -1194,18 +1206,7 @@ namespace DigitalTransparencySystem.Helpers
                 }
             }
 
-            foreach (int memberId in memberIds)
-            {
-                if (memberId == actorId)
-                    continue;
-                NotificationService.Send(
-                    memberId,
-                    "Event task assigned",
-                    "You were assigned a task for " + access.Event.EventName + ": " + title,
-                    "TaskAssignment",
-                    taskId,
-                    "Task");
-            }
+            EventTaskService.NotifyNewAssignees(taskId, memberIds, actorId);
 
             AuthService.WriteAudit(actorId, "EventTaskCreated", "Task", taskId, title, null);
             return null;

@@ -68,5 +68,35 @@ namespace DigitalTransparencySystem
         /// pnlPublicFooter control.
         /// </summary>
         protected global::System.Web.UI.WebControls.Panel pnlPublicFooter;
+
+        /// <summary>
+        /// lnkSignIn control.
+        /// </summary>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor lnkSignIn;
+
+        /// <summary>
+        /// lnkRegister control.
+        /// </summary>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor lnkRegister;
+
+        /// <summary>
+        /// lnkBackToDashboard control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.HyperLink lnkBackToDashboard;
+
+        /// <summary>
+        /// lnkMobileSignIn control.
+        /// </summary>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor lnkMobileSignIn;
+
+        /// <summary>
+        /// lnkMobileRegister control.
+        /// </summary>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor lnkMobileRegister;
+
+        /// <summary>
+        /// lnkMobileDashboard control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.HyperLink lnkMobileDashboard;
     }
 }

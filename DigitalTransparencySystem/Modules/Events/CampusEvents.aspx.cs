@@ -37,16 +37,7 @@ namespace DigitalTransparencySystem.Modules.Events
                 return;
 
             string error = EventService.JoinPublic(eventId, Convert.ToInt32(Session["UserID"]));
-            if (error == null)
-            {
-                lblMessage.CssClass = "font-label-md block mb-4 text-tertiary";
-                lblMessage.Text = "Request sent. The event lead or manager must accept you before you can join.";
-            }
-            else
-            {
-                lblMessage.CssClass = "font-label-md block mb-4 text-error";
-                lblMessage.Text = error;
-            }
+            UiNotice.Bind(lblMessage, error, "Request sent. The event lead or manager must accept you before you can join.");
 
             BindEvents();
         }

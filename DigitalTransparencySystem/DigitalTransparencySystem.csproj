@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -74,8 +74,13 @@
     <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
+            <Reference Include="EPPlus">
+                <HintPath>..\packages\EPPlus\lib\net40\EPPlus.dll</HintPath>
+                <Private>True</Private>
+            </Reference>
+            <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -104,10 +109,14 @@
     <Content Include="Assets\img\dtas-logo-on-dark.svg" />
     <Content Include="Assets\img\dtas-logo.png" />
     <Content Include="Assets\css\about.css" />
+    <Content Include="Assets\css\animations.css" />
+    <Content Include="Assets\css\auth-embed.css" />
     <Content Include="Assets\css\contact.css" />
     <Content Include="Assets\css\dashboard.css" />
     <Content Include="Assets\css\default.css" />
+    <Content Include="Assets\css\faq.css" />
     <Content Include="Assets\css\modal.css" />
+    <Content Include="Assets\css\public-chrome.css" />
     <Content Include="Assets\css\events.css" />
     <Content Include="Assets\css\features.css" />
     <Content Include="Assets\css\demo.css" />
@@ -120,6 +129,7 @@
     <Content Include="Assets\css\transparency.css" />
     <Content Include="Assets\css\transparency-admin.css" />
     <Content Include="Assets\js\about.js" />
+    <Content Include="Assets\js\faq.js" />
     <Content Include="Assets\js\charts.js" />
     <Content Include="Assets\js\contact.js" />
     <Content Include="Assets\js\dashboard.js" />
@@ -156,8 +166,6 @@
     <Content Include="Default.aspx" />
     <Content Include="LoginPopup.aspx" />
     <Content Include="RegisterPopup.aspx" />
-    <Content Include="Events.aspx" />
-    <Content Include="EventDetails.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Features.aspx" />
     <Content Include="Demo.aspx" />
@@ -331,20 +339,6 @@
     <Compile Include="RegisterPopup.aspx.designer.cs">
       <DependentUpon>RegisterPopup.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Events.aspx.cs">
-      <DependentUpon>Events.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Events.aspx.designer.cs">
-      <DependentUpon>Events.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="EventDetails.aspx.cs">
-      <DependentUpon>EventDetails.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="EventDetails.aspx.designer.cs">
-      <DependentUpon>EventDetails.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Features.aspx.cs">
       <DependentUpon>Features.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -492,10 +486,12 @@
     <Compile Include="Helpers\RoleAccess.cs" />
     <Compile Include="Helpers\PasswordHasher.cs" />
     <Compile Include="Helpers\MailSender.cs" />
+    <Compile Include="Helpers\MailComposer.cs" />
     <Compile Include="Helpers\EmailOtpService.cs" />
     <Compile Include="Helpers\AuthService.cs" />
     <Compile Include="Helpers\GoogleAuthService.cs" />
     <Compile Include="Helpers\AccessGuard.cs" />
+    <Compile Include="Helpers\UiNotice.cs" />
     <Compile Include="Helpers\IdentityDocumentService.cs" />
     <Compile Include="Helpers\ModerationService.cs" />
     <Compile Include="Helpers\RestrictionService.cs" />
@@ -506,10 +502,12 @@
     <Compile Include="Helpers\ClubService.cs" />
     <Compile Include="Helpers\ConnectService.cs" />
     <Compile Include="Helpers\NotificationService.cs" />
+    <Compile Include="Helpers\SidebarAlertService.cs" />
     <Compile Include="Helpers\TimelineService.cs" />
     <Compile Include="Helpers\DeadlineService.cs" />
     <Compile Include="Helpers\TaskAccess.cs" />
     <Compile Include="Helpers\EventTaskService.cs" />
+    <Compile Include="Helpers\AccountabilityExcelReport.cs" />
     <Compile Include="Helpers\TransparencyService.cs" />
     <Compile Include="FAQ.aspx.cs">
       <DependentUpon>FAQ.aspx</DependentUpon>

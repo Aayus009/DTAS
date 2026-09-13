@@ -197,6 +197,20 @@ html.dark .tx-card { box-shadow: 0 10px 28px rgb(0 0 0 / 0.22); }
     border-top: 1px solid rgb(var(--dt-outline-variant-rgb, 197 197 211) / 0.28);
 }
 
+.tx-event-scroll {
+    max-height: 22rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--dt-outline-variant) transparent;
+}
+.tx-event-scroll::-webkit-scrollbar { width: 6px; }
+.tx-event-scroll::-webkit-scrollbar-track { background: transparent; }
+.tx-event-scroll::-webkit-scrollbar-thumb {
+    background: var(--dt-outline-variant);
+    border-radius: 4px;
+}
+
 .tx-event-top {
     display: flex;
     justify-content: space-between;

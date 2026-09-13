@@ -15,31 +15,43 @@
             CssClass="group cursor-pointer flex items-center gap-4 px-4 py-3 mb-1 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-all hover:translate-x-1">
             <span class="material-symbols-outlined">calendar_today</span>
             <span class="font-label-md text-label-md">Events</span>
+            <asp:Label ID="lblEventsCount" runat="server" Visible="false"
+                CssClass="js-unread-badge ml-auto min-w-[20px] h-5 px-1.5 bg-error text-on-error text-[11px] font-bold rounded-full flex items-center justify-center"></asp:Label>
         </asp:HyperLink>
         <asp:HyperLink ID="lnkDecisions" runat="server" NavigateUrl="~/Modules/Decisions/Decisions.aspx"
             CssClass="group cursor-pointer flex items-center gap-4 px-4 py-3 mb-1 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-all hover:translate-x-1">
             <span class="material-symbols-outlined">gavel</span>
             <span class="font-label-md text-label-md">Decisions</span>
+            <asp:Label ID="lblDecisionsCount" runat="server" Visible="false"
+                CssClass="js-unread-badge ml-auto min-w-[20px] h-5 px-1.5 bg-error text-on-error text-[11px] font-bold rounded-full flex items-center justify-center"></asp:Label>
         </asp:HyperLink>
         <asp:HyperLink ID="lnkTasks" runat="server" NavigateUrl="~/Modules/Tasks/Tasks.aspx"
             CssClass="group cursor-pointer flex items-center gap-4 px-4 py-3 mb-1 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-all hover:translate-x-1">
             <span class="material-symbols-outlined">assignment</span>
             <span class="font-label-md text-label-md">Tasks</span>
+            <asp:Label ID="lblTasksCount" runat="server" Visible="false"
+                CssClass="js-unread-badge ml-auto min-w-[20px] h-5 px-1.5 bg-error text-on-error text-[11px] font-bold rounded-full flex items-center justify-center"></asp:Label>
         </asp:HyperLink>
         <asp:HyperLink ID="lnkAssignments" runat="server" Visible="false" NavigateUrl="~/Modules/Assignments/Assignments.aspx"
             CssClass="group cursor-pointer flex items-center gap-4 px-4 py-3 mb-1 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-all hover:translate-x-1">
             <span class="material-symbols-outlined">school</span>
             <span class="font-label-md text-label-md">Assignments</span>
+            <asp:Label ID="lblAssignmentsCount" runat="server" Visible="false"
+                CssClass="js-unread-badge ml-auto min-w-[20px] h-5 px-1.5 bg-error text-on-error text-[11px] font-bold rounded-full flex items-center justify-center"></asp:Label>
         </asp:HyperLink>
         <asp:HyperLink ID="lnkClubs" runat="server" NavigateUrl="~/Modules/Clubs/Clubs.aspx"
             CssClass="group cursor-pointer flex items-center gap-4 px-4 py-3 mb-1 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-all hover:translate-x-1">
             <span class="material-symbols-outlined">groups</span>
             <span class="font-label-md text-label-md">Clubs</span>
+            <asp:Label ID="lblClubsCount" runat="server" Visible="false"
+                CssClass="js-unread-badge ml-auto min-w-[20px] h-5 px-1.5 bg-error text-on-error text-[11px] font-bold rounded-full flex items-center justify-center"></asp:Label>
         </asp:HyperLink>
         <asp:HyperLink ID="lnkPolls" runat="server" NavigateUrl="~/Modules/Polls/Polls.aspx"
             CssClass="group cursor-pointer flex items-center gap-4 px-4 py-3 mb-1 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-all hover:translate-x-1">
             <span class="material-symbols-outlined">how_to_vote</span>
             <span class="font-label-md text-label-md">Polls</span>
+            <asp:Label ID="lblPollsCount" runat="server" Visible="false"
+                CssClass="js-unread-badge ml-auto min-w-[20px] h-5 px-1.5 bg-error text-on-error text-[11px] font-bold rounded-full flex items-center justify-center"></asp:Label>
         </asp:HyperLink>
         <asp:HyperLink ID="lnkReports" runat="server" NavigateUrl="~/Modules/Reports/Reports.aspx"
             CssClass="group cursor-pointer flex items-center gap-4 px-4 py-3 mb-1 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-all hover:translate-x-1">
@@ -55,21 +67,29 @@
             CssClass="group cursor-pointer flex items-center gap-4 px-4 py-3 mb-1 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-all hover:translate-x-1">
             <span class="material-symbols-outlined">manage_accounts</span>
             <span class="font-label-md text-label-md">Users</span>
+            <asp:Label ID="lblUsersCount" runat="server" Visible="false"
+                CssClass="js-unread-badge ml-auto min-w-[20px] h-5 px-1.5 bg-error text-on-error text-[11px] font-bold rounded-full flex items-center justify-center"></asp:Label>
         </asp:HyperLink>
         <asp:HyperLink ID="lnkIdentity" runat="server" NavigateUrl="~/Modules/Users/IdentityQueue.aspx"
             CssClass="group cursor-pointer flex items-center gap-4 px-4 py-3 mb-1 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-all hover:translate-x-1">
             <span class="material-symbols-outlined">badge</span>
             <span class="font-label-md text-label-md">ID Queue</span>
+            <asp:Label ID="lblIdentityCount" runat="server" Visible="false"
+                CssClass="js-unread-badge ml-auto min-w-[20px] h-5 px-1.5 bg-error text-on-error text-[11px] font-bold rounded-full flex items-center justify-center"></asp:Label>
         </asp:HyperLink>
         <asp:HyperLink ID="lnkFlags" runat="server" NavigateUrl="~/Modules/Users/Flags.aspx"
             CssClass="group cursor-pointer flex items-center gap-4 px-4 py-3 mb-1 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-all hover:translate-x-1">
             <span class="material-symbols-outlined">flag</span>
             <span class="font-label-md text-label-md">Flags</span>
+            <asp:Label ID="lblFlagsCount" runat="server" Visible="false"
+                CssClass="js-unread-badge ml-auto min-w-[20px] h-5 px-1.5 bg-error text-on-error text-[11px] font-bold rounded-full flex items-center justify-center"></asp:Label>
         </asp:HyperLink>
         <asp:HyperLink ID="lnkFeedback" runat="server" NavigateUrl="~/Modules/Participation/Feedback.aspx"
             CssClass="group cursor-pointer flex items-center gap-4 px-4 py-3 mb-1 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-all hover:translate-x-1">
             <span class="material-symbols-outlined">feedback</span>
             <span class="font-label-md text-label-md">Feedback</span>
+            <asp:Label ID="lblFeedbackCount" runat="server" Visible="false"
+                CssClass="js-unread-badge ml-auto min-w-[20px] h-5 px-1.5 bg-error text-on-error text-[11px] font-bold rounded-full flex items-center justify-center"></asp:Label>
         </asp:HyperLink>
         <asp:HyperLink ID="lnkNotifications" runat="server" NavigateUrl="~/Modules/Notifications/Notifications.aspx"
             CssClass="group cursor-pointer flex items-center gap-4 px-4 py-3 mb-1 rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-all hover:translate-x-1">

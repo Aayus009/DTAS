@@ -176,7 +176,7 @@ namespace DigitalTransparencySystem.Modules.Events
         protected void btnLeave_Click(object sender, EventArgs e)
         {
             Show(EventService.Leave(eventId, Convert.ToInt32(Session["UserID"])), "You left the event.");
-            if (string.IsNullOrEmpty(lblMessage.CssClass) || lblMessage.CssClass.IndexOf("error") < 0)
+            if (!UiNotice.HasError(lblMessage))
                 Response.Redirect("~/Modules/Events/MyEvents.aspx");
         }
 
@@ -786,16 +786,7 @@ namespace DigitalTransparencySystem.Modules.Events
 
         private void Show(string error, string success)
         {
-            if (!string.IsNullOrEmpty(error))
-            {
-                lblMessage.CssClass = "font-label-md block mb-4 text-error";
-                lblMessage.Text = error;
-            }
-            else
-            {
-                lblMessage.CssClass = "font-label-md block mb-4 text-tertiary";
-                lblMessage.Text = success ?? "";
-            }
+            UiNotice.Bind(lblMessage, error, success);
         }
     }
 }

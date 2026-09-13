@@ -5,7 +5,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" type="text/css" href="/Assets/css/default.css?v=6" />
+    <link rel="stylesheet" type="text/css" href="/Assets/css/default.css?v=9" />
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
@@ -29,10 +29,10 @@
                     that students, faculty, and staff can actually follow.
                 </p>
                 <div class="lp-hero-actions">
-                    <a href="javascript:void(0)" onclick="openLogin()" class="lp-btn lp-btn-primary">
+                    <asp:HyperLink ID="lnkAccessDashboard" runat="server" CssClass="lp-btn lp-btn-primary">
                         Access dashboard
                         <span class="material-symbols-outlined">arrow_forward</span>
-                    </a>
+                    </asp:HyperLink>
                     <a href="/Transparency.aspx" class="lp-btn lp-btn-ghost" onclick="requireAuth('/Transparency.aspx'); return false;">
                         <span class="material-symbols-outlined">visibility</span>
                         Public portal
@@ -240,7 +240,8 @@
                 <h2>Ready to see the record, not the rumor?</h2>
                 <p>Join the people already using DTAS to keep campus decisions visible and follow-through honest.</p>
                 <div class="lp-hero-actions">
-                    <a href="javascript:void(0)" onclick="openRegister()" class="lp-btn lp-btn-light">Create an account</a>
+                    <asp:HyperLink ID="lnkCreateAccount" runat="server" NavigateUrl="javascript:void(0)" CssClass="lp-btn lp-btn-light"
+                        onclick="openRegister()">Create an account</asp:HyperLink>
                     <a href="/FAQ.aspx" class="lp-btn lp-btn-outline">Read the FAQ</a>
                 </div>
             </div>
@@ -251,5 +252,5 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="ScriptContent" runat="server">
-    <script type="text/javascript" src="/Assets/js/default.js?v=3"></script>
+    <script type="text/javascript" src="/Assets/js/default.js?v=4"></script>
 </asp:Content>

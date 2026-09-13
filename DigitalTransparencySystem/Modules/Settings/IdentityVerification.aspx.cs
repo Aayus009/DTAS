@@ -29,16 +29,14 @@ namespace DigitalTransparencySystem.Modules.Settings
             string error = IdentityDocumentService.SaveUpload(userId, fuDocument.PostedFile, txtInstitutionalID.Text, Server);
             if (error != null)
             {
-                lblMessage.CssClass = "font-label-md block text-error";
-                lblMessage.Text = error;
+                UiNotice.Bind(lblMessage, error, null);
                 return;
             }
 
             Session["IdentityVerified"] = false;
             Session["VerificationStatus"] = "Pending";
             AuthService.WriteAudit(userId, "IdentitySubmitted", "User", userId, "ID document submitted.", Request.UserHostAddress);
-            lblMessage.CssClass = "font-label-md block text-tertiary";
-            lblMessage.Text = "Document submitted. An administrator will review it.";
+            UiNotice.Bind(lblMessage, null, "Document submitted. An administrator will review it.");
             BindStatus();
         }
 

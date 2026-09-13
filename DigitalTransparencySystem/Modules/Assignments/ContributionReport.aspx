@@ -60,9 +60,8 @@
 
                 <section class="standard-card rounded-xl p-6 mb-6">
                     <h3 class="font-title-lg text-title-lg text-primary mb-2">How the score is calculated</h3>
-                    <p class="text-on-surface-variant mb-3">Scores come from <code>sp_GetMemberContributionReport</code>. They are not estimated and not random.</p>
                     <ul class="text-sm text-on-surface-variant list-disc pl-5 space-y-1">
-                        <li>50% completion - completed assigned tasks / assigned tasks</li>
+                        <li>50% completion - task progress / assigned tasks (In Progress 50%, Under Review 75%, Completed 100%)</li>
                         <li>20% timeliness - lower when assigned tasks are overdue</li>
                         <li>20% activity - progress updates recorded in task history</li>
                         <li>10% recency - last recorded activity within 14 days</li>
@@ -537,8 +536,7 @@
                 doc.setFontSize(9);
                 doc.setTextColor(ink[0], ink[1], ink[2]);
                 var formula = [
-                    'Scores come from the database procedure. They are not estimated and not random.',
-                    '50% completion - completed assigned tasks divided by assigned tasks.',
+                    '50% completion - task progress divided by assigned tasks (In Progress 50%, Under Review 75%, Completed 100%).',
                     '20% timeliness - lower when assigned tasks are overdue.',
                     '20% activity - progress updates recorded in task history.',
                     '10% recency - last recorded activity within 14 days.',

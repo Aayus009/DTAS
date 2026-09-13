@@ -41,16 +41,21 @@ namespace DigitalTransparencySystem.Helpers
 
     public static class ConnectService
     {
+        private static readonly object SchemaLock = new object();
         private static bool schemaReady;
 
         public static void EnsureSchema()
         {
             if (schemaReady)
                 return;
-            using (var con = new SqlConnection(AuthService.ConnectionString))
+            lock (SchemaLock)
             {
-                con.Open();
-                new SqlCommand(@"
+                if (schemaReady)
+                    return;
+                using (var con = new SqlConnection(AuthService.ConnectionString))
+                {
+                    con.Open();
+                    new SqlCommand(@"
                     IF OBJECT_ID('dbo.ConnectGroups', 'U') IS NULL
                     BEGIN
                         CREATE TABLE dbo.ConnectGroups (
@@ -111,9 +116,16 @@ namespace DigitalTransparencySystem.Helpers
 
                     IF COL_LENGTH('dbo.ConnectGroups', 'ClubID') IS NULL
                         ALTER TABLE dbo.ConnectGroups ADD ClubID INT NULL;
+
+                    IF COL_LENGTH('dbo.ConnectGroups', 'AssignmentID') IS NULL
+                        ALTER TABLE dbo.ConnectGroups ADD AssignmentID INT NULL;
+
+                    IF COL_LENGTH('dbo.ConnectGroups', 'AssignmentGroupID') IS NULL
+                        ALTER TABLE dbo.ConnectGroups ADD AssignmentGroupID INT NULL;
                 ", con).ExecuteNonQuery();
+                }
+                schemaReady = true;
             }
-            schemaReady = true;
         }
 
         public static string CreateGroup(int userId, string name, string description, out int groupId, out string code)
@@ -166,6 +178,249 @@ namespace DigitalTransparencySystem.Helpers
                 object id = cmd.ExecuteScalar();
                 return id == null || id == DBNull.Value ? (int?)null : Convert.ToInt32(id);
             }
+        }
+
+        public static int? FindGroupIdByAssignment(int assignmentId)
+        {
+            EnsureSchema();
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            using (var cmd = new SqlCommand(
+                @"SELECT TOP 1 GroupID FROM ConnectGroups
+                  WHERE AssignmentID = @AssignmentID AND AssignmentGroupID IS NULL AND IsDeleted = 0
+                  ORDER BY GroupID", con))
+            {
+                cmd.Parameters.AddWithValue("@AssignmentID", assignmentId);
+                con.Open();
+                object id = cmd.ExecuteScalar();
+                return id == null || id == DBNull.Value ? (int?)null : Convert.ToInt32(id);
+            }
+        }
+
+        public static int? FindGroupIdByAssignmentGroup(int assignmentGroupId)
+        {
+            EnsureSchema();
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            using (var cmd = new SqlCommand(
+                @"SELECT TOP 1 GroupID FROM ConnectGroups
+                  WHERE AssignmentGroupID = @GroupID AND IsDeleted = 0
+                  ORDER BY GroupID", con))
+            {
+                cmd.Parameters.AddWithValue("@GroupID", assignmentGroupId);
+                con.Open();
+                object id = cmd.ExecuteScalar();
+                return id == null || id == DBNull.Value ? (int?)null : Convert.ToInt32(id);
+            }
+        }
+
+        public static string CreateGroupForAssignment(int assignmentId, out int connectGroupId)
+        {
+            connectGroupId = 0;
+            EnsureSchema();
+            AssignmentRecord assignment = AssignmentService.GetAssignment(assignmentId);
+            if (assignment == null || assignment.IsDeleted)
+                return "Assignment not found.";
+
+            int? existing = FindGroupIdByAssignment(assignmentId);
+            if (existing.HasValue)
+            {
+                connectGroupId = existing.Value;
+                return null;
+            }
+
+            string error = CreateGroup(
+                assignment.CreatedBy,
+                ClipName(assignment.AssignmentName),
+                "Connect group for assignment " + assignment.AssignmentName,
+                out connectGroupId,
+                out _);
+            if (error != null)
+                return error;
+
+            LinkAssignment(connectGroupId, assignmentId, null);
+            SyncAssignmentRosterToConnect(assignmentId, connectGroupId, assignment.AssignmentName);
+            return null;
+        }
+
+        public static string CreateGroupForAssignmentSubgroup(int assignmentGroupId, out int connectGroupId)
+        {
+            connectGroupId = 0;
+            EnsureSchema();
+            AssignmentGroupRecord group = AssignmentService.GetGroup(assignmentGroupId);
+            if (group == null || group.IsDeleted)
+                return "Subgroup not found.";
+
+            AssignmentRecord assignment = AssignmentService.GetAssignment(group.AssignmentID);
+            if (assignment == null || assignment.IsDeleted)
+                return "Assignment not found.";
+
+            int? existing = FindGroupIdByAssignmentGroup(assignmentGroupId);
+            if (existing.HasValue)
+            {
+                connectGroupId = existing.Value;
+                return null;
+            }
+
+            string connectName = assignment.IsPersonal || string.Equals(assignment.AssignmentName, group.GroupName, StringComparison.OrdinalIgnoreCase)
+                ? group.GroupName
+                : assignment.AssignmentName + " - " + group.GroupName;
+
+            string error = CreateGroup(
+                group.LeaderID,
+                ClipName(connectName),
+                "Connect group for subgroup " + group.GroupName,
+                out connectGroupId,
+                out _);
+            if (error != null)
+                return error;
+
+            LinkAssignment(connectGroupId, group.AssignmentID, assignmentGroupId);
+            SyncAssignmentGroupMembersToConnect(assignmentGroupId, connectGroupId, connectName);
+
+            if (!assignment.IsPersonal)
+            {
+                int mainId;
+                CreateGroupForAssignment(group.AssignmentID, out mainId);
+                if (mainId > 0)
+                    AddMemberDirect(mainId, group.LeaderID, assignment.AssignmentName, null);
+            }
+            return null;
+        }
+
+        public static void SyncUserToAssignmentConnect(int assignmentGroupId, int userId)
+        {
+            int subId;
+            CreateGroupForAssignmentSubgroup(assignmentGroupId, out subId);
+            AssignmentGroupRecord group = AssignmentService.GetGroup(assignmentGroupId);
+            if (group == null)
+                return;
+
+            AssignmentRecord assignment = AssignmentService.GetAssignment(group.AssignmentID);
+            string subName = group.GroupName;
+            if (subId > 0)
+                AddMemberDirect(subId, userId, subName, null);
+
+            if (assignment != null && !assignment.IsPersonal)
+            {
+                int mainId;
+                CreateGroupForAssignment(group.AssignmentID, out mainId);
+                if (mainId > 0)
+                    AddMemberDirect(mainId, userId, assignment.AssignmentName, null);
+            }
+        }
+
+        public static void RenameAssignmentSubgroupConnect(int assignmentGroupId, string groupName)
+        {
+            int? connectId = FindGroupIdByAssignmentGroup(assignmentGroupId);
+            if (!connectId.HasValue)
+                return;
+
+            AssignmentGroupRecord group = AssignmentService.GetGroup(assignmentGroupId);
+            if (group == null)
+                return;
+            AssignmentRecord assignment = AssignmentService.GetAssignment(group.AssignmentID);
+            string connectName = groupName;
+            if (assignment != null && !assignment.IsPersonal
+                && !string.Equals(assignment.AssignmentName, groupName, StringComparison.OrdinalIgnoreCase))
+                connectName = assignment.AssignmentName + " - " + groupName;
+
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            using (var cmd = new SqlCommand(
+                "UPDATE ConnectGroups SET GroupName = @Name WHERE GroupID = @GroupID AND IsDeleted = 0", con))
+            {
+                cmd.Parameters.AddWithValue("@Name", ClipName(connectName));
+                cmd.Parameters.AddWithValue("@GroupID", connectId.Value);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public static void CloseAssignmentConnect(int assignmentGroupId)
+        {
+            int? connectId = FindGroupIdByAssignmentGroup(assignmentGroupId);
+            if (!connectId.HasValue)
+                return;
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            using (var cmd = new SqlCommand(
+                "UPDATE ConnectGroups SET IsDeleted = 1 WHERE GroupID = @GroupID", con))
+            {
+                cmd.Parameters.AddWithValue("@GroupID", connectId.Value);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public static void TransferOwner(int connectGroupId, int newOwnerId)
+        {
+            ConnectGroupRecord group = GetGroup(connectGroupId);
+            if (group == null || group.IsDeleted)
+                return;
+            AddMemberDirect(connectGroupId, newOwnerId, group.GroupName, null);
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            {
+                con.Open();
+                var demote = new SqlCommand(
+                    "UPDATE ConnectMembers SET Role = N'Member' WHERE GroupID = @GroupID AND Role = N'Owner'", con);
+                demote.Parameters.AddWithValue("@GroupID", connectGroupId);
+                demote.ExecuteNonQuery();
+                var promote = new SqlCommand(
+                    "UPDATE ConnectMembers SET Role = N'Owner' WHERE GroupID = @GroupID AND UserID = @UserID", con);
+                promote.Parameters.AddWithValue("@GroupID", connectGroupId);
+                promote.Parameters.AddWithValue("@UserID", newOwnerId);
+                promote.ExecuteNonQuery();
+                var created = new SqlCommand(
+                    "UPDATE ConnectGroups SET CreatedBy = @UserID WHERE GroupID = @GroupID", con);
+                created.Parameters.AddWithValue("@UserID", newOwnerId);
+                created.Parameters.AddWithValue("@GroupID", connectGroupId);
+                created.ExecuteNonQuery();
+            }
+        }
+
+        private static void LinkAssignment(int connectGroupId, int assignmentId, int? assignmentGroupId)
+        {
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            using (var cmd = new SqlCommand(
+                @"UPDATE ConnectGroups
+                  SET AssignmentID = @AssignmentID, AssignmentGroupID = @AssignmentGroupID
+                  WHERE GroupID = @GroupID", con))
+            {
+                cmd.Parameters.AddWithValue("@AssignmentID", assignmentId);
+                cmd.Parameters.AddWithValue("@AssignmentGroupID", assignmentGroupId.HasValue ? (object)assignmentGroupId.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("@GroupID", connectGroupId);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static void SyncAssignmentRosterToConnect(int assignmentId, int connectGroupId, string groupName)
+        {
+            using (var con = new SqlConnection(AuthService.ConnectionString))
+            using (var cmd = new SqlCommand(
+                @"SELECT DISTINCT m.UserID
+                  FROM AssignmentMembers m
+                  INNER JOIN AssignmentGroups g ON g.GroupID = m.GroupID AND g.IsDeleted = 0
+                  WHERE g.AssignmentID = @AssignmentID", con))
+            {
+                cmd.Parameters.AddWithValue("@AssignmentID", assignmentId);
+                var table = new DataTable();
+                new SqlDataAdapter(cmd).Fill(table);
+                foreach (DataRow row in table.Rows)
+                    AddMemberDirect(connectGroupId, Convert.ToInt32(row["UserID"]), groupName, null);
+            }
+        }
+
+        private static void SyncAssignmentGroupMembersToConnect(int assignmentGroupId, int connectGroupId, string groupName)
+        {
+            DataTable members = AssignmentService.ListMembers(assignmentGroupId);
+            foreach (DataRow row in members.Rows)
+                AddMemberDirect(connectGroupId, Convert.ToInt32(row["UserID"]), groupName, null);
+        }
+
+        private static string ClipName(string name)
+        {
+            string value = (name ?? "").Trim();
+            if (value.Length == 0)
+                return "Assignment";
+            return value.Length <= 200 ? value : value.Substring(0, 200);
         }
 
         public static string CreateGroupForEvent(int eventId, int actorId, int? clubId, out int groupId)

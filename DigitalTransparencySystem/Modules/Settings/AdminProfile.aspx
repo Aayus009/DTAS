@@ -23,8 +23,8 @@
 
             <!-- Success/Error Messages -->
             <asp:Panel ID="pnlMessage" runat="server" Visible="false" CssClass="mb-6">
-                <div id="divMessage" runat="server" class="px-4 py-3 rounded-xl flex items-center gap-3 text-label-md">
-                    <span id="msgIcon" runat="server" class="material-symbols-outlined text-[20px]"></span>
+                <div id="divMessage" runat="server" class="flex items-start gap-3">
+                    <span id="msgIcon" runat="server" class="material-symbols-outlined dtas-notice-icon"></span>
                     <asp:Label ID="lblMessage" runat="server"></asp:Label>
                 </div>
             </asp:Panel>

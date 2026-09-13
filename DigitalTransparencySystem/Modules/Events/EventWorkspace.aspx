@@ -6,7 +6,7 @@
 <%@ Register TagPrefix="uc" TagName="UserTopbar" Src="~/MasterPages/UserTopbar.ascx" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=board7" />
+    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=notices1" />
     <style>
         .work-attach { position: relative; overflow-x: hidden; }
         .work-type-btn {
@@ -67,8 +67,13 @@
             </asp:Panel>
 
             <asp:Panel ID="pnlWorkspace" runat="server" CssClass="jira-workspace">
-                <asp:Panel ID="pnlDisabled" runat="server" Visible="false" CssClass="p-4 rounded-xl bg-error-container/20 text-error font-label-md">
-                    This event is restricted. Members cannot open workspaces or perform tasks until the system administrator restores it.
+                <asp:Panel ID="pnlDisabled" runat="server" Visible="false" CssClass="dtas-notice dtas-notice-danger dtas-notice-sticky dtas-notice-rich">
+                    <span class="material-symbols-outlined dtas-notice-icon">block</span>
+                    <div>
+                        <p class="dtas-notice-kicker">Restricted</p>
+                        <p class="dtas-notice-title">This event is restricted</p>
+                        <p class="dtas-notice-copy">Members cannot open workspaces or perform tasks until the system administrator restores it.</p>
+                    </div>
                 </asp:Panel>
 
                 <header class="jira-top">
@@ -184,7 +189,7 @@
                     </asp:Panel>
                 </header>
 
-                <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md block"></asp:Label>
+                <asp:Label ID="lblMessage" runat="server" CssClass="dtas-notice"></asp:Label>
 
                 <asp:Panel ID="pnlPublicPreview" runat="server" Visible="false" CssClass="standard-card rounded-xl p-6 mb-6">
                     <h2 class="font-title-lg text-title-lg text-primary mb-1">Public event details</h2>
@@ -208,8 +213,13 @@
                 </asp:Panel>
 
                 <asp:Panel ID="pnlMemberWork" runat="server">
-                <asp:Panel ID="pnlConcluded" runat="server" Visible="false" CssClass="p-4 rounded-xl bg-tertiary-container/30 text-on-surface">
-                    Faculty approved the last task. This event is concluded.
+                <asp:Panel ID="pnlConcluded" runat="server" Visible="false" CssClass="dtas-notice dtas-notice-success dtas-notice-sticky dtas-notice-rich" role="status">
+                    <span class="material-symbols-outlined dtas-notice-icon">verified</span>
+                    <div>
+                        <p class="dtas-notice-kicker">Complete</p>
+                        <p class="dtas-notice-title">This event is concluded</p>
+                        <p class="dtas-notice-copy">Faculty approved the last task. The board stays here as the record.</p>
+                    </div>
                 </asp:Panel>
                 <asp:Panel ID="pnlReviewQueue" runat="server" Visible="false" CssClass="standard-card rounded-xl p-4">
                     <p class="font-label-md text-on-surface mb-2">Needs your review</p>

@@ -64,26 +64,27 @@ namespace DigitalTransparencySystem.Modules.Reports
                 object totalResult = cmdTotal.ExecuteScalar();
                 litTotalReports.Text = totalResult != DBNull.Value ? Convert.ToInt32(totalResult).ToString("N0") : "0";
 
-                SqlCommand cmdEvents = new SqlCommand("SELECT COUNT(*) FROM Events WHERE ISNULL(IsDeleted, 0) = 0", con);
-                object eventsResult = cmdEvents.ExecuteScalar();
-                litEventsSummary.Text = eventsResult != DBNull.Value ? Convert.ToInt32(eventsResult).ToString("N0") : "0";
+                int liveEvents = 0;
+                int taskTotal = 0;
+                int taskDone = 0;
+                foreach (EventLiveProgress row in EventTaskService.ListLiveEventProgress())
+                {
+                    if (!EventTaskService.CountsTowardInstitutionProgress(row.StatusKey))
+                        continue;
+                    liveEvents++;
+                    taskTotal += row.TotalTasks;
+                    taskDone += row.CompletedTasks;
+                }
 
-                SqlCommand cmdTotalTasks = new SqlCommand("SELECT COUNT(*) FROM Tasks", con);
-                object totalTasks = cmdTotalTasks.ExecuteScalar();
+                litEventsSummary.Text = liveEvents.ToString("N0");
 
-                SqlCommand cmdCompletedTasks = new SqlCommand("SELECT COUNT(*) FROM Tasks WHERE Status = 'Completed'", con);
-                object completedTasks = cmdCompletedTasks.ExecuteScalar();
+                int completionRate = EventTaskService.PercentFromCounts(taskDone, taskTotal);
+                litTasksRate.Text = completionRate + "%";
+                litTasksRateBar.Text = "<div class='bg-primary h-full' style='width: " + completionRate + "%'></div>";
 
-                int tTotal = totalTasks != DBNull.Value ? Convert.ToInt32(totalTasks) : 0;
-                int tCompleted = completedTasks != DBNull.Value ? Convert.ToInt32(completedTasks) : 0;
-                decimal completionRate = tTotal > 0 ? (decimal)tCompleted / tTotal * 100 : 0;
-                litTasksRate.Text = completionRate.ToString("F1") + "%";
-                litTasksRateBar.Text = "<div class='bg-primary h-full' style='width: " + completionRate.ToString("F0") + "%'></div>";
-
-                SqlCommand cmdDecisions = new SqlCommand(
-                    "SELECT COUNT(*) FROM Decisions WHERE Status IN ('Approved', 'Rejected', 'Implemented')", con);
-                object decisionsResult = cmdDecisions.ExecuteScalar();
-                litDecisionOutcomes.Text = decisionsResult != DBNull.Value ? Convert.ToInt32(decisionsResult).ToString("N0") : "0";
+                int decisionPct = EventTaskService.InstitutionDecisionPercent();
+                litDecisionOutcomes.Text = decisionPct + "%";
+                litDecisionBar.Text = "<div class='bg-primary h-full' style='width: " + decisionPct + "%'></div>";
             }
         }
 
@@ -253,39 +254,63 @@ namespace DigitalTransparencySystem.Modules.Reports
 
         protected void btnGenerateAccountabilityReport_Click(object sender, EventArgs e)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("User,Total Tasks,Completed Tasks,Pending Tasks,In-Progress Tasks,Overdue Tasks");
-
+            var staff = new DataTable();
             using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(
+                @"SELECT u.UserID,
+                         LTRIM(RTRIM(ISNULL(u.FullName, N''))) AS FullName,
+                         LTRIM(RTRIM(ISNULL(u.Username, N''))) AS Username,
+                         ISNULL(r.RoleName, N'') AS Role,
+                         COUNT(t.TaskID) AS TotalTasks,
+                         ISNULL(SUM(CASE WHEN REPLACE(LTRIM(RTRIM(ISNULL(t.Status, N''))), N' ', N'') = N'Completed' THEN 1 ELSE 0 END), 0) AS Completed,
+                         ISNULL(SUM(CASE WHEN REPLACE(LTRIM(RTRIM(ISNULL(t.Status, N''))), N' ', N'') = N'Pending' THEN 1 ELSE 0 END), 0) AS Pending,
+                         ISNULL(SUM(CASE WHEN REPLACE(LTRIM(RTRIM(ISNULL(t.Status, N''))), N' ', N'') IN (N'InProgress', N'In Progress') THEN 1 ELSE 0 END), 0) AS InProgress,
+                         ISNULL(SUM(CASE WHEN REPLACE(LTRIM(RTRIM(ISNULL(t.Status, N''))), N' ', N'') NOT IN (N'Completed', N'Cancelled', N'Archived')
+                                           AND t.DueDate IS NOT NULL AND t.DueDate < GETDATE() THEN 1 ELSE 0 END), 0) AS Overdue
+                  FROM Users u
+                  LEFT JOIN Roles r ON r.RoleID = u.RoleID
+                  INNER JOIN TaskAssignments ta ON ta.UserID = u.UserID
+                  INNER JOIN Tasks t ON t.TaskID = ta.TaskID AND ISNULL(t.IsDeleted, 0) = 0
+                  WHERE ISNULL(u.IsDeleted, 0) = 0
+                  GROUP BY u.UserID, u.FullName, u.Username, r.RoleName
+                  HAVING COUNT(t.TaskID) > 0
+                  ORDER BY u.FullName, u.Username", con))
             {
-                string query = @"SELECT u.FullName,
-                                        COUNT(t.TaskID) AS TotalTasks,
-                                        SUM(CASE WHEN t.Status = 'Completed' THEN 1 ELSE 0 END) AS Completed,
-                                        SUM(CASE WHEN t.Status = 'Pending' THEN 1 ELSE 0 END) AS Pending,
-                                        SUM(CASE WHEN t.Status = 'InProgress' THEN 1 ELSE 0 END) AS InProgress,
-                                        SUM(CASE WHEN t.Status != 'Completed' AND t.DueDate < GETDATE() THEN 1 ELSE 0 END) AS Overdue
-                                  FROM Users u
-                                  LEFT JOIN TaskAssignments ta ON u.UserID = ta.UserID
-                                  LEFT JOIN Tasks t ON ta.TaskID = t.TaskID
-                                  GROUP BY u.FullName
-                                  HAVING COUNT(t.TaskID) > 0
-                                  ORDER BY TotalTasks DESC";
-                SqlCommand cmd = new SqlCommand(query, con);
-                con.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    sb.AppendLine(string.Format("{0},{1},{2},{3},{4},{5}",
-                        EscapeCsv(reader["FullName"].ToString()),
-                        reader["TotalTasks"],
-                        reader["Completed"],
-                        reader["Pending"],
-                        reader["InProgress"],
-                        reader["Overdue"]));
-                }
+                new SqlDataAdapter(cmd).Fill(staff);
             }
 
-            DownloadCsv("Accountability_Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".csv", sb.ToString());
+            int liveEvents = 0;
+            int taskTotal = 0;
+            int taskDone = 0;
+            foreach (EventLiveProgress row in EventTaskService.ListLiveEventProgress())
+            {
+                if (!EventTaskService.CountsTowardInstitutionProgress(row.StatusKey))
+                    continue;
+                liveEvents++;
+                taskTotal += row.TotalTasks;
+                taskDone += row.CompletedTasks;
+            }
+
+            byte[] xlsx = AccountabilityExcelReport.Build(
+                staff,
+                EventTaskService.PercentFromCounts(taskDone, taskTotal),
+                EventTaskService.InstitutionDecisionPercent(),
+                liveEvents,
+                Convert.ToString(Session["FullName"]));
+
+            DownloadXlsx("Accountability_Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx", xlsx);
+        }
+
+        private void DownloadXlsx(string fileName, byte[] bytes)
+        {
+            InsertReport(fileName.Replace(".xlsx", "").Replace("_", " "), "Excel accountability report with charts.");
+
+            Response.Clear();
+            Response.Buffer = true;
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("Content-Disposition", "attachment; filename=" + fileName);
+            Response.BinaryWrite(bytes);
+            Response.End();
         }
 
         protected void btnGenerateTaskCompletionReport_Click(object sender, EventArgs e)

@@ -42,8 +42,7 @@ namespace DigitalTransparencySystem.Modules.Users
                 if (!ModerationService.TryGetReportTarget(reportId, out targetType, out targetId)
                     || !string.Equals(targetType, "Club", StringComparison.OrdinalIgnoreCase))
                 {
-                    lblMessage.CssClass = "font-label-md block mb-4 text-error";
-                    lblMessage.Text = "That flag is not for a club.";
+                    UiNotice.Bind(lblMessage, "That flag is not for a club.", null);
                     BindQueue();
                     return;
                 }
@@ -51,8 +50,7 @@ namespace DigitalTransparencySystem.Modules.Users
                 string restrictError = RestrictionService.SetClubRestricted(targetId, adminId, Session["Role"] as string, true);
                 if (!string.IsNullOrEmpty(restrictError))
                 {
-                    lblMessage.CssClass = "font-label-md block mb-4 text-error";
-                    lblMessage.Text = restrictError;
+                    UiNotice.Bind(lblMessage, restrictError, null);
                     BindQueue();
                     return;
                 }
@@ -64,15 +62,9 @@ namespace DigitalTransparencySystem.Modules.Users
 
             string error = ModerationService.ResolveReport(reportId, adminId, status, note);
             if (!string.IsNullOrEmpty(error))
-            {
-                lblMessage.CssClass = "font-label-md block mb-4 text-error";
-                lblMessage.Text = error;
-            }
+                UiNotice.Bind(lblMessage, error, null);
             else
-            {
-                lblMessage.CssClass = "font-label-md block mb-4 text-tertiary";
-                lblMessage.Text = "Flag updated to " + status + ".";
-            }
+                UiNotice.Bind(lblMessage, null, "Flag updated to " + status + ".");
 
             BindQueue();
         }

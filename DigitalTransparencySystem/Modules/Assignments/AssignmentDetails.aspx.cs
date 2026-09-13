@@ -71,6 +71,12 @@ namespace DigitalTransparencySystem.Modules.Assignments
             litStatus.Text = assignment.Status;
             litDescription.Text = Server.HtmlEncode(assignment.Description);
             lnkScheduleMeeting.NavigateUrl = "~/Modules/UserMeetings/UserMeetings.aspx?AssignmentID=" + assignmentId;
+            int connectId;
+            ConnectService.CreateGroupForAssignment(assignmentId, out connectId);
+            lnkAssignmentConnect.Visible = connectId > 0;
+            lnkAssignmentConnect.NavigateUrl = connectId > 0
+                ? "~/Modules/Connect/ConnectRoom.aspx?GroupID=" + connectId
+                : "";
             btnClose.Visible = assignment.Status == "Active";
             txtNewDeadline.Text = assignment.Deadline.ToString("yyyy-MM-ddTHH:mm");
             int days = (assignment.Deadline.Date - DateTime.Today).Days;
@@ -95,10 +101,7 @@ namespace DigitalTransparencySystem.Modules.Assignments
 
         private void Show(string error, string ok)
         {
-            lblMessage.Text = error ?? ok;
-            lblMessage.CssClass = error != null
-                ? "font-label-md block mb-4 text-error"
-                : "font-label-md block mb-4 text-tertiary";
+            UiNotice.Bind(lblMessage, error, ok);
         }
     }
 }

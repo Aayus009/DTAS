@@ -28,7 +28,7 @@
                 </p>
             </header>
 
-            <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md block mb-4"></asp:Label>
+            <asp:Label ID="lblMessage" runat="server" CssClass="dtas-notice"></asp:Label>
 
             <section class="standard-card rounded-xl p-6 mb-6 max-w-2xl">
                 <h3 class="font-title-lg text-title-lg text-primary mb-4">Create assignment</h3>
@@ -39,6 +39,7 @@
                     <asp:RequiredFieldValidator ID="rfvAssignmentName" runat="server" ControlToValidate="txtName"
                         ValidationGroup="CreateAssignment" CssClass="field-error" Display="Dynamic"
                         ErrorMessage="Assignment name is required."></asp:RequiredFieldValidator>
+                    <p class="text-xs text-on-surface-variant">The join code is built from this name. FYP Assignment becomes FYP-0000.</p>
                     <asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" Rows="3"
                         CssClass="w-full p-3 bg-surface-container-low border border-outline rounded-xl font-body-md resize-none"
                         placeholder="Description"></asp:TextBox>

@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using DigitalTransparencySystem.Helpers;
 
@@ -195,10 +196,7 @@ namespace DigitalTransparencySystem.Modules.Dashboard
             int taskDone = 0;
             foreach (EventLiveProgress row in rows)
             {
-                string key = row.StatusKey ?? "";
-                if (key.Equals("proposed", StringComparison.OrdinalIgnoreCase)
-                    || key.Equals("rejected", StringComparison.OrdinalIgnoreCase)
-                    || key.Equals("cancelled", StringComparison.OrdinalIgnoreCase))
+                if (!EventTaskService.CountsTowardInstitutionProgress(row.StatusKey))
                     continue;
 
                 table.Rows.Add(
@@ -218,12 +216,11 @@ namespace DigitalTransparencySystem.Modules.Dashboard
             pnlNoLiveEvents.Visible = table.Rows.Count == 0;
 
             int pct = EventTaskService.PercentFromCounts(taskDone, taskTotal);
-            litTrustIndex.Text = pct + "%";
-            barAccountability.Style["width"] = pct + "%";
-            litComplianceRate.Text = pct + "%";
-            barTaskCompletion.Style["width"] = pct + "%";
-            barAccountability.Attributes["class"] = (barAccountability.Attributes["class"] ?? "") + " js-progress-fill";
-            barTaskCompletion.Attributes["class"] = (barTaskCompletion.Attributes["class"] ?? "") + " js-progress-fill";
+            string pctText = pct + "%";
+            litTrustIndex.Text = pctText;
+            litComplianceRate.Text = pctText;
+            ApplyMeter(barAccountability, pctText);
+            ApplyMeter(barTaskCompletion, pctText);
         }
 
         private void LoadMetrics()
@@ -252,14 +249,21 @@ namespace DigitalTransparencySystem.Modules.Dashboard
                 litResponseTime.Text = pendingInvites.ToString();
                 litFulfillmentRate.Text = openFeedback.ToString();
 
-                int totalDecisions = Convert.ToInt32(new SqlCommand("SELECT COUNT(*) FROM Decisions", con).ExecuteScalar());
-                int progressedDecisions = Convert.ToInt32(new SqlCommand(
-                    @"SELECT COUNT(*) FROM Decisions
-                      WHERE Status IN ('Approved', 'Implemented', 'Completed', 'Closed')", con).ExecuteScalar());
-                int decisionPct = totalDecisions > 0 ? (int)Math.Round((progressedDecisions * 100.0) / totalDecisions) : 0;
+                int decisionPct = EventTaskService.InstitutionDecisionPercent();
                 litAccessibilityRate.Text = decisionPct + "%";
-                barDecisionProgress.Style["width"] = decisionPct + "%";
+                ApplyMeter(barDecisionProgress, decisionPct + "%");
             }
+        }
+
+        private static void ApplyMeter(HtmlGenericControl bar, string pctText)
+        {
+            if (bar == null)
+                return;
+            bar.Style["width"] = pctText;
+            bar.Attributes["data-width"] = pctText;
+            string css = bar.Attributes["class"] ?? "";
+            if (css.IndexOf("js-progress-fill", StringComparison.Ordinal) < 0)
+                bar.Attributes["class"] = (css + " js-progress-fill").Trim();
         }
 
         private void LoadPendingTasks()

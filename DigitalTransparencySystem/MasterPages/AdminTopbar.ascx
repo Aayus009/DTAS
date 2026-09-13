@@ -10,10 +10,10 @@
     <div class="dtas-search" data-search-url="<%= ResolveUrl("~/Modules/Search/GlobalSearch.ashx") %>">
         <label class="dtas-search-field">
             <span class="material-symbols-outlined text-outline">search</span>
-            <input type="search" class="js-dtas-search dtas-search-input" placeholder="Search events, tasks, meetings..." autocomplete="off" />
+            <input type="search" class="js-dtas-search dtas-search-input" placeholder="Search..." autocomplete="off" />
             <kbd class="dtas-search-kbd">/</kbd>
         </label>
-        <div class="js-dtas-search-results dtas-search-results hidden" role="listbox"></div>
+        <div class="js-dtas-search-status dtas-search-results hidden" role="status"></div>
     </div>
     <div class="dtas-topbar-right">
         <!-- Theme Toggle -->

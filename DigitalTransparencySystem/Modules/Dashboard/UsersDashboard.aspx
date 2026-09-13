@@ -1,13 +1,14 @@
-<%@ Page Title="Dashboard | DTAS" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="UsersDashboard.aspx.cs" Inherits="DigitalTransparencySystem.Modules.Dashboard.UserDashboard" %>
+<%@ Page Title="Dashboard | DTAS" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="UsersDashboard.aspx.cs" Inherits="DigitalTransparencySystem.Modules.Dashboard.UserDashboard" MaintainScrollPositionOnPostBack="true" %>
 <%@ Import Namespace="DigitalTransparencySystem.Helpers" %>
 <%@ Register TagPrefix="uc" TagName="UserSidebar" Src="~/MasterPages/UserSidebar.ascx" %>
 <%@ Register TagPrefix="uc" TagName="UserTopbar" Src="~/MasterPages/UserTopbar.ascx" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=3" />
+    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=notices1" />
 </asp:Content>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
+    <asp:ScriptManager ID="smUserDash" runat="server" EnablePartialRendering="true" />
     
     <uc:UserTopbar runat="server" />
 
@@ -33,23 +34,24 @@
                 </div>
             </header>
 
-            <asp:Panel ID="pnlSuspendedBanner" runat="server" Visible="false" CssClass="suspension-banner rounded-xl p-5 mb-6 flex items-start gap-3">
-                <span class="material-symbols-outlined shrink-0">gavel</span>
-                <div>
-                    <h3 class="font-title-lg text-title-lg mb-1">Account suspended</h3>
-                    <asp:Literal ID="litSuspendedBanner" runat="server"></asp:Literal>
+            <asp:Panel ID="pnlSuspendedBanner" runat="server" Visible="false" CssClass="dtas-notice dtas-notice-danger dtas-notice-sticky dtas-notice-rich" role="status">
+                <span class="material-symbols-outlined dtas-notice-icon">gavel</span>
+                <div class="dtas-notice-body">
+                    <p class="dtas-notice-kicker">Account</p>
+                    <p class="dtas-notice-title">Account suspended</p>
+                    <p class="dtas-notice-copy"><asp:Literal ID="litSuspendedBanner" runat="server"></asp:Literal></p>
                 </div>
             </asp:Panel>
 
-            <asp:Panel ID="pnlIdentityBanner" runat="server" Visible="false" CssClass="standard-card rounded-xl p-5 mb-6 border border-[#e67e00]/30">
-                <div class="flex items-start justify-between gap-4">
-                    <div>
-                        <h3 class="font-title-lg text-title-lg text-on-surface mb-1">Identity verification required</h3>
-                        <asp:Label ID="lblIdentityBanner" runat="server" CssClass="font-body-md text-on-surface-variant block"></asp:Label>
-                    </div>
-                    <asp:HyperLink ID="lnkVerifyIdentity" runat="server" NavigateUrl="~/Modules/Settings/IdentityVerification.aspx"
-                        CssClass="py-2.5 px-5 bg-primary text-on-primary rounded-xl font-label-md font-bold whitespace-nowrap">Verify ID</asp:HyperLink>
+            <asp:Panel ID="pnlIdentityBanner" runat="server" Visible="false" CssClass="dtas-notice dtas-notice-warning dtas-notice-sticky dtas-notice-rich" role="status">
+                <span class="material-symbols-outlined dtas-notice-icon">badge</span>
+                <div class="dtas-notice-body">
+                    <p class="dtas-notice-kicker">Required</p>
+                    <p class="dtas-notice-title">Identity verification required</p>
+                    <asp:Label ID="lblIdentityBanner" runat="server" CssClass="dtas-notice-copy"></asp:Label>
                 </div>
+                <asp:HyperLink ID="lnkVerifyIdentity" runat="server" NavigateUrl="~/Modules/Settings/IdentityVerification.aspx"
+                    CssClass="dtas-notice-action">Verify ID</asp:HyperLink>
             </asp:Panel>
 
             <!-- Metrics Bento Grid -->
@@ -161,24 +163,26 @@
                 <div class="lg:col-span-2 space-y-6">
                     
                     <!-- My Active Tasks -->
+                    <asp:UpdatePanel ID="upMyTasks" runat="server" UpdateMode="Conditional">
+                        <ContentTemplate>
                     <section class="standard-card dash-panel rounded-xl overflow-hidden">
                         <div class="dash-panel-head px-6 py-4 border-b border-surface-container-high flex flex-wrap justify-between items-center gap-3">
                             <h3 class="font-title-lg text-title-lg text-primary">My Active Tasks</h3>
-                            <div class="flex gap-2 flex-wrap">
+                            <div class="flex gap-2 flex-wrap" role="group" aria-label="Task status filter">
                                 <asp:Button ID="btnFilterAll" runat="server" Text="All" CausesValidation="false"
-                                    CssClass="px-4 py-2 rounded-full font-label-md text-label-md bg-primary text-on-primary"
+                                    UseSubmitBehavior="false" CssClass="dash-task-filter is-active"
                                     OnClick="btnFilterAll_Click" />
                                 <asp:Button ID="btnFilterPending" runat="server" Text="Pending" CausesValidation="false"
-                                    CssClass="px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-colors"
+                                    UseSubmitBehavior="false" CssClass="dash-task-filter"
                                     OnClick="btnFilterPending_Click" />
                                 <asp:Button ID="btnFilterInProgress" runat="server" Text="In Progress" CausesValidation="false"
-                                    CssClass="px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-colors"
+                                    UseSubmitBehavior="false" CssClass="dash-task-filter"
                                     OnClick="btnFilterInProgress_Click" />
                                 <asp:Button ID="btnFilterCompleted" runat="server" Text="Completed" CausesValidation="false"
-                                    CssClass="px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-colors"
+                                    UseSubmitBehavior="false" CssClass="dash-task-filter"
                                     OnClick="btnFilterCompleted_Click" />
                                 <asp:Button ID="btnFilterLate" runat="server" Text="Late" CausesValidation="false"
-                                    CssClass="px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-colors"
+                                    UseSubmitBehavior="false" CssClass="dash-task-filter"
                                     OnClick="btnFilterLate_Click" />
                             </div>
                         </div>
@@ -229,6 +233,8 @@
                             <a href="<%= ResolveUrl("~/Modules/UserTasks/UserTasks.aspx") %>" class="text-primary font-label-md text-label-md hover:underline">View all tasks</a>
                         </asp:Panel>
                     </section>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
 
                     <!-- Accountability Reports (Faculty/Staff only) -->
                     <asp:Panel ID="pnlReportsSection" runat="server" CssClass="standard-card rounded-xl overflow-hidden" Visible="false">
@@ -459,6 +465,13 @@
 
             initCharts();
             window.addEventListener('themechange', initCharts);
+
+            if (window.Sys && Sys.WebForms && Sys.WebForms.PageRequestManager) {
+                Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+                    if (document.activeElement && document.activeElement.blur)
+                        document.activeElement.blur();
+                });
+            }
 
             // Sidebar toggle for mobile
             var toggleBtn = document.getElementById('btnUserSidebarToggle');

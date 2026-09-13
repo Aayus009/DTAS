@@ -8,7 +8,7 @@
 <%@ Register TagPrefix="uc" TagName="AdminTopbar" Src="~/MasterPages/AdminTopbar.ascx" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>" />
+    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=trailscroll2" />
 </asp:Content>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -40,7 +40,8 @@
                     <h3 class="font-title-lg text-title-lg text-primary">System audit log</h3>
                     <p class="text-xs text-on-surface-variant">Actions written to AuditLogs (login, identity, moderation, events, assignments, clubs).</p>
                 </div>
-                <asp:Repeater ID="rptSystemAudit" runat="server">
+                <div class="report-table-scroll">
+                    <asp:Repeater ID="rptSystemAudit" runat="server">
                     <HeaderTemplate>
                         <table class="w-full text-left font-body-md">
                             <thead>
@@ -67,7 +68,8 @@
                             </tbody>
                         </table>
                     </FooterTemplate>
-                </asp:Repeater>
+                    </asp:Repeater>
+                </div>
                 <asp:Panel ID="pnlNoSystemAudit" runat="server" Visible="false" CssClass="px-6 py-8 text-on-surface-variant">No system audit rows yet.</asp:Panel>
             </section>
 
@@ -119,7 +121,7 @@
                     <h3 class="font-title-lg text-title-lg text-primary">Activity Log</h3>
                     <span class="font-badge-cap text-badge-cap uppercase text-outline"><asp:Literal ID="litTotalEntries" runat="server" Text="0"></asp:Literal> entries</span>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="report-table-scroll">
                     <table class="w-full text-left font-body-md">
                         <thead>
                             <tr class="bg-surface-container-low text-on-surface-variant border-b border-surface-container-high">

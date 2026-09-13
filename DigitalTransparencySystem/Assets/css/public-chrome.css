@@ -1,6 +1,127 @@
 /* Public header + footer — academic navy / cream / brass */
 body:has(.pub-header) {
     background: #e9dfcc;
+    color: #12243a;
+
+    --dt-primary-rgb: 14 34 56;
+    --dt-on-primary-rgb: 243 234 216;
+    --dt-primary-container-rgb: 22 50 79;
+    --dt-on-primary-container-rgb: 232 213 168;
+    --dt-primary-fixed-rgb: 232 213 168;
+    --dt-on-primary-fixed-rgb: 18 36 58;
+    --dt-primary-fixed-dim-rgb: 176 137 72;
+    --dt-inverse-primary-rgb: 176 137 72;
+
+    --dt-secondary-rgb: 92 83 70;
+    --dt-on-secondary-rgb: 243 234 216;
+    --dt-secondary-container-rgb: 232 213 168;
+    --dt-on-secondary-container-rgb: 18 36 58;
+
+    --dt-background-rgb: 233 223 204;
+    --dt-on-background-rgb: 18 36 58;
+    --dt-surface-rgb: 233 223 204;
+    --dt-on-surface-rgb: 18 36 58;
+    --dt-surface-variant-rgb: 216 203 179;
+    --dt-on-surface-variant-rgb: 92 83 70;
+    --dt-surface-tint-rgb: 176 137 72;
+    --dt-surface-container-lowest-rgb: 243 234 216;
+    --dt-surface-container-low-rgb: 239 228 207;
+    --dt-surface-container-rgb: 232 219 195;
+    --dt-surface-container-high-rgb: 216 203 179;
+    --dt-surface-container-highest-rgb: 216 203 179;
+    --dt-outline-rgb: 176 137 72;
+    --dt-outline-variant-rgb: 216 203 179;
+
+    --dt-primary: #0e2238;
+    --dt-on-primary: #f3ead8;
+    --dt-primary-container: #16324f;
+    --dt-on-primary-container: #e8d5a8;
+    --dt-primary-fixed-dim: #b08948;
+    --dt-secondary: #5c5346;
+    --dt-secondary-container: #e8d5a8;
+    --dt-on-secondary-container: #12243a;
+    --dt-surface: #e9dfcc;
+    --dt-on-surface: #12243a;
+    --dt-on-surface-variant: #5c5346;
+    --dt-surface-container-lowest: #f3ead8;
+    --dt-surface-container-low: #efe4cf;
+    --dt-surface-container: #e8dbc3;
+    --dt-surface-container-high: #d8cbb3;
+    --dt-surface-container-highest: #d8cbb3;
+    --dt-outline: #b08948;
+    --dt-outline-variant: #d8cbb3;
+    --dt-surface-tint: #b08948;
+}
+
+/* Named Tailwind colors on open-access pages (Features, FAQ, Contact) */
+body:has(.pub-header) .text-pacific-blue { color: #b08948 !important; }
+body:has(.pub-header) .bg-pacific-blue {
+    background-color: #b08948 !important;
+    color: #12243a !important;
+}
+body:has(.pub-header) .text-slate-deep { color: #12243a !important; }
+body:has(.pub-header) .bg-slate-deep {
+    background-color: #0e2238 !important;
+    color: #f3ead8 !important;
+}
+body:has(.pub-header) .border-slate-deep { border-color: rgba(18, 36, 58, 0.35) !important; }
+body:has(.pub-header) .border-l-pacific-blue { border-left-color: #b08948 !important; }
+body:has(.pub-header) .border-border-light { border-color: #d8cbb3 !important; }
+body:has(.pub-header) .bg-pacific-blue.hover\:bg-slate-deep:hover,
+body:has(.pub-header) a.bg-pacific-blue:hover,
+body:has(.pub-header) button.bg-pacific-blue:hover {
+    background-color: #c4a05a !important;
+    color: #12243a !important;
+}
+
+body:has(.pub-header) .from-slate-deep {
+    --tw-gradient-from: #0e2238 var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(14 34 56 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+body:has(.pub-header) .via-pacific-blue {
+    --tw-gradient-to: rgb(22 50 79 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), #16324f var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+body:has(.pub-header) .to-pacific-blue {
+    --tw-gradient-to: #1b4464 var(--tw-gradient-to-position);
+}
+
+body:has(.pub-header) .category-btn.active,
+body:has(.pub-header) .filter-btn.active {
+    background-color: #b08948 !important;
+    color: #12243a !important;
+}
+
+body:has(.pub-header) .hero-gradient {
+    background:
+        radial-gradient(circle at 14% 18%, rgba(176, 137, 72, 0.16), transparent 30%),
+        radial-gradient(circle at 88% 0%, rgba(72, 202, 228, 0.12), transparent 34%),
+        linear-gradient(165deg, #0e2238 0%, #16324f 48%, #1b4464 100%);
+    color: #f3ead8;
+}
+body:has(.pub-header) .hero-gradient h1,
+body:has(.pub-header) .hero-gradient .text-primary {
+    color: #f7f0e3 !important;
+}
+body:has(.pub-header) .hero-gradient .text-secondary,
+body:has(.pub-header) .hero-gradient p {
+    color: rgba(243, 234, 216, 0.78) !important;
+}
+body:has(.pub-header) .hero-gradient a.text-secondary {
+    color: rgba(243, 234, 216, 0.78) !important;
+}
+body:has(.pub-header) .hero-gradient a.text-secondary:hover {
+    color: #e8d5a8 !important;
+}
+body:has(.pub-header) .hero-gradient .bg-primary-container {
+    background: rgba(243, 234, 216, 0.1) !important;
+    color: #e8d5a8 !important;
+    border: 1px solid rgba(232, 213, 168, 0.28);
+}
+body:has(.pub-header) .hero-gradient .bg-surface-container-high {
+    background: #f3ead8 !important;
+    color: #12243a !important;
 }
 
 .pub-header {
@@ -99,6 +220,22 @@ body:has(.pub-header) {
 
 .pub-register:hover { background: #c4a05a; color: #12243a; }
 
+.pub-dashboard {
+    display: none;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.95rem;
+    border-radius: 0.7rem;
+    background: #b08948;
+    color: #12243a;
+    font-size: 0.88rem;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.pub-dashboard:hover { background: #c4a05a; color: #12243a; }
+
 .pub-menu-btn {
     width: 2.4rem;
     height: 2.4rem;
@@ -141,7 +278,7 @@ body:has(.pub-header) {
     background: #0e2238;
     color: rgba(243, 234, 216, 0.72);
     margin-top: 0;
-    padding: 3rem 0 1.4rem;
+    padding: 1.5rem 0 0.85rem;
     border-top: 3px solid #b08948;
 }
 
@@ -150,7 +287,7 @@ body:has(.pub-header) {
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1.3fr 1fr 1fr 1fr;
-    gap: 2rem 1.5rem;
+    gap: 1.1rem 1.25rem;
 }
 
 .pub-footer-brand {
@@ -204,8 +341,8 @@ body:has(.pub-header) {
 
 .pub-footer-base {
     width: min(1120px, calc(100% - 2rem));
-    margin: 2rem auto 0;
-    padding-top: 1.1rem;
+    margin: 1rem auto 0;
+    padding-top: 0.7rem;
     border-top: 1px solid rgba(232, 213, 168, 0.14);
     display: flex;
     justify-content: space-between;
@@ -220,7 +357,7 @@ body:has(.pub-header) {
 
 @media (min-width: 768px) {
     .pub-nav { display: flex; }
-    .pub-link, .pub-register { display: inline-flex; }
+    .pub-link, .pub-register, .pub-dashboard { display: inline-flex; }
     .pub-menu-btn { display: none; }
     .pub-mobile { display: none !important; }
 }

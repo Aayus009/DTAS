@@ -1,4 +1,4 @@
-/* Guest demo — public tour, Features palette */
+/* Guest demo — landing navy / cream / brass */
 
 .demo-banner {
     display: flex;
@@ -7,8 +7,8 @@
     justify-content: center;
     gap: 12px;
     padding: 10px 20px;
-    background: #023e8a;
-    color: #fff;
+    background: #0e2238;
+    color: #f3ead8;
     font-size: 13px;
     font-weight: 600;
 }
@@ -46,7 +46,7 @@
 
 .demo-hero {
     padding: 56px 0 40px;
-    background: linear-gradient(180deg, #f8fafc 0%, #eef4f8 100%);
+    background: transparent;
     border-bottom: 1px solid #e2e8f0;
     text-align: center;
 }
@@ -56,9 +56,9 @@
     padding: 6px 16px;
     margin-bottom: 20px;
     border-radius: 999px;
-    border: 1px solid rgba(0, 119, 182, 0.16);
-    background: rgba(0, 119, 182, 0.06);
-    color: #0077b6;
+    border: 1px solid rgba(176, 137, 72, 0.16);
+    background: rgba(176, 137, 72, 0.08);
+    color: #b08948;
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.1em;
@@ -69,19 +69,19 @@
     font-family: 'Hanken Grotesk', 'Segoe UI', sans-serif;
     font-size: clamp(28px, 4vw, 44px);
     font-weight: 700;
-    color: #0f172a;
+    color: #12243a;
     line-height: 1.15;
     max-width: 26ch;
     margin: 0 auto 16px;
 }
 
 .demo-hero h1 span {
-    color: #0077b6;
+    color: #b08948;
 }
 
 .demo-hero > .demo-wrap > p,
 .demo-copy {
-    color: #475569;
+    color: #5c5346;
     line-height: 1.6;
     font-size: 15px;
 }
@@ -120,32 +120,33 @@
 }
 
 .demo-btn-primary {
-    background: #0077b6;
-    color: #fff;
+    background: #b08948;
+    color: #12243a;
 }
 
 .demo-btn-primary:hover {
-    background: #023e8a;
+    background: #c4a05a;
+    color: #12243a;
 }
 
 .demo-btn-ghost {
     background: transparent;
-    color: #023e8a;
-    border-color: #023e8a;
+    color: #12243a;
+    border-color: #d8cbb3;
 }
 
 .demo-btn-ghost:hover {
-    background: rgba(2, 62, 138, 0.06);
+    background: rgba(14, 34, 56, 0.06);
 }
 
 .demo-btn-light {
-    background: #fff;
-    color: #023e8a;
+    background: #f3ead8;
+    color: #12243a;
 }
 
 .demo-btn-outline {
     background: transparent;
-    color: #fff;
+    color: #12243a;
     border-color: rgba(255, 255, 255, 0.45);
 }
 
@@ -163,11 +164,11 @@
     justify-content: center;
     gap: 10px 18px;
     list-style: none;
-    padding: 0;
+    padding: 1.2rem 0 0;
     margin: 0;
     font-size: 13px;
     font-weight: 600;
-    color: #334155;
+    color: rgba(243, 234, 216, 0.78);
 }
 
 .demo-limits li {
@@ -178,11 +179,11 @@
 
 .demo-limits .material-symbols-outlined {
     font-size: 18px;
-    color: #0077b6;
+    color: #b08948;
 }
 
 .demo-limits li:last-child .material-symbols-outlined {
-    color: #0077b6;
+    color: #b08948;
 }
 
 .demo-limits li.is-tried {
@@ -205,8 +206,8 @@
 }
 
 .demo-card {
-    background: #fff;
-    border: 1px solid #e2e8f0;
+    background: #f3ead8;
+    border: 1px solid #d8cbb3;
     border-radius: 1rem;
     padding: 24px;
 }
@@ -225,14 +226,14 @@
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #0077b6;
+    color: #b08948;
     margin-bottom: 6px;
 }
 
 .demo-card h2 {
     font-size: 22px;
     font-weight: 700;
-    color: #023e8a;
+    color: #12243a;
     margin: 0;
 }
 
@@ -241,8 +242,8 @@
     align-items: center;
     padding: 4px 10px;
     border-radius: 999px;
-    background: #e2e8f0;
-    color: #334155;
+    background: #d8cbb3;
+    color: #5c5346;
     font-size: 11px;
     font-weight: 800;
     text-transform: uppercase;
@@ -265,7 +266,7 @@
     margin: 0 0 14px;
     font-size: 13px;
     font-weight: 600;
-    color: #475569;
+    color: #5c5346;
 }
 
 .demo-event-meta span,
@@ -278,7 +279,7 @@
 .demo-event-meta .material-symbols-outlined,
 .demo-meeting .material-symbols-outlined {
     font-size: 18px;
-    color: #0077b6;
+    color: #b08948;
 }
 
 .demo-gist {
@@ -292,12 +293,12 @@
     font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #64748b;
+    color: #5c5346;
 }
 
 .demo-gist dd {
     margin: 4px 0 0;
-    color: #1e293b;
+    color: #12243a;
     font-size: 14px;
 }
 
@@ -310,8 +311,8 @@
 
 .demo-reset {
     background: transparent;
-    border: 1px solid #cbd5e1;
-    color: #334155;
+    border: 1px solid #d8cbb3;
+    color: #5c5346;
     border-radius: 0.5rem;
     padding: 6px 12px;
     font-size: 12px;
@@ -320,7 +321,7 @@
 }
 
 .demo-reset:hover {
-    background: #f8fafc;
+    background: #efe4cf;
 }
 
 .demo-board {
@@ -331,8 +332,8 @@
 }
 
 .demo-col {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: #efe4cf;
+    border: 1px solid #d8cbb3;
     border-radius: 0.75rem;
     padding: 12px;
     min-height: 180px;
@@ -347,11 +348,11 @@
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #475569;
+    color: #5c5346;
 }
 
 .demo-count {
-    background: #e2e8f0;
+    background: #d8cbb3;
     border-radius: 999px;
     min-width: 22px;
     height: 22px;
@@ -359,7 +360,7 @@
     align-items: center;
     justify-content: center;
     font-size: 11px;
-    color: #0f172a;
+    color: #12243a;
 }
 
 .demo-col-body {
@@ -370,28 +371,28 @@
 }
 
 .demo-task {
-    background: #fff;
-    border: 1px solid #e2e8f0;
+    background: #f3ead8;
+    border: 1px solid #d8cbb3;
     border-radius: 0.6rem;
     padding: 12px;
 }
 
 .demo-task.is-moved {
-    box-shadow: 0 0 0 2px rgba(0, 119, 182, 0.28);
+    box-shadow: 0 0 0 2px rgba(176, 137, 72, 0.28);
 }
 
 .demo-key {
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 0.08em;
-    color: #0077b6;
+    color: #b08948;
 }
 
 .demo-task p {
     margin: 6px 0 10px;
     font-size: 14px;
     font-weight: 600;
-    color: #0f172a;
+    color: #12243a;
 }
 
 .demo-task-btn {
@@ -399,21 +400,22 @@
     padding: 0 12px;
     border-radius: 0.4rem;
     border: 0;
-    background: #0077b6;
-    color: #fff;
+    background: #b08948;
+    color: #12243a;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
 }
 
 .demo-task-btn:hover {
-    background: #023e8a;
+    background: #c4a05a;
+    color: #12243a;
 }
 
 .demo-task-btn-locked,
 .demo-done-tag {
-    background: #e2e8f0;
-    color: #475569;
+    background: #d8cbb3;
+    color: #5c5346;
 }
 
 .demo-done-tag {
@@ -429,7 +431,7 @@
     margin: 12px 0 0;
     font-size: 13px;
     font-weight: 600;
-    color: #0077b6;
+    color: #b08948;
 }
 
 .demo-locked {
@@ -446,17 +448,17 @@
     gap: 10px;
     font-size: 14px;
     font-weight: 600;
-    color: #334155;
+    color: #5c5346;
 }
 
 .demo-locked .material-symbols-outlined {
     font-size: 18px;
-    color: #64748b;
+    color: #5c5346;
 }
 
 .demo-cta {
-    background: linear-gradient(135deg, #023e8a 0%, #0077b6 100%);
-    color: #fff;
+    background: linear-gradient(160deg, #0e2238 0%, #16324f 55%, #1b4464 100%);
+    color: #12243a;
     padding: 48px 0;
     border-radius: 48px 48px 0 0;
     margin: 0 16px;
@@ -498,9 +500,9 @@
 }
 
 .demo-chip {
-    border: 1px solid #cbd5e1;
-    background: #fff;
-    color: #334155;
+    border: 1px solid #d8cbb3;
+    background: #f3ead8;
+    color: #5c5346;
     border-radius: 999px;
     padding: 6px 14px;
     font-size: 12px;
@@ -509,9 +511,9 @@
 }
 
 .demo-chip.is-on {
-    background: #0077b6;
-    border-color: #0077b6;
-    color: #fff;
+    background: #b08948;
+    border-color: #b08948;
+    color: #12243a;
 }
 
 .demo-sub,
@@ -521,7 +523,7 @@
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #023e8a;
+    color: #12243a;
 }
 
 .demo-note-list {
@@ -532,8 +534,8 @@
 
 .demo-note,
 .demo-chat-msg {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: #efe4cf;
+    border: 1px solid #d8cbb3;
     border-radius: 0.6rem;
     padding: 10px 12px;
 }
@@ -545,7 +547,7 @@
     font-weight: 800;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #0077b6;
+    color: #b08948;
     margin-bottom: 4px;
 }
 
@@ -553,7 +555,7 @@
 .demo-chat-msg p {
     margin: 0;
     font-size: 14px;
-    color: #1e293b;
+    color: #12243a;
 }
 
 .demo-note-form {
@@ -568,7 +570,7 @@
 .demo-form textarea {
     flex: 1;
     width: 100%;
-    border: 1px solid #cbd5e1;
+    border: 1px solid #d8cbb3;
     border-radius: 0.5rem;
     padding: 10px 12px;
     font: inherit;
@@ -598,7 +600,7 @@
     gap: 8px;
     font-size: 14px;
     font-weight: 600;
-    color: #334155;
+    color: #5c5346;
     cursor: pointer;
 }
 
@@ -613,8 +615,8 @@
 .demo-record {
     width: 100%;
     text-align: left;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: #efe4cf;
+    border: 1px solid #d8cbb3;
     border-radius: 0.6rem;
     padding: 10px 12px;
     cursor: pointer;
@@ -624,27 +626,27 @@
 
 .demo-record:hover,
 .demo-record-detail {
-    border-color: #0077b6;
+    border-color: #b08948;
 }
 
 .demo-record em {
     font-style: normal;
     font-size: 12px;
-    color: #64748b;
+    color: #5c5346;
 }
 
 .demo-record-detail {
-    border: 1px solid #e2e8f0;
+    border: 1px solid #d8cbb3;
     border-radius: 0.6rem;
     padding: 12px;
-    background: #fff;
+    background: #f3ead8;
     margin-bottom: 8px;
 }
 
 .demo-record-detail h3 {
     margin: 0 0 6px;
     font-size: 16px;
-    color: #023e8a;
+    color: #12243a;
 }
 
 .demo-chat {
@@ -656,8 +658,8 @@
 }
 
 .demo-chat-msg.is-guest {
-    background: rgba(0, 119, 182, 0.08);
-    border-color: rgba(0, 119, 182, 0.2);
+    background: rgba(176, 137, 72, 0.12);
+    border-color: rgba(176, 137, 72, 0.22);
 }
 
 .demo-form {
@@ -672,7 +674,7 @@
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #64748b;
+    color: #5c5346;
 }
 
 .demo-propose-result {
@@ -685,7 +687,7 @@
 
 .demo-propose-result h3 {
     margin: 8px 0 6px;
-    color: #023e8a;
+    color: #12243a;
     font-size: 16px;
 }
 

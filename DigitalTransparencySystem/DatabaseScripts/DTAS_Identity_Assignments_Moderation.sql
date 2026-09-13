@@ -751,11 +751,41 @@ BEGIN
     END
 
     DECLARE @Tries INT = 0;
-    SET @AssignmentCode = NULL;
+        SET @AssignmentCode = NULL;
+        DECLARE @Prefix NVARCHAR(12);
+        DECLARE @Work NVARCHAR(200) = N' ' + UPPER(LTRIM(RTRIM(@AssignmentName))) + N' ';
+        SET @Work = REPLACE(@Work, N' ASSIGNMENTS ', N' ');
+        SET @Work = REPLACE(@Work, N' ASSIGNMENT ', N' ');
+        SET @Work = REPLACE(@Work, N' GROUPS ', N' ');
+        SET @Work = REPLACE(@Work, N' GROUP ', N' ');
+        SET @Work = REPLACE(@Work, N' THE ', N' ');
+        SET @Work = REPLACE(@Work, N' AND ', N' ');
+        SET @Work = REPLACE(@Work, N' OF ', N' ');
+        SET @Work = REPLACE(@Work, N' FOR ', N' ');
+        WHILE CHARINDEX(N'  ', @Work) > 0 SET @Work = REPLACE(@Work, N'  ', N' ');
+        SET @Work = LTRIM(RTRIM(@Work));
+        DECLARE @Cut INT = CHARINDEX(N' ', @Work);
+        IF @Cut = 0
+            SET @Prefix = LEFT(@Work, 6);
+        ELSE IF LEN(LEFT(@Work, @Cut - 1)) BETWEEN 2 AND 5
+            SET @Prefix = LEFT(@Work, @Cut - 1);
+        ELSE
+        BEGIN
+            SET @Prefix = N'';
+            DECLARE @Rest NVARCHAR(200) = @Work;
+            WHILE LEN(@Rest) > 0 AND LEN(@Prefix) < 6
+            BEGIN
+                SET @Prefix = @Prefix + LEFT(@Rest, 1);
+                SET @Cut = CHARINDEX(N' ', @Rest);
+                IF @Cut = 0 SET @Rest = N'';
+                ELSE SET @Rest = LTRIM(SUBSTRING(@Rest, @Cut + 1, 200));
+            END
+        END
+        IF @Prefix IS NULL OR LEN(@Prefix) < 2 SET @Prefix = N'ASN';
 
-    WHILE @Tries < 25 AND @AssignmentCode IS NULL
-    BEGIN
-        SET @AssignmentCode = N'SNA-ASSIGN-' + RIGHT(N'0000' + CAST(ABS(CHECKSUM(NEWID())) % 10000 AS NVARCHAR(4)), 4);
+        WHILE @Tries < 25 AND @AssignmentCode IS NULL
+        BEGIN
+            SET @AssignmentCode = @Prefix + N'-' + RIGHT(N'0000' + CAST(ABS(CHECKSUM(NEWID())) % 10000 AS NVARCHAR(4)), 4);
         IF EXISTS (SELECT 1 FROM dbo.Assignments WHERE AssignmentCode = @AssignmentCode)
             SET @AssignmentCode = NULL;
         SET @Tries += 1;
@@ -803,7 +833,12 @@ BEGIN
         SUM(CASE WHEN t.Status = N'Blocked' THEN 1 ELSE 0 END) AS BlockedTasks,
         SUM(CASE WHEN t.DueDate IS NOT NULL AND t.DueDate < GETDATE() AND t.Status <> N'Completed' THEN 1 ELSE 0 END) AS OverdueTasks,
         CAST(
-            SUM(CASE WHEN t.Status = N'Completed' THEN 1 ELSE 0 END) * 100.0
+            SUM(CASE
+                WHEN t.Status = N'Completed' THEN 1.0
+                WHEN t.Status = N'UnderReview' THEN 0.75
+                WHEN t.Status = N'InProgress' THEN 0.50
+                ELSE 0.0
+            END) * 100.0
             / NULLIF(COUNT(t.TaskID), 0)
             AS DECIMAL(5,2)
         ) AS CompletionPercentage
@@ -824,7 +859,12 @@ BEGIN
         SUM(CASE WHEN t.Status <> N'Completed' THEN 1 ELSE 0 END) AS PendingTasks,
         SUM(CASE WHEN t.DueDate IS NOT NULL AND t.DueDate < GETDATE() AND t.Status <> N'Completed' THEN 1 ELSE 0 END) AS OverdueTasks,
         ISNULL(CAST(
-            SUM(CASE WHEN t.Status = N'Completed' THEN 1 ELSE 0 END) * 100.0
+            SUM(CASE
+                WHEN t.Status = N'Completed' THEN 1.0
+                WHEN t.Status = N'UnderReview' THEN 0.75
+                WHEN t.Status = N'InProgress' THEN 0.50
+                ELSE 0.0
+            END) * 100.0
             / NULLIF(COUNT(t.TaskID), 0)
             AS DECIMAL(5,2)
         ), 0) AS CompletionPercentage
@@ -847,7 +887,8 @@ GO
 /*
 ContributionScore (0-100), documented so C# does not invent percentages:
 
-  Completion  50%  = CompletedTasks / AssignedTasks
+  Completion  50%  = task progress weight / assigned tasks
+                     (In Progress 50%, Under Review 75%, Completed 100%)
   Timeliness  20%  = 1 - (OverdueTasks / AssignedTasks)
   Activity    20%  = min(100, ProgressUpdates * 20) / 100
   Recency     10%  = 100 if last activity within 14 days, else 0
@@ -876,6 +917,12 @@ BEGIN
             CompletedTasks = SUM(CASE WHEN t.Status = N'Completed' THEN 1 ELSE 0 END),
             PendingTasks = SUM(CASE WHEN t.Status <> N'Completed' THEN 1 ELSE 0 END),
             OverdueTasks = SUM(CASE WHEN t.DueDate IS NOT NULL AND t.DueDate < GETDATE() AND t.Status <> N'Completed' THEN 1 ELSE 0 END),
+            ProgressWeight = SUM(CASE
+                WHEN t.Status = N'Completed' THEN 1.0
+                WHEN t.Status = N'UnderReview' THEN 0.75
+                WHEN t.Status = N'InProgress' THEN 0.50
+                ELSE 0.0
+            END),
             LastTaskActivity = MAX(t.UpdatedAt)
         FROM MemberBase b
         LEFT JOIN dbo.AssignmentTasks t
@@ -914,13 +961,13 @@ BEGIN
             END,
             CompletionPercentage = CAST(
                 CASE WHEN ts.AssignedTasks = 0 THEN 0
-                     ELSE ts.CompletedTasks * 100.0 / ts.AssignedTasks
+                     ELSE ISNULL(ts.ProgressWeight, 0) * 100.0 / ts.AssignedTasks
                 END AS DECIMAL(5,2)
             ),
             ContributionScore = CAST(
                 CASE WHEN ts.AssignedTasks = 0 THEN 0
                      ELSE
-                        (50.0 * ts.CompletedTasks / ts.AssignedTasks)
+                        (50.0 * ISNULL(ts.ProgressWeight, 0) / ts.AssignedTasks)
                       + (20.0 * (1.0 - (ts.OverdueTasks * 1.0 / ts.AssignedTasks)))
                       + (20.0 * (CASE WHEN us.ProgressUpdates * 20.0 > 100 THEN 100 ELSE us.ProgressUpdates * 20.0 END) / 100.0)
                       + (10.0 * CASE WHEN COALESCE(

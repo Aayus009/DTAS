@@ -5,7 +5,7 @@
 <%@ Register TagPrefix="uc" TagName="UserTopbar" Src="~/MasterPages/UserTopbar.ascx" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=navfix2" />
+    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=notices1" />
     <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/clubs.css") %>?v=1" />
 </asp:Content>
 
@@ -65,11 +65,16 @@
                         </div>
                     </header>
 
-                    <asp:Panel ID="pnlRestricted" runat="server" Visible="false" CssClass="mb-4 p-4 rounded-xl bg-error-container/20 text-error font-label-md">
-                        This club is restricted after an administrator review. Messages, invites, joining, and linking to events are paused.
+                    <asp:Panel ID="pnlRestricted" runat="server" Visible="false" CssClass="dtas-notice dtas-notice-danger dtas-notice-sticky dtas-notice-rich">
+                        <span class="material-symbols-outlined dtas-notice-icon">block</span>
+                        <div>
+                            <p class="dtas-notice-kicker">Restricted</p>
+                            <p class="dtas-notice-title">This club is restricted</p>
+                            <p class="dtas-notice-copy">Messages, invites, joining, and linking to events are paused until the system administrator restores it.</p>
+                        </div>
                     </asp:Panel>
 
-                    <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md block mb-4"></asp:Label>
+                    <asp:Label ID="lblMessage" runat="server" CssClass="dtas-notice"></asp:Label>
 
                     <div class="club-grid">
                         <section class="club-card club-feed">

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.SessionState;
@@ -24,7 +23,7 @@ namespace DigitalTransparencySystem.Modules.Search
 
             if (AuthService.IsSuspendedViewOnly(context.Session))
             {
-                Write(context, new { ok = true, items = new object[0] });
+                Write(context, new { ok = true, url = (string)null, error = "Search is not available while suspended." });
                 return;
             }
 
@@ -34,26 +33,18 @@ namespace DigitalTransparencySystem.Modules.Search
 
             try
             {
-                List<SearchHit> hits = SearchService.Search(userId, role, query);
-                var items = new object[hits.Count];
-                for (int i = 0; i < hits.Count; i++)
+                SearchHit best = SearchService.BestMatch(userId, role, query);
+                if (best == null || string.IsNullOrEmpty(best.Url))
                 {
-                    SearchHit hit = hits[i];
-                    items[i] = new
-                    {
-                        type = hit.Type,
-                        title = hit.Title,
-                        subtitle = hit.Subtitle,
-                        url = hit.Url,
-                        icon = hit.Icon
-                    };
+                    Write(context, new { ok = true, url = (string)null, error = "No matching page or record." });
+                    return;
                 }
 
-                Write(context, new { ok = true, items });
+                Write(context, new { ok = true, url = best.Url, title = best.Title });
             }
             catch (Exception)
             {
-                Write(context, new { ok = false, error = "Search could not be completed.", items = new object[0] });
+                Write(context, new { ok = false, error = "Search could not be completed." });
             }
         }
 

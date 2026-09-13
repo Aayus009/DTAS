@@ -24,7 +24,7 @@
                     CssClass="py-2.5 px-6 bg-primary text-on-primary rounded-xl font-label-md font-bold">Create event</asp:HyperLink>
             </header>
 
-            <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md block mb-4"></asp:Label>
+            <asp:Label ID="lblMessage" runat="server" CssClass="dtas-notice"></asp:Label>
 
             <section class="standard-card rounded-xl p-6 mb-6">
                 <h3 class="font-title-lg text-title-lg text-primary mb-4">Join with invitation code</h3>

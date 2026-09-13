@@ -1,0 +1,106 @@
+DTAS tests in Visual Studio, SSMS, and Postman
+==============================================
+
+Complete Pass/Fail here (Status column):
+  FYP Diagrams\Testing\DTAS-Test-Run-Guidelines.docx
+
+Case inventory (same IDs):
+  FYP Diagrams\Testing\DTAS-Test-Cases-Apps.docx
+
+Order: Unit (VS) -> Integration (SSMS) -> System (SSMS) -> start site -> Interface (Postman) -> Security (Postman)
+One case at a time. 21 cases total.
+
+
+1. UNIT — Visual Studio Test Explorer (NUnit)
+   Open:  DigitalTransparencySystem.sln
+   App:   Visual Studio
+
+   1. Build > Build Solution (Ctrl+Shift+B). Wait for success.
+   2. Test > Test Explorer.
+   3. If the list is empty, Run All once to discover tests, then run one method at a time.
+   4. Right-click the method, Run. Green = Pass. Type Pass/Fail in Table 2 of the guidelines Word file.
+
+   Run these, one by one:
+     UT-01  UT01_AdminRoleIsRecognised
+            Expect: Admin true; Faculty and Student false.
+     UT-02  UT02_OnlyFacultyAndStaffMayBeEventLead
+            Expect: Faculty and Staff true; Student and Admin false.
+     UT-03  UT03_OnlyFacultyMayCreateAssignments
+            Expect: Faculty true; Staff and Student false.
+     UT-04  UT04_AdminIsNotACreateEventRole
+            Expect: Admin false; Faculty and Staff true.
+     UT-05  UT05_PasswordHasherHashAndVerify
+            Expect: hash starts with pbkdf2$; correct password verifies; wrong password fails.
+
+
+2. INTEGRATION — SQL Server Management Studio
+   Server:   AAYUS-ARK009\SQLEXPRESS
+   Database: DigitalTransparencyDB
+   Folder:   Tests\Sql\
+
+   1. Connect with Windows Authentication.
+   2. Click DigitalTransparencyDB in Object Explorer.
+   3. File > Open > File, pick one .sql file.
+   4. Confirm the database dropdown is DigitalTransparencyDB.
+   5. Execute (F5). Read the Messages pane (not Results).
+   6. Pass = a PRINT line starting with PASS IT-xx. Type Pass/Fail in Table 3.
+
+   Run these, one file at a time:
+     IT-01  Tests\Sql\IT-01.sql
+            Messages: PASS IT-01 Auth/Users gate
+     IT-02  Tests\Sql\IT-02.sql
+            Messages: PASS IT-02 EventMembers public join is Requested
+     IT-03  Tests\Sql\IT-03.sql
+            Messages: PASS IT-03 EventMembers invite code is Accepted
+     IT-04  Tests\Sql\IT-04.sql
+            Messages: PASS IT-04 Clubs student lead; admin CreatedBy count is 0
+     IT-05  Tests\Sql\IT-05.sql
+            Messages: PASS IT-05 Meetings close after duration
+
+   Dummy rows use emails dtas.sql.*@dtas.test and are deleted at the end of each script.
+
+
+3. SYSTEM — SQL Server Management Studio (same connection)
+   Folder: Tests\Sql\
+
+   Same steps as integration. Type Pass/Fail in Table 4.
+
+     ST-01  Tests\Sql\ST-01.sql
+            Messages: PASS ST-01 identity gate email then ID
+     ST-02  Tests\Sql\ST-02.sql
+            Messages: PASS ST-02 propose, approve, join
+     ST-03  Tests\Sql\ST-03.sql
+            Messages: PASS ST-03 meeting duration close
+     ST-04  Tests\Sql\ST-04.sql
+            Messages: PASS ST-04 club create and public join
+     ST-05  Tests\Sql\ST-05.sql
+            Messages: PASS ST-05 admin AccountStatus stays Active
+
+
+4. INTERFACE — Postman
+   Do not open the .request.yaml file in the code editor. That is source, not the test runner.
+
+   In Cursor / Postman Local Mode:
+     1. Click Upgrade to v3 if the orange banner is showing, then close the YAML tab.
+     2. In the Postman sidebar switch from Files to Collections (or Items).
+     3. Open DTAS API and Security > Interface > API-01.
+     4. You should see GET, the URL, and a Send button — not YAML.
+     5. Start the site at https://localhost:44353, click Send, then open Scripts / Tests (post-response). Green = Pass.
+
+   In the Postman desktop app:
+     Import Tests\DTAS.postman_collection.json
+     Open Interface > API-01 > Send > Tests tab.
+
+     API-01  API-01 ConnectApi.ashx refuses anonymous
+     API-02  API-02 TaskProgressApi.ashx refuses anonymous
+     API-03  API-03 GlobalSearch.ashx refuses anonymous
+     API-04  API-04 EventsProgressApi.ashx refuses anonymous
+     API-05  API-05 TransparencySync.ashx refuses anonymous
+
+
+5. SECURITY — Postman (same collection, site still running)
+   Folder: Security
+   Type Pass/Fail in Table 6.
+
+     SEC-01  SEC-01 EventWorkspace.aspx not open anonymously
+             Expect: Tests tab green (redirect or login; workspace not returned)

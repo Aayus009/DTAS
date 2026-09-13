@@ -1,0 +1,59 @@
+{
+  "info": {
+    "name": "DTAS JSON handlers",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://localhost:44353" }
+  ],
+  "item": [
+    {
+      "name": "API-01 ConnectApi no session",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/Modules/Connect/ConnectApi.ashx?action=messages&groupId=1"
+      }
+    },
+    {
+      "name": "API-02 TaskProgressApi no session",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/Modules/Tasks/TaskProgressApi.ashx?taskId=1"
+      }
+    },
+    {
+      "name": "API-03 GlobalSearch no session",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/Modules/Search/GlobalSearch.ashx?q=event"
+      }
+    },
+    {
+      "name": "API-04 EventsProgressApi no session",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/Modules/Events/EventsProgressApi.ashx"
+      }
+    },
+    {
+      "name": "API-05 TransparencySync no session",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/Modules/Transparency/TransparencySync.ashx"
+      }
+    },
+    {
+      "name": "SEC-01 EventWorkspace no session",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/Modules/Events/EventWorkspace.aspx"
+      }
+    }
+  ]
+}

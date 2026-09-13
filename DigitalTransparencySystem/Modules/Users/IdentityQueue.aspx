@@ -27,7 +27,7 @@
                 </asp:DropDownList>
             </header>
 
-            <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md block mb-4"></asp:Label>
+            <asp:Label ID="lblMessage" runat="server" CssClass="dtas-notice"></asp:Label>
             <asp:HiddenField ID="hfRejectReason" runat="server" />
 
             <div class="standard-card rounded-xl overflow-hidden">

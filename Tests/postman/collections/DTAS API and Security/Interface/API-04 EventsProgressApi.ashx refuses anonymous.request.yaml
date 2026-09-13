@@ -1,0 +1,11 @@
+$kind: http-request
+name: API-04 EventsProgressApi.ashx refuses anonymous
+url: "{{baseUrl}}/Modules/Events/EventsProgressApi.ashx"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      var t = pm.response.text().toLowerCase();
+      pm.test('API-04 EventsProgressApi refuses anonymous caller', function () { pm.expect(t).to.include('sign in'); });
+    language: text/javascript
+order: 4000

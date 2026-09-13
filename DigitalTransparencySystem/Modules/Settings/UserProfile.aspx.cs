@@ -164,7 +164,7 @@ namespace DigitalTransparencySystem.Modules.Settings
 
             Session["FullName"] = txtFullName.Text.Trim();
             lblProfileSuccess.Visible = true;
-            lblProfileSuccess.CssClass = "text-tertiary font-label-md";
+            UiNotice.Bind(lblProfileSuccess, null, "Profile updated successfully.");
             LoadProfile();
         }
 
@@ -172,24 +172,26 @@ namespace DigitalTransparencySystem.Modules.Settings
         {
             lblPasswordError.Visible = false;
             lblPasswordSuccess.Visible = false;
+            UiNotice.Bind(lblPasswordError, null, null);
+            UiNotice.Bind(lblPasswordSuccess, null, null);
 
             if (string.IsNullOrEmpty(txtCurrentPassword.Text) || string.IsNullOrEmpty(txtNewPassword.Text))
             {
-                lblPasswordError.Text = "Please fill in all password fields.";
+                UiNotice.Bind(lblPasswordError, "Please fill in all password fields.", null);
                 lblPasswordError.Visible = true;
                 return;
             }
 
             if (txtNewPassword.Text != txtConfirmPassword.Text)
             {
-                lblPasswordError.Text = "New passwords do not match.";
+                UiNotice.Bind(lblPasswordError, "New passwords do not match.", null);
                 lblPasswordError.Visible = true;
                 return;
             }
 
             if (txtNewPassword.Text.Length < 8)
             {
-                lblPasswordError.Text = "Password must be at least 8 characters.";
+                UiNotice.Bind(lblPasswordError, "Password must be at least 8 characters.", null);
                 lblPasswordError.Visible = true;
                 return;
             }
@@ -198,7 +200,7 @@ namespace DigitalTransparencySystem.Modules.Settings
             UserAccount user = AuthService.FindById(userId);
             if (user == null || !PasswordHasher.Verify(txtCurrentPassword.Text, user.Password))
             {
-                lblPasswordError.Text = "Current password is incorrect.";
+                UiNotice.Bind(lblPasswordError, "Current password is incorrect.", null);
                 lblPasswordError.Visible = true;
                 return;
             }
@@ -207,7 +209,7 @@ namespace DigitalTransparencySystem.Modules.Settings
             AuthService.WriteAudit(userId, "PasswordChanged", "User", userId, "User changed password.", Request.UserHostAddress);
 
             lblPasswordSuccess.Visible = true;
-            lblPasswordSuccess.CssClass = "text-tertiary font-label-md";
+            UiNotice.Bind(lblPasswordSuccess, null, "Password changed successfully.");
             txtCurrentPassword.Text = "";
             txtNewPassword.Text = "";
             txtConfirmPassword.Text = "";
@@ -236,6 +238,7 @@ namespace DigitalTransparencySystem.Modules.Settings
                 cmd.ExecuteNonQuery();
             }
 
+            Session.Remove("ProfileImageUrl");
             LoadProfile();
         }
 
@@ -245,8 +248,7 @@ namespace DigitalTransparencySystem.Modules.Settings
             string newEmail = (txtNewEmail.Text ?? "").Trim().ToLowerInvariant();
             if (string.IsNullOrEmpty(newEmail) || newEmail.IndexOf('@') < 1)
             {
-                lblEmailChangeMessage.CssClass = "text-error font-label-md";
-                lblEmailChangeMessage.Text = "Enter a valid email address.";
+                UiNotice.Bind(lblEmailChangeMessage, "Enter a valid email address.", null);
                 return;
             }
 
@@ -254,15 +256,13 @@ namespace DigitalTransparencySystem.Modules.Settings
             int userId = Convert.ToInt32(Session["UserID"]);
             if (existing != null && existing.UserID != userId)
             {
-                lblEmailChangeMessage.CssClass = "text-error font-label-md";
-                lblEmailChangeMessage.Text = "That email is already in use.";
+                UiNotice.Bind(lblEmailChangeMessage, "That email is already in use.", null);
                 return;
             }
 
             if (AuthService.IsBanned(newEmail, null))
             {
-                lblEmailChangeMessage.CssClass = "text-error font-label-md";
-                lblEmailChangeMessage.Text = "That email cannot be used.";
+                UiNotice.Bind(lblEmailChangeMessage, "That email cannot be used.", null);
                 return;
             }
 
@@ -273,10 +273,7 @@ namespace DigitalTransparencySystem.Modules.Settings
             if (!otp.Sent && !string.IsNullOrEmpty(otp.Code))
                 lblEmailOtpSent.Text += " (Dev: " + otp.Code + ")";
             if (!string.IsNullOrEmpty(otp.Error) && string.IsNullOrEmpty(otp.Code))
-            {
-                lblEmailChangeMessage.CssClass = "text-error font-label-md";
-                lblEmailChangeMessage.Text = otp.Error;
-            }
+                UiNotice.Bind(lblEmailChangeMessage, otp.Error, null);
         }
 
         protected void btnConfirmEmail_Click(object sender, EventArgs e)
@@ -285,16 +282,14 @@ namespace DigitalTransparencySystem.Modules.Settings
             string newEmail = Session["PendingEmailChange"] as string;
             if (string.IsNullOrEmpty(newEmail))
             {
-                lblEmailChangeMessage.CssClass = "text-error font-label-md";
-                lblEmailChangeMessage.Text = "Request a code first.";
+                UiNotice.Bind(lblEmailChangeMessage, "Request a code first.", null);
                 return;
             }
 
             string error;
             if (!EmailOtpService.Verify(userId, txtEmailOtp.Text.Trim(), EmailOtpService.PurposeEmailChange, out error))
             {
-                lblEmailChangeMessage.CssClass = "text-error font-label-md";
-                lblEmailChangeMessage.Text = error;
+                UiNotice.Bind(lblEmailChangeMessage, error, null);
                 return;
             }
 
@@ -302,8 +297,7 @@ namespace DigitalTransparencySystem.Modules.Settings
             Session["Email"] = newEmail;
             Session.Remove("PendingEmailChange");
             AuthService.WriteAudit(userId, "EmailChanged", "User", userId, "Email changed after OTP.", Request.UserHostAddress);
-            lblEmailChangeMessage.CssClass = "text-tertiary font-label-md";
-            lblEmailChangeMessage.Text = "Email updated.";
+            UiNotice.Bind(lblEmailChangeMessage, null, "Email updated.");
             pnlEmailOtp.Visible = false;
             txtNewEmail.Text = "";
             LoadProfile();

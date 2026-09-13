@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.35931.197 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalTransparencySystem", "DigitalTransparencySystem\DigitalTransparencySystem.csproj", "{5B9CCDD5-65BD-4600-97B8-72A5114323E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalTransparencySystem.Tests", "DigitalTransparencySystem.Tests\DigitalTransparencySystem.Tests.csproj", "{A11C0DE5-7E57-4A51-9B0E-D7A500000001}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5B9CCDD5-65BD-4600-97B8-72A5114323E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B9CCDD5-65BD-4600-97B8-72A5114323E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B9CCDD5-65BD-4600-97B8-72A5114323E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A11C0DE5-7E57-4A51-9B0E-D7A500000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A11C0DE5-7E57-4A51-9B0E-D7A500000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A11C0DE5-7E57-4A51-9B0E-D7A500000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A11C0DE5-7E57-4A51-9B0E-D7A500000001}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -113,7 +113,7 @@
                             </div>
 
                             <p class="text-sm text-on-surface-variant mb-4">
-                                Recording is not shown on the Join link. Use <strong>Start (Host)</strong> so Zoom can cloud-record this meeting.
+                                Members cannot enter until you click <strong>Start (Host)</strong>. After that they wait in the Zoom waiting room until you admit them.
                             </p>
                             <div class="flex flex-wrap gap-3">
                                 <asp:HyperLink ID="lnkStartButton" runat="server" Target="_blank" CssClass="flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-full font-label-md font-bold hover:scale-[1.02] active:scale-95 transition-all">

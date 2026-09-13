@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Web;
+using System.Web.SessionState;
 using System.Web.UI;
 
 namespace DigitalTransparencySystem.Helpers
@@ -16,8 +18,6 @@ namespace DigitalTransparencySystem.Helpers
             "/demo",
             "/faq",
             "/contact",
-            "/events",
-            "/eventdetails",
             "/loginpopup",
             "/registerpopup",
             "/modules/authentication/login",
@@ -46,11 +46,6 @@ namespace DigitalTransparencySystem.Helpers
         {
             if (context == null || context.Handler == null || !(context.Handler is Page))
                 return;
-
-            try { RestrictionService.EnsureSchema(); } catch { }
-            try { AssignmentService.EnsureSchema(); } catch { }
-            try { ConnectService.EnsureSchema(); } catch { }
-            try { MeetingService.EnsureSchema(); } catch { }
             if (context.Session == null)
                 return;
 
@@ -73,6 +68,12 @@ namespace DigitalTransparencySystem.Helpers
                 return;
             }
 
+            if (!IsMutatingRequest(context) && RecentlyChecked(context.Session))
+            {
+                RedirectIfUnverified(context, path, isPublic);
+                return;
+            }
+
             UserAccount user = AuthService.FindById(userId);
             if (user == null)
             {
@@ -81,7 +82,7 @@ namespace DigitalTransparencySystem.Helpers
                 return;
             }
 
-            string block = AuthService.AccountBlockReason(user);
+            string block = AuthService.AccountBlockReason(user, false);
             if (block != null)
             {
                 context.Session.Clear();
@@ -100,6 +101,7 @@ namespace DigitalTransparencySystem.Helpers
             context.Session["AccountStatus"] = user.AccountStatus;
             context.Session["VerificationStatus"] = user.VerificationStatus;
             AuthService.ApplySuspensionSession(context.Session, user);
+            context.Session["AccessCheckedUtc"] = DateTime.UtcNow.ToString("o");
 
             if (AuthService.IsSuspendedViewOnly(context.Session)
                 && IsMutatingRequest(context)
@@ -110,18 +112,44 @@ namespace DigitalTransparencySystem.Helpers
                 return;
             }
 
-            if (!user.EmailVerified && path != "/modules/authentication/verifyemail"
+            RedirectIfUnverified(context, path, isPublic);
+        }
+
+        private static bool RecentlyChecked(HttpSessionState session)
+        {
+            object raw = session["AccessCheckedUtc"];
+            DateTime checkedAt;
+            return raw != null
+                && DateTime.TryParse(Convert.ToString(raw), null, DateTimeStyles.RoundtripKind, out checkedAt)
+                && (DateTime.UtcNow - checkedAt).TotalSeconds < 20;
+        }
+
+        private static void RedirectIfUnverified(HttpContext context, string path, bool isPublic)
+        {
+            bool emailVerified = ReadBool(context.Session["EmailVerified"]);
+            bool identityVerified = ReadBool(context.Session["IdentityVerified"]);
+            string role = context.Session["Role"] as string;
+
+            if (!emailVerified && !isPublic && path != "/modules/authentication/verifyemail"
                 && path != "/modules/authentication/logout")
             {
                 context.Response.Redirect("~/Modules/Authentication/VerifyEmail.aspx", true);
                 return;
             }
 
-            if (!user.IdentityVerified && user.RoleID != 1
+            if (!identityVerified && !RoleAccess.IsAdmin(role)
                 && !isPublic && !IdentityExemptPaths.Contains(path))
             {
                 context.Response.Redirect("~/Modules/Settings/IdentityVerification.aspx", true);
             }
+        }
+
+        private static bool ReadBool(object flag)
+        {
+            if (flag is bool)
+                return (bool)flag;
+            bool parsed;
+            return flag != null && bool.TryParse(flag.ToString(), out parsed) && parsed;
         }
 
         private static void SendToSignIn(HttpContext context, string reason)

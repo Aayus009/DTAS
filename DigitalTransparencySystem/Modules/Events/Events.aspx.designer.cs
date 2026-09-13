@@ -12,7 +12,6 @@ namespace DigitalTransparencySystem.Modules.Events
         protected global::System.Web.UI.WebControls.Literal litInProgress;
         protected global::System.Web.UI.WebControls.Literal litCompleted;
         protected global::System.Web.UI.WebControls.Literal litPendingProposals;
-        protected global::System.Web.UI.WebControls.Literal litEventCount;
         protected global::System.Web.UI.WebControls.SqlDataSource dsLiveEventStats;
         protected global::System.Web.UI.WebControls.FormView fvLiveEventStats;
         protected global::System.Web.UI.WebControls.Repeater rptEvents;

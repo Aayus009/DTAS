@@ -1,5 +1,6 @@
 using System;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using DigitalTransparencySystem.Helpers;
 
 namespace DigitalTransparencySystem.MasterPages
@@ -16,19 +17,53 @@ namespace DigitalTransparencySystem.MasterPages
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["UserID"] != null)
-            {
-                int count = NotificationService.CountUnread(Convert.ToInt32(Session["UserID"]));
-                string text = NotificationService.BadgeText(count);
-                lblNotifCount.Visible = !string.IsNullOrEmpty(text);
-                lblNotifCount.Text = text;
-            }
-            else
-            {
-                lblNotifCount.Visible = false;
-            }
+            BindSidebarBadges();
             btnCreateTask.Visible = false;
             ApplyActiveState();
+        }
+
+        private void BindSidebarBadges()
+        {
+            if (Session["UserID"] == null)
+            {
+                HideBadge(lblEventsCount);
+                HideBadge(lblDecisionsCount);
+                HideBadge(lblTasksCount);
+                HideBadge(lblAssignmentsCount);
+                HideBadge(lblClubsCount);
+                HideBadge(lblPollsCount);
+                HideBadge(lblUsersCount);
+                HideBadge(lblIdentityCount);
+                HideBadge(lblFlagsCount);
+                HideBadge(lblFeedbackCount);
+                HideBadge(lblNotifCount);
+                return;
+            }
+
+            SidebarAlertCounts counts = SidebarAlertService.Load(Convert.ToInt32(Session["UserID"]), _activePage);
+            BindBadge(lblEventsCount, counts.Events);
+            BindBadge(lblDecisionsCount, counts.Decisions);
+            BindBadge(lblTasksCount, counts.Tasks);
+            BindBadge(lblAssignmentsCount, counts.Assignments);
+            BindBadge(lblClubsCount, counts.Clubs);
+            BindBadge(lblPollsCount, counts.Polls);
+            BindBadge(lblUsersCount, counts.Users);
+            BindBadge(lblIdentityCount, counts.Identity);
+            BindBadge(lblFlagsCount, counts.Flags);
+            BindBadge(lblFeedbackCount, counts.Feedback);
+            BindBadge(lblNotifCount, counts.Notifications);
+        }
+
+        private static void BindBadge(Label badge, int count)
+        {
+            string text = NotificationService.BadgeText(count);
+            badge.Visible = !string.IsNullOrEmpty(text);
+            badge.Text = text;
+        }
+
+        private static void HideBadge(Label badge)
+        {
+            badge.Visible = false;
         }
 
         private void ApplyActiveState()

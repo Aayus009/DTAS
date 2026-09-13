@@ -167,12 +167,7 @@ namespace DigitalTransparencySystem.Modules.Clubs
 
         private void ShowMessage(string error, string ok)
         {
-            pnlMessage.Visible = true;
-            bool success = string.IsNullOrEmpty(error);
-            pnlMessage.CssClass = success
-                ? "mb-6 p-4 rounded-xl flex items-center gap-3 bg-tertiary-container/10 border border-tertiary-container text-on-tertiary-container"
-                : "mb-6 p-4 rounded-xl flex items-center gap-3 bg-error-container border border-error text-error";
-            lblMessage.Text = success ? ok : error;
+            UiNotice.BindPanel(pnlMessage, lblMessage, error, ok);
         }
     }
 }

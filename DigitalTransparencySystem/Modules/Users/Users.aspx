@@ -191,8 +191,8 @@
                         <asp:Button ID="btnClosePanel" runat="server" Text="" CssClass="material-symbols-outlined text-outline hover:text-error transition-colors cursor-pointer" OnClick="btnClosePanel_Click" />
                     </div>
                     <div class="p-6">
-                        <asp:Panel ID="pnlMessage" runat="server" Visible="false" CssClass="mb-4 p-4 rounded-lg">
-                            <asp:Label ID="lblMessage" runat="server" CssClass="font-body-md text-body-md"></asp:Label>
+                        <asp:Panel ID="pnlMessage" runat="server" Visible="false" CssClass="dtas-notice">
+                            <asp:Label ID="lblMessage" runat="server"></asp:Label>
                         </asp:Panel>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -239,7 +239,7 @@
     <footer class="dashboard-footer bg-on-secondary-fixed text-on-primary py-20 px-8 ml-64">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
             <div class="md:col-span-1">
-                <h2 class="font-headline-md text-headline-md font-bold mb-4">DTAS</h2>
+                <h2 class="font-headline-md text-headline-md font-bold mb-4"><a href="<%= ResolveUrl("~/Default.aspx") %>" class="hover:text-white">DTAS</a></h2>
                 <p class="font-body-md text-surface-container-high/60">The authoritative platform for educational accountability and data transparency.</p>
             </div>
             <div>

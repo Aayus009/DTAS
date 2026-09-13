@@ -38,7 +38,6 @@
 
             <section class="standard-card rounded-xl p-6 mb-6">
                 <h3 class="font-title-lg text-title-lg text-primary mb-4">System snapshot</h3>
-                <p class="text-xs text-on-surface-variant mb-4">Live counts from <code>sp_GetAdminDashboardStats</code>. Generated file reports below are unchanged.</p>
                 <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-4">
                     <div>
                         <span class="font-badge-cap text-badge-cap uppercase text-outline block">Users</span>
@@ -98,7 +97,7 @@
                     <div class="mt-4">
                         <div class="flex items-center gap-1">
                             <span class="material-symbols-outlined text-secondary text-[18px]">calendar_today</span>
-                            <p class="font-label-md text-label-md text-on-surface-variant">Tracked events</p>
+                            <p class="font-label-md text-label-md text-on-surface-variant">Live events</p>
                         </div>
                     </div>
                 </div>
@@ -116,16 +115,19 @@
                     </div>
                 </div>
 
-                <!-- Decision Outcomes -->
+                <!-- Decision Progress -->
                 <div class="standard-card p-6 flex flex-col justify-between rounded-xl">
                     <div>
-                        <span class="font-badge-cap text-badge-cap text-tertiary uppercase tracking-widest block mb-4">Decision Outcomes</span>
-                        <asp:Literal ID="litDecisionOutcomes" runat="server" Text="0"></asp:Literal>
+                        <span class="font-badge-cap text-badge-cap text-tertiary uppercase tracking-widest block mb-4">Decision Progress</span>
+                        <asp:Literal ID="litDecisionOutcomes" runat="server" Text="0%"></asp:Literal>
                     </div>
                     <div class="mt-4">
+                        <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden mb-2">
+                            <asp:Literal ID="litDecisionBar" runat="server" Text="<div class='bg-primary h-full' style='width: 0%'></div>"></asp:Literal>
+                        </div>
                         <div class="flex items-center gap-1">
                             <span class="material-symbols-outlined text-on-tertiary-container text-[18px]">gavel</span>
-                            <p class="font-label-md text-label-md text-on-surface-variant">Resolved decisions</p>
+                            <p class="font-label-md text-label-md text-on-surface-variant">Approved, implemented, or closed</p>
                         </div>
                     </div>
                 </div>
@@ -178,8 +180,8 @@
                                 <p class="font-body-sm text-sm text-on-surface-variant">Staff & compliance overview</p>
                             </div>
                         </div>
-                        <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-1">Produce an accountability audit covering task completions, decision adherence, and staff compliance metrics.</p>
-                        <asp:Button ID="btnGenerateAccountabilityReport" runat="server" Text="Generate Report" CssClass="w-full py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold hover:opacity-90 transition-opacity cursor-pointer" OnClick="btnGenerateAccountabilityReport_Click" />
+                        <p class="font-body-md text-sm text-on-surface-variant mb-6 flex-1">Download an Excel workbook with staff task totals plus charts for completion rate, status mix, and overdue work.</p>
+                        <asp:Button ID="btnGenerateAccountabilityReport" runat="server" Text="Download Excel" CssClass="w-full py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold hover:opacity-90 transition-opacity cursor-pointer" OnClick="btnGenerateAccountabilityReport_Click" />
                     </div>
 
                     <!-- Login History -->

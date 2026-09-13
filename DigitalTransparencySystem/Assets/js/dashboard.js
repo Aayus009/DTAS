@@ -9,6 +9,11 @@
         if (window.__dtasDashboardInit) return;
         window.__dtasDashboardInit = true;
 
+        initTransientNotices();
+        if (window.Sys && Sys.WebForms && Sys.WebForms.PageRequestManager) {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(initTransientNotices);
+        }
+
         if (!document.querySelector('.dashboard-main') && !document.querySelector('.dashboard-sidebar')) {
             window.toggleUserSidebar = window.toggleAdminSidebar = function () { };
             return;
@@ -34,7 +39,7 @@
     }
 
     /**
-     * Live header search across tasks, meetings, and events
+     * Header search: type a page or record name, press Enter, go there.
      */
     function initGlobalSearch() {
         var boxes = document.querySelectorAll('.dtas-search');
@@ -56,117 +61,68 @@
 
     function bindSearchBox(box) {
         var input = box.querySelector('.js-dtas-search');
-        var panel = box.querySelector('.js-dtas-search-results');
+        var status = box.querySelector('.js-dtas-search-status');
         var url = box.getAttribute('data-search-url');
-        if (!input || !panel || !url) return;
+        if (!input || !url) return;
 
-        var timer = null;
-        var active = -1;
-        var hits = [];
+        var pending = false;
 
         input.addEventListener('input', function () {
-            active = -1;
-            var q = (input.value || '').trim();
-            if (timer) window.clearTimeout(timer);
-            if (q.length < 2) {
-                hidePanel();
-                return;
-            }
-            timer = window.setTimeout(function () { runSearch(q); }, 180);
+            hideStatus();
         });
 
         input.addEventListener('keydown', function (e) {
-            if (panel.classList.contains('hidden')) return;
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                move(1);
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                move(-1);
-            } else if (e.key === 'Enter') {
-                if (active >= 0 && hits[active]) {
-                    e.preventDefault();
-                    window.location.href = hits[active].url;
-                }
-            } else if (e.key === 'Escape') {
-                hidePanel();
+            if (e.key === 'Escape') {
+                hideStatus();
                 input.blur();
+                return;
             }
+            if (e.key !== 'Enter') return;
+            e.preventDefault();
+            e.stopPropagation();
+            go((input.value || '').trim());
         });
 
-        document.addEventListener('click', function (e) {
-            if (!box.contains(e.target)) hidePanel();
-        });
-
-        function runSearch(q) {
+        function go(q) {
+            hideStatus();
+            if (q.length < 2 || pending) {
+                if (q.length < 2) showStatus('Type at least 2 characters, then press Enter.');
+                return;
+            }
+            pending = true;
+            input.setAttribute('aria-busy', 'true');
             fetch(url + '?q=' + encodeURIComponent(q), {
                 credentials: 'same-origin',
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
                 .then(function (res) { return res.json(); })
                 .then(function (data) {
-                    if ((input.value || '').trim() !== q) return;
-                    hits = (data && data.items) ? data.items : [];
-                    render();
+                    if (data && data.url) {
+                        window.location.href = data.url;
+                        return;
+                    }
+                    showStatus((data && data.error) ? data.error : 'No matching page or record.');
                 })
                 .catch(function () {
-                    hits = [];
-                    panel.innerHTML = '<div class="dtas-search-empty">Search is unavailable right now.</div>';
-                    panel.classList.remove('hidden');
+                    showStatus('Search is unavailable right now.');
+                })
+                .then(function () {
+                    pending = false;
+                    input.removeAttribute('aria-busy');
                 });
         }
 
-        function render() {
-            if (!hits.length) {
-                panel.innerHTML = '<div class="dtas-search-empty">No matching tasks, meetings, or events.</div>';
-                panel.classList.remove('hidden');
-                return;
-            }
-
-            var html = '';
-            var lastType = '';
-            hits.forEach(function (hit, i) {
-                if (hit.type !== lastType) {
-                    lastType = hit.type;
-                    html += '<div class="dtas-search-group">' + escapeHtml(hit.type) + 's</div>';
-                }
-                html += '<a class="dtas-search-hit' + (i === active ? ' is-active' : '') + '" href="' + escapeAttr(hit.url) + '" data-i="' + i + '">'
-                    + '<span class="dtas-search-hit-icon material-symbols-outlined">' + escapeHtml(hit.icon || 'search') + '</span>'
-                    + '<span><span class="dtas-search-hit-title">' + escapeHtml(hit.title || '') + '</span>'
-                    + '<span class="dtas-search-hit-sub">' + escapeHtml(hit.subtitle || '') + '</span></span></a>';
-            });
-            panel.innerHTML = html;
-            panel.classList.remove('hidden');
+        function showStatus(text) {
+            if (!status) return;
+            status.textContent = text;
+            status.classList.remove('hidden');
         }
 
-        function move(delta) {
-            if (!hits.length) return;
-            active = (active + delta + hits.length) % hits.length;
-            var nodes = panel.querySelectorAll('.dtas-search-hit');
-            for (var i = 0; i < nodes.length; i++) {
-                if (i === active) nodes[i].classList.add('is-active');
-                else nodes[i].classList.remove('is-active');
-            }
-            if (nodes[active]) nodes[active].scrollIntoView({ block: 'nearest' });
+        function hideStatus() {
+            if (!status) return;
+            status.textContent = '';
+            status.classList.add('hidden');
         }
-
-        function hidePanel() {
-            panel.classList.add('hidden');
-            panel.innerHTML = '';
-            active = -1;
-        }
-    }
-
-    function escapeHtml(value) {
-        return String(value || '')
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
-    }
-
-    function escapeAttr(value) {
-        return escapeHtml(value);
     }
 
     /**
@@ -178,13 +134,31 @@
         var progressBars = root.querySelectorAll('.js-progress-fill');
 
         progressBars.forEach(function (bar) {
-            var targetWidth = bar.style.width;
+            if (bar.getAttribute('data-bar-ready') === '1')
+                return;
+
+            var painted = (bar.style.width || '').trim();
+            var target = bar.getAttribute('data-width') || painted || '';
+            if (!target || target === '0' || target === '0%') {
+                bar.setAttribute('data-bar-ready', '1');
+                return;
+            }
+
+            bar.setAttribute('data-width', target);
+            bar.setAttribute('data-bar-ready', '1');
+
+            // Already showing the real width (server-rendered). Do not collapse to 0%.
+            if (painted && painted !== '0' && painted !== '0%')
+                return;
+
             bar.style.width = '0%';
             bar.style.transition = 'width 1s cubic-bezier(0.4, 0, 0.2, 1)';
 
-            setTimeout(function () {
-                bar.style.width = targetWidth;
-            }, 200);
+            window.requestAnimationFrame(function () {
+                window.requestAnimationFrame(function () {
+                    bar.style.width = target;
+                });
+            });
         });
     }
 
@@ -282,19 +256,29 @@
         });
     }
 
-    /**
-     * Auto-hide toast notifications after 5 seconds
-     */
-    var toasts = document.querySelectorAll('.toast-notification');
-    toasts.forEach(function (toast) {
-        setTimeout(function () {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateY(16px)';
+    function initTransientNotices() {
+        document.querySelectorAll('.dtas-toast, .toast-notification').forEach(function (el) {
+            var text = (el.textContent || '').replace(/\s+/g, '');
+            if (!text)
+                return;
+            if (el.getAttribute('data-toast-sig') === text)
+                return;
+            el.setAttribute('data-toast-sig', text);
+            el.classList.remove('is-leaving', 'is-gone');
+            el.removeAttribute('aria-hidden');
             setTimeout(function () {
-                toast.remove();
-            }, 300);
-        }, 5000);
-    });
+                if (el.getAttribute('data-toast-sig') !== text)
+                    return;
+                el.classList.add('is-leaving');
+                setTimeout(function () {
+                    if (el.getAttribute('data-toast-sig') !== text)
+                        return;
+                    el.classList.add('is-gone');
+                    el.setAttribute('aria-hidden', 'true');
+                }, 280);
+            }, 5500);
+        });
+    }
 
     /**
      * Smooth scroll to anchor links

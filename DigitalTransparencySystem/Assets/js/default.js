@@ -4,19 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function reveal(selector, extraClass) {
         var nodes = document.querySelectorAll(selector);
         if (!nodes.length) return;
-        if (reduce || !('IntersectionObserver' in window)) {
-            nodes.forEach(function (n) { n.classList.add('is-in', extraClass || 'is-visible'); });
-            return;
-        }
-        var obs = new IntersectionObserver(function (entries) {
-            entries.forEach(function (e) {
-                if (!e.isIntersecting) return;
-                e.target.classList.add('is-in');
-                if (extraClass) e.target.classList.add(extraClass);
-                obs.unobserve(e.target);
-            });
-        }, { threshold: 0.16, rootMargin: '0px 0px -40px 0px' });
-        nodes.forEach(function (n) { obs.observe(n); });
+        nodes.forEach(function (n) { n.classList.add('is-in', extraClass || 'is-visible'); });
     }
 
     reveal('.lp-reveal');

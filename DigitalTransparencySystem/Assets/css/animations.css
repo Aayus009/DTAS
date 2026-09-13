@@ -4,12 +4,13 @@
 
 /* --- Page entrance fade --- */
 @keyframes dtPageFade {
-    from { opacity: 0; }
+    from { opacity: 0.001; }
     to { opacity: 1; }
 }
 
 body {
-    animation: dtPageFade 0.55s ease both;
+    opacity: 1;
+    animation: dtPageFade 0.45s ease;
 }
 
 /* --- Navbar / topbar entrance --- */
@@ -20,7 +21,8 @@ body {
 
 nav.sticky,
 .dashboard-topbar {
-    animation: dtNavIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    opacity: 1;
+    animation: dtNavIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* --- Brand / logo --- */
@@ -120,15 +122,10 @@ nav.sticky,
 .reveal-left,
 .reveal-right,
 .reveal-scale {
-    opacity: 0;
+    opacity: 1;
+    transform: none;
     transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: opacity, transform;
 }
-
-.reveal-up { transform: translateY(26px); }
-.reveal-left { transform: translateX(-30px); }
-.reveal-right { transform: translateX(30px); }
-.reveal-scale { transform: scale(0.94); }
 
 .reveal-up.revealed,
 .reveal-left.revealed,

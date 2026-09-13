@@ -43,8 +43,8 @@
                 <p class="text-on-surface-variant max-w-2xl">Admin reviews this before it becomes a live event. Name a suggested lead and keep budget internal.</p>
             </header>
 
-            <asp:Panel ID="pnlMessage" runat="server" CssClass="mb-6 p-4 rounded-xl flex items-center gap-3" Visible="false">
-                <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md text-label-md"></asp:Label>
+            <asp:Panel ID="pnlMessage" runat="server" CssClass="dtas-notice" Visible="false">
+                <asp:Label ID="lblMessage" runat="server"></asp:Label>
             </asp:Panel>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

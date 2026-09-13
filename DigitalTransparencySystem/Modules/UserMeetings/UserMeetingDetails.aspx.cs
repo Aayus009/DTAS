@@ -82,6 +82,7 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
             pnlZoomOpen.Visible = hadZoom && roomOpen;
             pnlZoomClosed.Visible = hadZoom && !roomOpen;
             hidRoomEndsAt.Value = "";
+            hidWaitForHost.Value = "";
             if (hadZoom && roomOpen)
             {
                 DateTime start = Convert.ToDateTime(meeting["ScheduledDate"]);
@@ -91,22 +92,41 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
                 litPasscode.Text = meeting["ZoomPasscode"] == DBNull.Value || string.IsNullOrWhiteSpace(meeting["ZoomPasscode"].ToString())
                     ? "None"
                     : Server.HtmlEncode(meeting["ZoomPasscode"].ToString());
-                if (!string.IsNullOrWhiteSpace(joinUrl))
+
+                string liveStatus = null;
+                if (meeting.Table.Columns.Contains("ZoomMeetingId") && meeting["ZoomMeetingId"] != DBNull.Value)
                 {
-                    lnkJoin.NavigateUrl = joinUrl;
-                    lnkJoin.Visible = true;
-                    lnkJoinUrlText.Text = Server.HtmlEncode(joinUrl);
-                    lnkJoinUrlText.NavigateUrl = joinUrl;
-                    lnkJoinUrlText.Visible = true;
+                    ZoomService zoomService = new ZoomService();
+                    if (zoomService.IsConfigured)
+                        liveStatus = zoomService.GetMeetingLiveStatus(Convert.ToInt64(meeting["ZoomMeetingId"]));
                 }
-                else
-                {
-                    lnkJoin.Visible = false;
-                    lnkJoinUrlText.Visible = false;
-                }
+                bool hostStarted = ZoomService.HostHasStarted(liveStatus);
+                bool hostNotStarted = string.Equals(liveStatus, "waiting", StringComparison.OrdinalIgnoreCase);
+
                 lnkStart.Visible = isHost && !string.IsNullOrWhiteSpace(startUrl);
                 if (lnkStart.Visible)
                     lnkStart.NavigateUrl = startUrl;
+
+                bool showJoin = !string.IsNullOrWhiteSpace(joinUrl) && (isHost ? !lnkStart.Visible : !hostNotStarted);
+                if (!string.IsNullOrWhiteSpace(joinUrl))
+                {
+                    lnkJoin.NavigateUrl = joinUrl;
+                    lnkJoinUrlText.Text = Server.HtmlEncode(joinUrl);
+                    lnkJoinUrlText.NavigateUrl = joinUrl;
+                }
+                lnkJoin.Visible = showJoin;
+                lnkJoinUrlText.Visible = showJoin || isHost;
+
+                if (isHost)
+                    litZoomHelp.Text = "Click Start as host to open the room. Members cannot enter until you start it. After they join, admit them from the Zoom waiting room. The room closes when the scheduled duration ends.";
+                else if (hostNotStarted)
+                    litZoomHelp.Text = "The host has not started this meeting yet. You cannot enter until the host starts the room. This page will refresh automatically.";
+                else if (hostStarted)
+                    litZoomHelp.Text = "The host has started the meeting. Click Join. You will wait in the Zoom waiting room until the host admits you.";
+                else
+                    litZoomHelp.Text = "Click Join when you are ready. You cannot enter until the host starts the room, and you will wait in the waiting room until the host admits you.";
+
+                hidWaitForHost.Value = (!isHost && hostNotStarted) ? "1" : "";
             }
 
             rptParticipants.DataSource = MeetingService.ListParticipants(meetingId);

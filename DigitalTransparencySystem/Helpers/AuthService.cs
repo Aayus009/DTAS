@@ -176,36 +176,40 @@ namespace DigitalTransparencySystem.Helpers
 
         public static bool IsBanned(string email, string institutionalId)
         {
-            ModerationService.EnsureSchema();
             string normalizedEmail = (email ?? string.Empty).Trim().ToLowerInvariant();
             string id = (institutionalId ?? string.Empty).Trim();
-            using (var con = new SqlConnection(ConnectionString))
-            using (var cmd = new SqlCommand(
-                @"SELECT CASE WHEN EXISTS (
-                        SELECT 1 FROM Bans
-                        WHERE IsActive = 1
-                          AND (
-                              (@Email <> N'' AND LOWER(LTRIM(RTRIM(Email))) = @Email)
-                              OR (@InstitutionalID <> N'' AND InstitutionalID = @InstitutionalID)
-                          )
-                    ) OR EXISTS (
-                        SELECT 1 FROM Users
-                        WHERE ISNULL(IsDeleted, 0) = 0
-                          AND AccountStatus = N'Banned'
-                          AND @Email <> N''
-                          AND LOWER(LTRIM(RTRIM(Email))) = @Email
-                    ) THEN 1 ELSE 0 END", con))
+            if (normalizedEmail.Length == 0 && id.Length == 0)
+                return false;
+
+            try
             {
-                cmd.Parameters.AddWithValue("@Email", normalizedEmail);
-                cmd.Parameters.AddWithValue("@InstitutionalID", id);
-                con.Open();
-                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+                using (var con = new SqlConnection(ConnectionString))
+                using (var cmd = new SqlCommand(
+                    @"SELECT CASE WHEN EXISTS (
+                            SELECT 1 FROM Bans
+                            WHERE IsActive = 1
+                              AND (
+                                  (@Email <> N'' AND Email = @Email)
+                                  OR (@InstitutionalID <> N'' AND InstitutionalID = @InstitutionalID)
+                              )
+                        ) THEN 1 ELSE 0 END", con))
+                {
+                    cmd.CommandTimeout = 8;
+                    cmd.Parameters.AddWithValue("@Email", normalizedEmail);
+                    cmd.Parameters.AddWithValue("@InstitutionalID", id);
+                    con.Open();
+                    return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+                }
+            }
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine("IsBanned: " + ex.Message);
+                return false;
             }
         }
 
         public static SuspensionInfo GetActiveSuspension(int userId)
         {
-            ModerationService.EnsureSchema();
             using (var con = new SqlConnection(ConnectionString))
             using (var cmd = new SqlCommand(
                 @"SELECT TOP 1 Reason, StartDate, EndDate
@@ -255,13 +259,18 @@ namespace DigitalTransparencySystem.Helpers
 
         public static string AccountBlockReason(UserAccount user)
         {
+            return AccountBlockReason(user, true);
+        }
+
+        public static string AccountBlockReason(UserAccount user, bool checkGlobalBanList)
+        {
             if (user == null)
                 return "Invalid username or password.";
 
             LiftExpiredSuspension(user);
 
             if (string.Equals(user.AccountStatus, "Banned", StringComparison.OrdinalIgnoreCase)
-                || IsBanned(user.Email, user.InstitutionalID))
+                || (checkGlobalBanList && IsBanned(user.Email, user.InstitutionalID)))
                 return "This account has been banned. You cannot sign in with this email.";
 
             if (user.IsDeleted || !user.IsActive)
@@ -281,8 +290,6 @@ namespace DigitalTransparencySystem.Helpers
             }
 
             string block = AccountBlockReason(user);
-            if (block == null && IsBanned(input, user.InstitutionalID))
-                block = "This account has been banned. You cannot sign in with this email.";
             if (block != null)
             {
                 result.Error = block;
@@ -389,6 +396,33 @@ namespace DigitalTransparencySystem.Helpers
             if (!string.IsNullOrEmpty(role) && role.Equals("Admin", StringComparison.OrdinalIgnoreCase))
                 return "~/Modules/Dashboard/AdminDashboard.aspx";
             return "~/Modules/Dashboard/UsersDashboard.aspx";
+        }
+
+        public static void RememberHomePortal(HttpSessionState session, bool adminPortal)
+        {
+            if (session == null)
+                return;
+            session["HomePortal"] = adminPortal ? "admin" : "user";
+        }
+
+        public static string HomeDashboardUrl(HttpSessionState session)
+        {
+            string portal = session == null ? null : session["HomePortal"] as string;
+            if (string.Equals(portal, "admin", StringComparison.OrdinalIgnoreCase))
+                return "~/Modules/Dashboard/AdminDashboard.aspx";
+            if (string.Equals(portal, "user", StringComparison.OrdinalIgnoreCase))
+                return "~/Modules/Dashboard/UsersDashboard.aspx";
+            return DashboardUrl(session == null ? null : session["Role"] as string);
+        }
+
+        public static string HomeDashboardLabel(HttpSessionState session)
+        {
+            string portal = session == null ? null : session["HomePortal"] as string;
+            if (string.IsNullOrEmpty(portal) && session != null && RoleAccess.IsAdmin(session["Role"] as string))
+                portal = "admin";
+            if (string.Equals(portal, "admin", StringComparison.OrdinalIgnoreCase))
+                return "Back to admin dashboard";
+            return "Back to dashboard";
         }
 
         public static bool IsSafeLocalUrl(string url)

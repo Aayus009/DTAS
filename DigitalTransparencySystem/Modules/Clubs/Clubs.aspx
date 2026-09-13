@@ -25,8 +25,8 @@
                 </div>
             </header>
 
-            <asp:Panel ID="pnlMessage" runat="server" CssClass="mb-6 p-4 rounded-xl flex items-center gap-3" Visible="false">
-                <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md text-label-md"></asp:Label>
+            <asp:Panel ID="pnlMessage" runat="server" CssClass="dtas-notice" Visible="false">
+                <asp:Label ID="lblMessage" runat="server"></asp:Label>
             </asp:Panel>
 
             <!-- Clubs List -->

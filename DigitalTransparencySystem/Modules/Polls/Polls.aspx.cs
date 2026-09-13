@@ -396,11 +396,7 @@ namespace DigitalTransparencySystem.Modules.Polls
 
         private void ShowMessage(string text, bool success)
         {
-            pnlMessage.Visible = true;
-            lblMessage.Text = text;
-            pnlMessage.CssClass = success
-                ? "mb-6 p-4 rounded-xl bg-tertiary-container/30 text-on-tertiary-container"
-                : "mb-6 p-4 rounded-xl bg-error-container/40 text-error";
+            UiNotice.BindPanel(pnlMessage, lblMessage, text, success);
         }
     }
 }

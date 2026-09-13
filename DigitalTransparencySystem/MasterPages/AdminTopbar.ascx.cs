@@ -14,6 +14,7 @@ namespace DigitalTransparencySystem.MasterPages
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            AuthService.RememberHomePortal(Session, true);
             connectionString = ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString;
 
             if (!IsPostBack)
@@ -81,6 +82,11 @@ namespace DigitalTransparencySystem.MasterPages
 
         private string GetUserProfileImage(string userId)
         {
+            object cached = Session["ProfileImageUrl"];
+            if (cached != null)
+                return string.IsNullOrEmpty(cached.ToString()) ? null : cached.ToString();
+
+            string imgPath = null;
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
@@ -89,16 +95,18 @@ namespace DigitalTransparencySystem.MasterPages
                 object result = cmd.ExecuteScalar();
                 if (result != null && result != DBNull.Value)
                 {
-                    string imgPath = result.ToString();
+                    imgPath = result.ToString();
                     if (!string.IsNullOrEmpty(imgPath))
                     {
                         if (!imgPath.StartsWith("~") && !imgPath.StartsWith("/"))
                             imgPath = "~/Uploads/ProfileImages/" + imgPath;
-                        return imgPath;
                     }
+                    else
+                        imgPath = null;
                 }
             }
-            return null;
+            Session["ProfileImageUrl"] = imgPath ?? "";
+            return imgPath;
         }
 
         private string GetInitials(string fullName)

@@ -89,16 +89,7 @@ namespace DigitalTransparencySystem.Modules.Events
 
         private void Show(string error, string success)
         {
-            if (!string.IsNullOrEmpty(error))
-            {
-                lblMessage.CssClass = "font-label-md block mb-4 text-error";
-                lblMessage.Text = error;
-            }
-            else
-            {
-                lblMessage.CssClass = "font-label-md block mb-4 text-tertiary";
-                lblMessage.Text = success ?? "";
-            }
+            UiNotice.Bind(lblMessage, error, success);
         }
     }
 }

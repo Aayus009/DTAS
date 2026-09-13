@@ -15,17 +15,27 @@ namespace DigitalTransparencySystem.MasterPages
         protected global::System.Web.UI.WebControls.HyperLink lnkNotifications;
         protected global::System.Web.UI.WebControls.Label lblNotifCount;
         protected global::System.Web.UI.WebControls.HyperLink lnkEvents;
+        protected global::System.Web.UI.WebControls.Label lblEventsCount;
         protected global::System.Web.UI.WebControls.HyperLink lnkDecisions;
+        protected global::System.Web.UI.WebControls.Label lblDecisionsCount;
         protected global::System.Web.UI.WebControls.HyperLink lnkTasks;
+        protected global::System.Web.UI.WebControls.Label lblTasksCount;
         protected global::System.Web.UI.WebControls.HyperLink lnkAssignments;
+        protected global::System.Web.UI.WebControls.Label lblAssignmentsCount;
         protected global::System.Web.UI.WebControls.HyperLink lnkClubs;
+        protected global::System.Web.UI.WebControls.Label lblClubsCount;
         protected global::System.Web.UI.WebControls.HyperLink lnkPolls;
+        protected global::System.Web.UI.WebControls.Label lblPollsCount;
         protected global::System.Web.UI.WebControls.HyperLink lnkReports;
         protected global::System.Web.UI.WebControls.HyperLink lnkTransparency;
         protected global::System.Web.UI.WebControls.HyperLink lnkUsers;
+        protected global::System.Web.UI.WebControls.Label lblUsersCount;
         protected global::System.Web.UI.WebControls.HyperLink lnkIdentity;
+        protected global::System.Web.UI.WebControls.Label lblIdentityCount;
         protected global::System.Web.UI.WebControls.HyperLink lnkFlags;
+        protected global::System.Web.UI.WebControls.Label lblFlagsCount;
         protected global::System.Web.UI.WebControls.HyperLink lnkFeedback;
+        protected global::System.Web.UI.WebControls.Label lblFeedbackCount;
         protected global::System.Web.UI.WebControls.Button btnCreateTask;
     }
 }

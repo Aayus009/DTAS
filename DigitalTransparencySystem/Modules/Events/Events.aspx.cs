@@ -115,7 +115,6 @@ namespace DigitalTransparencySystem.Modules.Events
                 int totalFiltered = dt.Rows.Count;
                 pnlNoEvents.Visible = totalFiltered == 0;
                 rptEvents.Visible = totalFiltered > 0;
-                litEventCount.Text = $"<span class='font-label-md text-label-md text-on-surface-variant'>{totalFiltered} event{(totalFiltered != 1 ? "s" : "")}</span>";
             }
         }
 
@@ -190,23 +189,23 @@ namespace DigitalTransparencySystem.Modules.Events
                     break;
                 case "RestrictEvent":
                     RestrictionService.SetEventRestricted(eventId, Convert.ToInt32(Session["UserID"]), Session["Role"] as string, true);
-                    LoadEvents(txtSearch.Text.Trim(), ddlStatusFilter.SelectedValue);
+                    LoadEvents();
                     LoadStats();
                     break;
                 case "RestoreEvent":
                     RestrictionService.SetEventRestricted(eventId, Convert.ToInt32(Session["UserID"]), Session["Role"] as string, false);
-                    LoadEvents(txtSearch.Text.Trim(), ddlStatusFilter.SelectedValue);
+                    LoadEvents();
                     LoadStats();
                     break;
                 case "ApproveEvent":
                     ApproveEvent(eventId);
-                    LoadEvents(txtSearch.Text.Trim(), ddlStatusFilter.SelectedValue);
+                    LoadEvents();
                     LoadStats();
                     break;
                 case "RejectEvent":
                     RejectEvent(eventId, hfRejectReason.Value);
                     hfRejectReason.Value = "";
-                    LoadEvents(txtSearch.Text.Trim(), ddlStatusFilter.SelectedValue);
+                    LoadEvents();
                     LoadStats();
                     break;
             }
@@ -312,20 +311,5 @@ namespace DigitalTransparencySystem.Modules.Events
                 return string.Empty;
             return status.Replace(" ", "").Trim();
         }
-
-        protected void btnSearch_Click(object sender, EventArgs e)
-        {
-            LoadEvents(txtSearch.Text.Trim(), ddlStatusFilter.SelectedValue);
-            LoadStats();
-        }
-
-        protected void btnReset_Click(object sender, EventArgs e)
-        {
-            txtSearch.Text = string.Empty;
-            ddlStatusFilter.SelectedValue = string.Empty;
-            LoadEvents();
-            LoadStats();
-        }
-
     }
 }

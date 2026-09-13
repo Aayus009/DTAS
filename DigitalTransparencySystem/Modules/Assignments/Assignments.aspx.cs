@@ -75,8 +75,7 @@ namespace DigitalTransparencySystem.Modules.Assignments
 
         private void Show(string text, bool ok)
         {
-            lblMessage.Text = text;
-            lblMessage.CssClass = ok ? "font-label-md block mb-4 text-tertiary" : "font-label-md block mb-4 text-error";
+            UiNotice.Bind(lblMessage, text, ok);
         }
     }
 }

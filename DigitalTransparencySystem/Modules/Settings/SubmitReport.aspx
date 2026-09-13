@@ -64,7 +64,7 @@
                             placeholder="Describe what happened..."></asp:TextBox>
                     </div>
                     <asp:Button ID="btnSubmit" runat="server" Text="Submit flag" CssClass="btn-primary" OnClick="btnSubmit_Click" />
-                    <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md block"></asp:Label>
+                    <asp:Label ID="lblMessage" runat="server" CssClass="dtas-notice"></asp:Label>
                 </div>
             </section>
 

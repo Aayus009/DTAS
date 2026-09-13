@@ -4,7 +4,7 @@
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
     <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=navfix2" />
-    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/transparency-admin.css") %>?v=1" />
+    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/transparency-admin.css") %>?v=2" />
 </asp:Content>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -110,7 +110,7 @@
                         <h3>Live public events</h3>
                         <a class="tx-link" href="<%= ResolveUrl("~/Modules/Events/Events.aspx") %>">Events management</a>
                     </div>
-                    <div id="txEventList">
+                    <div id="txEventList" class="tx-event-scroll">
                         <asp:Repeater ID="rptEvents" runat="server">
                             <ItemTemplate>
                                 <div class="tx-event">

@@ -21,12 +21,21 @@ namespace DigitalTransparencySystem.Helpers
             return null;
         }
 
+        private static readonly object SchemaLock = new object();
+        private static bool schemaReady;
+
         public static void EnsureSchema()
         {
-            using (var con = new SqlConnection(AuthService.ConnectionString))
+            if (schemaReady)
+                return;
+            lock (SchemaLock)
             {
-                con.Open();
-                new SqlCommand(@"
+                if (schemaReady)
+                    return;
+                using (var con = new SqlConnection(AuthService.ConnectionString))
+                {
+                    con.Open();
+                    new SqlCommand(@"
                     IF COL_LENGTH('dbo.Users', 'AccountStatus') IS NULL
                         ALTER TABLE dbo.Users ADD AccountStatus NVARCHAR(50) NOT NULL CONSTRAINT DF_Users_AccountStatus_Runtime DEFAULT N'Active';
                     IF OBJECT_ID('dbo.Suspensions', 'U') IS NULL
@@ -50,7 +59,13 @@ namespace DigitalTransparencySystem.Helpers
                             BannedBy INT NOT NULL,
                             BannedAt DATETIME NOT NULL DEFAULT GETDATE(),
                             IsActive BIT NOT NULL DEFAULT 1
-                        );", con).ExecuteNonQuery();
+                        );
+                    IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Bans_IsActive_Email' AND object_id = OBJECT_ID(N'dbo.Bans'))
+                        CREATE NONCLUSTERED INDEX IX_Bans_IsActive_Email ON dbo.Bans(Email) INCLUDE (InstitutionalID) WHERE IsActive = 1;
+                    IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Suspensions_UserActive' AND object_id = OBJECT_ID(N'dbo.Suspensions'))
+                        CREATE NONCLUSTERED INDEX IX_Suspensions_UserActive ON dbo.Suspensions(UserID, EndDate) WHERE IsActive = 1;", con).ExecuteNonQuery();
+                }
+                schemaReady = true;
             }
         }
 

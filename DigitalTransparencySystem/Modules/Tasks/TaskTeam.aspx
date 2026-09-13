@@ -42,14 +42,14 @@
                 </div>
             </header>
 
-            <asp:Panel ID="pnlError" runat="server" CssClass="mb-6 p-4 bg-error-container border border-error/30 rounded-xl flex items-center gap-3" Visible="false">
-                <span class="material-symbols-outlined text-error">error</span>
-                <asp:Label ID="lblError" runat="server" CssClass="font-label-md text-label-md text-on-error-container"></asp:Label>
+            <asp:Panel ID="pnlError" runat="server" CssClass="dtas-notice dtas-notice-danger dtas-notice-sticky dtas-notice-rich" Visible="false">
+                <span class="material-symbols-outlined dtas-notice-icon">error</span>
+                <asp:Label ID="lblError" runat="server"></asp:Label>
             </asp:Panel>
 
-            <asp:Panel ID="pnlSuccess" runat="server" CssClass="mb-6 p-4 bg-[rgba(46,125,50,0.1)] border border-[rgba(46,125,50,0.3)] rounded-xl flex items-center gap-3" Visible="false">
-                <span class="material-symbols-outlined text-[#2e7d32]">check_circle</span>
-                <asp:Label ID="lblSuccess" runat="server" CssClass="font-label-md text-label-md text-[#2e7d32]"></asp:Label>
+            <asp:Panel ID="pnlSuccess" runat="server" CssClass="dtas-notice dtas-notice-success dtas-toast dtas-notice-rich" Visible="false">
+                <span class="material-symbols-outlined dtas-notice-icon">check_circle</span>
+                <asp:Label ID="lblSuccess" runat="server"></asp:Label>
             </asp:Panel>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

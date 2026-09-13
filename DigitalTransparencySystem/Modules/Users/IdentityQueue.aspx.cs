@@ -41,15 +41,9 @@ namespace DigitalTransparencySystem.Modules.Users
             hfRejectReason.Value = "";
 
             if (!string.IsNullOrEmpty(error))
-            {
-                lblMessage.CssClass = "font-label-md block mb-4 text-error";
-                lblMessage.Text = error;
-            }
+                UiNotice.Bind(lblMessage, error, null);
             else
-            {
-                lblMessage.CssClass = "font-label-md block mb-4 text-tertiary";
-                lblMessage.Text = e.CommandName == "Approve" ? "Identity approved." : "Identity rejected.";
-            }
+                UiNotice.Bind(lblMessage, null, e.CommandName == "Approve" ? "Identity approved." : "Identity rejected.");
 
             BindQueue();
         }

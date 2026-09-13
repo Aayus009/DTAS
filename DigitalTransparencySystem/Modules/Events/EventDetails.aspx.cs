@@ -12,6 +12,7 @@ namespace DigitalTransparencySystem.Modules.Events
     {
         private string connectionString;
         private int eventID;
+        protected int CurrentLifecycleIndex;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -46,6 +47,11 @@ namespace DigitalTransparencySystem.Modules.Events
                 LoadEventDecisions();
                 LoadLinkedMeetings();
                 LoadStatusTimeline();
+            }
+            else
+            {
+                EventLiveProgress live = EventTaskService.GetLiveEventProgress(eventID);
+                CurrentLifecycleIndex = EventTaskService.LifecycleIndex(live == null ? "" : live.Status);
             }
         }
 
@@ -250,13 +256,13 @@ namespace DigitalTransparencySystem.Modules.Events
 
             string[] allStatuses = { "Created", "Planned", "In Progress", "Completed", "Archived" };
             EventLiveProgress live = EventTaskService.GetLiveEventProgress(eventID);
-            int currentIndex = EventTaskService.LifecycleIndex(live == null ? "" : live.Status);
+            CurrentLifecycleIndex = EventTaskService.LifecycleIndex(live == null ? "" : live.Status);
 
             for (int i = 0; i < allStatuses.Length; i++)
             {
                 string label = allStatuses[i];
-                bool isCompleted = i < currentIndex;
-                bool isCurrent = i == currentIndex;
+                bool isCompleted = i < CurrentLifecycleIndex;
+                bool isCurrent = i == CurrentLifecycleIndex;
 
                 string dotStyle = isCompleted || isCurrent
                     ? "background-color: #0077b6;"
@@ -270,7 +276,7 @@ namespace DigitalTransparencySystem.Modules.Events
             rptTimeline.DataSource = timeline;
             rptTimeline.DataBind();
 
-            int progressPercent = (currentIndex * 100) / (allStatuses.Length - 1);
+            int progressPercent = (CurrentLifecycleIndex * 100) / (allStatuses.Length - 1);
             timelineFill.Style["width"] = progressPercent + "%";
         }
 

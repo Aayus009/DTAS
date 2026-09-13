@@ -18,7 +18,7 @@
             <header class="flex justify-between items-end mb-8 gap-4">
                 <div>
                     <h1 class="font-headline-lg text-headline-lg text-primary mb-2">My Meetings</h1>
-                    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Schedule a meeting for an event. DTAS creates the Zoom room and sends the join link to that event’s accepted members.</p>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl"><asp:Literal ID="litIntro" runat="server" Text="Schedule a meeting for an event. DTAS creates the Zoom room and sends the join link to that event’s accepted members."></asp:Literal></p>
                 </div>
                 <asp:Button ID="btnNew" runat="server" Text="Schedule meeting"
                     CssClass="px-6 py-3 bg-primary text-on-primary rounded-xl font-label-md text-label-md font-bold hover:scale-[1.02] active:scale-95 transition-transform cursor-pointer"
@@ -66,20 +66,23 @@
                         <label class="block font-label-md text-on-surface-variant mb-2 font-semibold">Venue</label>
                         <asp:TextBox ID="txtVenue" runat="server" CssClass="w-full px-4 py-3 bg-surface-container-low border border-outline rounded-xl font-body-md" placeholder="Leave blank for Zoom (online)" />
                     </div>
-                    <div>
+                    <asp:HiddenField ID="hidGroupId" runat="server" />
+                    <asp:HiddenField ID="hidAssignmentId" runat="server" />
+                    <asp:Panel ID="pnlEventLink" runat="server">
                         <label class="block font-label-md text-on-surface-variant mb-2 font-semibold">Event <span class="text-error">*</span></label>
                         <asp:DropDownList ID="ddlEvent" runat="server" CssClass="w-full px-4 py-3 bg-surface-container-low border border-outline rounded-xl font-body-md cursor-pointer"></asp:DropDownList>
                         <asp:RequiredFieldValidator ID="rfvEvent" runat="server" ControlToValidate="ddlEvent" InitialValue="" ErrorMessage="Choose the event this meeting is for." CssClass="text-error text-xs mt-1 block" Display="Dynamic" ValidationGroup="UserMeeting" />
                         <p class="text-xs text-on-surface-variant mt-1">Accepted members of this event get the Zoom join link automatically.</p>
-                    </div>
-                    <div>
+                    </asp:Panel>
+                    <asp:Panel ID="pnlWorkLink" runat="server">
                         <label class="block font-label-md text-on-surface-variant mb-2 font-semibold">Workspace / work</label>
                         <asp:DropDownList ID="ddlWork" runat="server" CssClass="w-full px-4 py-3 bg-surface-container-low border border-outline rounded-xl font-body-md cursor-pointer"></asp:DropDownList>
-                    </div>
-                    <div>
+                    </asp:Panel>
+                    <asp:Panel ID="pnlGroupLink" runat="server">
                         <label class="block font-label-md text-on-surface-variant mb-2 font-semibold">Assignment group</label>
                         <asp:DropDownList ID="ddlGroup" runat="server" CssClass="w-full px-4 py-3 bg-surface-container-low border border-outline rounded-xl font-body-md cursor-pointer"></asp:DropDownList>
-                    </div>
+                        <p class="text-xs text-on-surface-variant mt-1"><asp:Literal ID="litGroupHint" runat="server"></asp:Literal></p>
+                    </asp:Panel>
                     <asp:Panel ID="pnlAssignment" runat="server" CssClass="md:col-span-2">
                         <label class="block font-label-md text-on-surface-variant mb-2 font-semibold">Faculty assignment</label>
                         <asp:DropDownList ID="ddlAssignment" runat="server" CssClass="w-full px-4 py-3 bg-surface-container-low border border-outline rounded-xl font-body-md cursor-pointer"></asp:DropDownList>
@@ -93,7 +96,7 @@
                             Zoom credentials are missing in Web.config, so DTAS cannot create the room. Add Zoom_AccountId, Zoom_ClientId, and Zoom_ClientSecret.
                         </asp:Panel>
                         <asp:Panel ID="pnlZoomReady" runat="server" CssClass="p-3 rounded-xl bg-surface-container-low text-sm text-on-surface">
-                            DTAS will create a Zoom room for this event and send the join link to every accepted member.
+                            <asp:Literal ID="litZoomReady" runat="server" Text="DTAS will create a Zoom room and email the people who should join. Members cannot enter until the host starts the room and admits them from the waiting room."></asp:Literal>
                         </asp:Panel>
                     </div>
                 </div>

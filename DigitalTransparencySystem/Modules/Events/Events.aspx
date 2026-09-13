@@ -34,12 +34,12 @@
                         <label class="font-badge-cap text-badge-cap text-on-surface-variant uppercase tracking-widest block mb-2">Search</label>
                         <div class="relative">
                             <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">search</span>
-                            <asp:TextBox ID="txtSearch" runat="server" CssClass="pl-10 pr-4 py-2.5 bg-surface-container-low border border-outline rounded-lg font-body-md text-body-md w-full focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Search events by name..." />
+                            <asp:TextBox ID="txtSearch" runat="server" CssClass="js-event-search pl-10 pr-4 py-2.5 bg-surface-container-low border border-outline rounded-lg font-body-md text-body-md w-full focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Search events by name..." autocomplete="off" />
                         </div>
                     </div>
                     <div class="w-full md:w-48">
                         <label class="font-badge-cap text-badge-cap text-on-surface-variant uppercase tracking-widest block mb-2">Status</label>
-                        <asp:DropDownList ID="ddlStatusFilter" runat="server" CssClass="w-full py-2.5 px-4 bg-surface-container-low border border-outline rounded-lg font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none cursor-pointer">
+                        <asp:DropDownList ID="ddlStatusFilter" runat="server" CssClass="js-event-status-filter w-full py-2.5 px-4 bg-surface-container-low border border-outline rounded-lg font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none cursor-pointer">
                             <asp:ListItem Text="All Statuses" Value="" />
                             <asp:ListItem Text="Proposed" Value="Proposed" />
                             <asp:ListItem Text="Planned" Value="Planned" />
@@ -50,10 +50,10 @@
                         </asp:DropDownList>
                     </div>
                     <div class="w-full md:w-auto">
-                        <asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="w-full md:w-auto px-6 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold hover:scale-[1.02] active:scale-95 transition-transform cursor-pointer" OnClick="btnSearch_Click" />
+                        <asp:Button ID="btnSearch" runat="server" Text="Search" UseSubmitBehavior="false" OnClientClick="filterEventsLive(); return false;" CssClass="w-full md:w-auto px-6 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold hover:scale-[1.02] active:scale-95 transition-transform cursor-pointer" />
                     </div>
                     <div class="w-full md:w-auto">
-                        <asp:Button ID="btnReset" runat="server" Text="Reset" CssClass="w-full md:w-auto px-6 py-2.5 border border-outline text-on-surface-variant rounded-lg font-label-md text-label-md font-bold hover:bg-surface-variant/50 transition-colors cursor-pointer" OnClick="btnReset_Click" />
+                        <asp:Button ID="btnReset" runat="server" Text="Reset" UseSubmitBehavior="false" OnClientClick="resetEventsLive(); return false;" CssClass="w-full md:w-auto px-6 py-2.5 border border-outline text-on-surface-variant rounded-lg font-label-md text-label-md font-bold hover:bg-surface-variant/50 transition-colors cursor-pointer" />
                     </div>
                 </div>
             </div>
@@ -127,7 +127,7 @@
                             Live completion
                         </span>
                     </div>
-                    <asp:Literal ID="litEventCount" runat="server"></asp:Literal>
+                    <span id="eventVisibleCount" class="font-label-md text-label-md text-on-surface-variant"></span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left font-body-md">
@@ -147,7 +147,7 @@
                         <tbody class="divide-y divide-surface-container-high">
                             <asp:Repeater ID="rptEvents" runat="server" OnItemDataBound="rptEvents_ItemDataBound" OnItemCommand="rptEvents_ItemCommand">
                                 <ItemTemplate>
-                                    <tr class="hover:bg-surface-container-lowest transition-colors group" data-event-id='<%# Eval("EventID") %>'>
+                                    <tr class="js-event-row hover:bg-surface-container-lowest transition-colors group" data-event-id="<%# Eval("EventID") %>" data-event-name="<%# System.Web.HttpUtility.HtmlAttributeEncode(Convert.ToString(Eval("EventName"))) %>" data-event-status="<%# System.Web.HttpUtility.HtmlAttributeEncode(Convert.ToString(Eval("Status")).Replace(" ", "")) %>">
                                         <td class="px-6 py-4">
                                             <div class="flex items-center gap-3">
                                                 <div class="h-10 w-10 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
@@ -222,7 +222,7 @@
                                     </tr>
                                     <asp:PlaceHolder ID="phRejectRow" runat="server"
                                         Visible='<%# !string.IsNullOrEmpty(Eval("RejectionReason") != DBNull.Value ? Eval("RejectionReason").ToString() : "") %>'>
-                                        <tr class="bg-error-container/5">
+                                        <tr class="js-event-reject-row bg-error-container/5" data-event-id='<%# Eval("EventID") %>'>
                                             <td colspan="9" class="px-6 py-3 text-sm text-error">
                                                 <span class="font-semibold">Rejection Reason:</span> <%# Eval("RejectionReason") %>
                                             </td>
@@ -230,6 +230,12 @@
                                     </asp:PlaceHolder>
                                 </ItemTemplate>
                             </asp:Repeater>
+                            <tr id="eventSearchEmpty" class="js-event-search-empty" style="display:none">
+                                <td colspan="9" class="px-6 py-16 text-center">
+                                    <p class="font-title-lg text-title-lg text-on-surface-variant mb-1">No matching events</p>
+                                    <p class="font-body-md text-body-md text-outline">No event name matches what you typed.</p>
+                                </td>
+                            </tr>
                             <asp:Panel ID="pnlNoEvents" runat="server" Visible="false">
                                 <div class="px-6 py-16 text-center">
                                     <div class="flex flex-col items-center gap-4">
@@ -292,7 +298,6 @@
 </asp:Content>
 
 <asp:Content ID="ScriptContent" ContentPlaceHolderID="ScriptContent" runat="server">
-    <script type="text/javascript" src="<%= ResolveUrl("~/Assets/js/dashboard.js") %>"></script>
     <script type="text/javascript">
         function promptRejectReason(event, link) {
             if (event) event.preventDefault();
@@ -303,6 +308,58 @@
                 okText: 'Reject'
             });
         }
+
+        function filterEventsLive() {
+            var searchEl = document.querySelector('.js-event-search');
+            var statusEl = document.querySelector('.js-event-status-filter');
+            var query = (searchEl && searchEl.value ? searchEl.value : '').trim().toLowerCase();
+            var status = (statusEl && statusEl.value ? statusEl.value : '').replace(/\s+/g, '').toLowerCase();
+            var rows = document.querySelectorAll('.js-event-row');
+            var visible = 0;
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var name = (row.getAttribute('data-event-name') || '').toLowerCase();
+                var rowStatus = (row.getAttribute('data-event-status') || '').replace(/\s+/g, '').toLowerCase();
+                var show = (!query || name.indexOf(query) !== -1) && (!status || rowStatus === status);
+                row.style.display = show ? '' : 'none';
+                if (show) visible++;
+                var eventId = row.getAttribute('data-event-id');
+                var rejectRows = document.querySelectorAll('.js-event-reject-row[data-event-id="' + eventId + '"]');
+                for (var j = 0; j < rejectRows.length; j++) {
+                    rejectRows[j].style.display = show ? '' : 'none';
+                }
+            }
+            var empty = document.getElementById('eventSearchEmpty');
+            if (empty) empty.style.display = (rows.length > 0 && visible === 0) ? '' : 'none';
+            var count = document.getElementById('eventVisibleCount');
+            if (count) {
+                count.textContent = rows.length === 0 ? '' : (visible + (visible === 1 ? ' event' : ' events'));
+            }
+        }
+
+        function resetEventsLive() {
+            var searchEl = document.querySelector('.js-event-search');
+            var statusEl = document.querySelector('.js-event-status-filter');
+            if (searchEl) searchEl.value = '';
+            if (statusEl) statusEl.selectedIndex = 0;
+            filterEventsLive();
+        }
+
+        (function () {
+            var searchEl = document.querySelector('.js-event-search');
+            var statusEl = document.querySelector('.js-event-status-filter');
+            if (searchEl) {
+                searchEl.addEventListener('input', filterEventsLive);
+                searchEl.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.keyCode === 13) {
+                        e.preventDefault();
+                        filterEventsLive();
+                    }
+                });
+            }
+            if (statusEl) statusEl.addEventListener('change', filterEventsLive);
+            filterEventsLive();
+        })();
 
         (function () {
             function applyLiveStat(sourceId, destId) {
@@ -352,6 +409,9 @@
                     status.textContent = row.statusLabel;
                     status.className = statusClass(row.status);
                 }
+                if (row.status) {
+                    tr.setAttribute('data-event-status', String(row.status).replace(/\s+/g, '').toLowerCase());
+                }
             }
             function poll() {
                 var xhr = new XMLHttpRequest();
@@ -363,6 +423,7 @@
                         if (!data || !data.ok) return;
                         var list = data.events || [];
                         for (var i = 0; i < list.length; i++) applyEvent(list[i]);
+                        if (typeof filterEventsLive === 'function') filterEventsLive();
                         if (data.stats) {
                             setText('statTotalEvents', data.stats.total);
                             setText('statPlanned', data.stats.planned);

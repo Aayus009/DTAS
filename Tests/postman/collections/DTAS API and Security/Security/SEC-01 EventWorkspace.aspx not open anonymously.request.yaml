@@ -1,0 +1,15 @@
+$kind: http-request
+name: SEC-01 EventWorkspace.aspx not open anonymously
+url: "{{baseUrl}}/Modules/Events/EventWorkspace.aspx"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      var code = pm.response.code;
+      var t = pm.response.text().toLowerCase();
+      var blocked = (code >= 300 && code < 400) || t.indexOf('login') >= 0 || t.indexOf('sign in') >= 0;
+      pm.test('SEC-01 EventWorkspace is not open anonymously', function () { pm.expect(blocked).to.be.true; });
+    language: text/javascript
+settings:
+  followRedirects: false
+order: 1000

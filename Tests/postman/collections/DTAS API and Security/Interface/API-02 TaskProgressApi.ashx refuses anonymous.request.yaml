@@ -1,0 +1,13 @@
+$kind: http-request
+name: API-02 TaskProgressApi.ashx refuses anonymous
+url: "{{baseUrl}}/Modules/Tasks/TaskProgressApi.ashx?taskId=1"
+method: GET
+queryParams:
+  taskId: "1"
+scripts:
+  - type: afterResponse
+    code: |-
+      var t = pm.response.text().toLowerCase();
+      pm.test('API-02 TaskProgressApi refuses anonymous caller', function () { pm.expect(t).to.include('sign in'); });
+    language: text/javascript
+order: 2000

@@ -44,10 +44,20 @@ namespace DigitalTransparencySystem.Helpers
             }
         }
 
+        private static readonly object TokenLock = new object();
+        private static string cachedToken;
+        private static DateTime tokenExpiresUtc = DateTime.MinValue;
+
         /// <summary>Gets a valid S2S OAuth bearer token, or null on failure.</summary>
         public string GetAccessToken()
         {
             if (!IsConfigured) return null;
+
+            lock (TokenLock)
+            {
+                if (!string.IsNullOrEmpty(cachedToken) && DateTime.UtcNow < tokenExpiresUtc)
+                    return cachedToken;
+            }
 
             string credentials = Convert.ToBase64String(
                 Encoding.UTF8.GetBytes(HttpUtility.UrlEncode(_clientId) + ":" + HttpUtility.UrlEncode(_clientSecret)));
@@ -62,7 +72,7 @@ namespace DigitalTransparencySystem.Helpers
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Headers["Authorization"] = "Basic " + credentials;
-                request.Timeout = 15000;
+                request.Timeout = 8000;
 
                 byte[] data = Encoding.UTF8.GetBytes(body.ToString());
                 request.ContentLength = data.Length;
@@ -76,7 +86,16 @@ namespace DigitalTransparencySystem.Helpers
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     var json = JObject.Parse(reader.ReadToEnd());
-                    return json["access_token"]?.ToString();
+                    string token = json["access_token"]?.ToString();
+                    int expiresIn = 3600;
+                    if (json["expires_in"] != null)
+                        int.TryParse(json["expires_in"].ToString(), out expiresIn);
+                    lock (TokenLock)
+                    {
+                        cachedToken = token;
+                        tokenExpiresUtc = DateTime.UtcNow.AddSeconds(Math.Max(60, expiresIn - 120));
+                    }
+                    return token;
                 }
             }
             catch (WebException ex)
@@ -99,6 +118,60 @@ namespace DigitalTransparencySystem.Helpers
             string topic, DateTime startTime, int durationMinutes, string agenda, string timeZone = "UTC")
         {
             return CreateMeetingInternal(topic, startTime, durationMinutes, agenda, timeZone);
+        }
+
+        /// <summary>
+        /// Stops members from entering before the host starts, and holds them in the waiting room until the host admits them.
+        /// </summary>
+        public bool ApplyHostAdmission(long zoomMeetingId)
+        {
+            string token = GetAccessToken();
+            if (string.IsNullOrEmpty(token) || zoomMeetingId <= 0)
+                return false;
+
+            var payload = new JObject
+            {
+                ["settings"] = new JObject
+                {
+                    ["join_before_host"] = false,
+                    ["waiting_room"] = true,
+                    ["mute_upon_entry"] = true
+                }
+            };
+
+            try
+            {
+                ExecuteJsonRequest("PATCH", ApiBase + "/meetings/" + zoomMeetingId.ToString(), token, payload.ToString());
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>waiting = not started, started = host is in the room, finished = ended. Null if Zoom could not be reached.</summary>
+        public string GetMeetingLiveStatus(long zoomMeetingId)
+        {
+            string token = GetAccessToken();
+            if (string.IsNullOrEmpty(token) || zoomMeetingId <= 0)
+                return null;
+
+            try
+            {
+                string body = ExecuteJsonRequest("GET", ApiBase + "/meetings/" + zoomMeetingId.ToString(), token, null);
+                var json = JObject.Parse(body);
+                return json["status"]?.ToString();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static bool HostHasStarted(string liveStatus)
+        {
+            return string.Equals(liveStatus, "started", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>Turns on Zoom cloud auto-recording for an existing meeting. Returns null on success.</summary>
@@ -151,9 +224,9 @@ namespace DigitalTransparencySystem.Helpers
                 {
                     ["host_video"] = true,
                     ["participant_video"] = true,
-                    ["join_before_host"] = true,
-                    ["waiting_room"] = false,
-                    ["mute_upon_entry"] = false,
+                    ["join_before_host"] = false,
+                    ["waiting_room"] = true,
+                    ["mute_upon_entry"] = true,
                     ["approval_type"] = 2,
                     ["auto_recording"] = "none"
                 }
@@ -347,7 +420,7 @@ namespace DigitalTransparencySystem.Helpers
             request.ContentType = "application/json";
             request.Accept = "application/json";
             request.Headers["Authorization"] = "Bearer " + token;
-            request.Timeout = 20000;
+            request.Timeout = 8000;
 
             if (!string.IsNullOrEmpty(jsonBody))
             {

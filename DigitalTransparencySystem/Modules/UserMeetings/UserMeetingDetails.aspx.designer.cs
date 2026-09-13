@@ -16,10 +16,12 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
         protected global::System.Web.UI.WebControls.Panel pnlZoom;
         protected global::System.Web.UI.WebControls.Panel pnlZoomOpen;
         protected global::System.Web.UI.WebControls.Literal litPasscode;
+        protected global::System.Web.UI.WebControls.Literal litZoomHelp;
         protected global::System.Web.UI.WebControls.HyperLink lnkJoinUrlText;
         protected global::System.Web.UI.WebControls.HyperLink lnkStart;
         protected global::System.Web.UI.WebControls.HyperLink lnkJoin;
         protected global::System.Web.UI.WebControls.HiddenField hidRoomEndsAt;
+        protected global::System.Web.UI.WebControls.HiddenField hidWaitForHost;
         protected global::System.Web.UI.WebControls.Panel pnlZoomClosed;
         protected global::System.Web.UI.WebControls.Literal litMinutesHint;
         protected global::System.Web.UI.WebControls.TextBox txtMinutes;

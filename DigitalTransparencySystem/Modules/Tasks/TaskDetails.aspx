@@ -5,7 +5,7 @@
 <%@ Register TagPrefix="uc" TagName="UserTopbar" Src="~/MasterPages/UserTopbar.ascx" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>" />
+    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=tasklayout1" />
 </asp:Content>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -89,9 +89,9 @@
             </asp:Panel>
 
             <!-- Error Message -->
-            <asp:Panel ID="pnlError" runat="server" CssClass="mb-6 p-4 bg-error-container border border-error/30 rounded-xl flex items-center gap-3" Visible="false">
-                <span class="material-symbols-outlined text-error">error</span>
-                <asp:Label ID="lblError" runat="server" CssClass="font-label-md text-label-md text-on-error-container"></asp:Label>
+            <asp:Panel ID="pnlError" runat="server" CssClass="dtas-notice dtas-notice-danger dtas-notice-sticky dtas-notice-rich" Visible="false">
+                <span class="material-symbols-outlined dtas-notice-icon">error</span>
+                <asp:Label ID="lblError" runat="server"></asp:Label>
             </asp:Panel>
 
             <!-- Main Layout: 2 Column Asymmetric -->
@@ -129,8 +129,13 @@
                         </div>
                     </section>
 
-                    <asp:Panel ID="pnlRestricted" runat="server" Visible="false" CssClass="mb-6 p-4 rounded-xl bg-error-container/20 text-error font-label-md">
-                        This task is restricted. Assigned members cannot work on it until the system administrator restores it.
+                    <asp:Panel ID="pnlRestricted" runat="server" Visible="false" CssClass="dtas-notice dtas-notice-danger dtas-notice-sticky dtas-notice-rich">
+                        <span class="material-symbols-outlined dtas-notice-icon">block</span>
+                        <div>
+                            <p class="dtas-notice-kicker">Restricted</p>
+                            <p class="dtas-notice-title">This task is restricted</p>
+                            <p class="dtas-notice-copy">Assigned members cannot work on it until the system administrator restores it.</p>
+                        </div>
                     </asp:Panel>
                     <asp:Panel ID="pnlStatusUpdate" runat="server">
                     <!-- Status Update Section -->
@@ -173,7 +178,7 @@
                             <h3 class="font-title-lg text-title-lg text-primary">Update History</h3>
                             <asp:Literal ID="litUpdateCount" runat="server"></asp:Literal>
                         </div>
-                        <div class="p-6">
+                        <div class="task-history-scroll p-6">
                             <div class="space-y-6 relative before:absolute before:left-5 before:top-2 before:bottom-2 before:w-[1px] before:bg-outline-variant/30">
                                 <asp:Repeater ID="rptUpdates" runat="server">
                                     <ItemTemplate>
@@ -204,161 +209,6 @@
                         </div>
                     </section>
 
-                    <!-- Attachments -->
-                    <section class="standard-card rounded-xl overflow-hidden">
-                        <div class="px-6 py-4 border-b border-surface-container-high flex justify-between items-center">
-                            <h3 class="font-title-lg text-title-lg text-primary">Attachments</h3>
-                            <asp:Literal ID="litAttachmentCount" runat="server"></asp:Literal>
-                        </div>
-                        <div class="p-6">
-                            <asp:Panel ID="pnlUploadAttachment" runat="server">
-                            <!-- Upload Form -->
-                            <div class="mb-6 p-4 bg-surface-container-low rounded-lg border border-dashed border-outline-variant">
-                                <div class="flex items-center gap-4">
-                                    <asp:FileUpload ID="fuAttachment" runat="server" CssClass="flex-1 text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-primary-container file:text-on-primary-container hover:file:bg-primary/10 cursor-pointer" />
-                                    <asp:Button ID="btnUpload" runat="server" Text="Upload" CssClass="px-5 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold active:scale-95 transition-transform cursor-pointer" OnClick="btnUpload_Click" />
-                                </div>
-                                <p class="text-xs text-outline mt-2">Supported: PDF, Images, Documents (Max 10MB)</p>
-                            </div>
-                            </asp:Panel>
-                            <asp:Panel ID="pnlAdminNoUpload" runat="server" Visible="false" CssClass="mb-6 p-3 rounded-lg bg-surface-container-low text-sm text-on-surface-variant">
-                                System admin can review files here but cannot upload. Use a tagged comment to reach a specific member.
-                            </asp:Panel>
-                            <!-- File List -->
-                            <div class="space-y-3">
-                                <asp:Repeater ID="rptAttachments" runat="server" OnItemCommand="rptAttachments_ItemCommand" OnItemDataBound="rptAttachments_ItemDataBound">
-                                    <ItemTemplate>
-                                        <div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg border border-outline-variant/30 hover:bg-surface-container-high transition-colors">
-                                            <div class="h-10 w-10 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
-                                                <span class="material-symbols-outlined text-on-primary-container text-[20px]"><%# Eval("Icon") %></span>
-                                            </div>
-                                            <div class="flex-1 min-w-0">
-                                                <p class="font-label-md text-label-md font-bold truncate"><%# Eval("FileName") %></p>
-                                                <p class="text-xs text-on-surface-variant"><%# Eval("FileSizeText") %> &middot; <%# Eval("UploadedAt", "{0:MMM dd, yyyy}") %></p>
-                                            </div>
-                                            <asp:LinkButton ID="btnDownload" runat="server" CommandName="Download" CommandArgument='<%# Eval("AttachmentID") %>'
-                                                CssClass="p-2 hover:bg-surface-container-low rounded-lg transition-colors" ToolTip="Download">
-                                                <span class="material-symbols-outlined text-outline hover:text-primary transition-colors text-[20px]">download</span>
-                                            </asp:LinkButton>
-                                            <asp:Panel ID="pnlRemoveAttachment" runat="server">
-                                                <asp:LinkButton ID="btnRemoveAttachment" runat="server" CommandName="RemoveAttachment" CommandArgument='<%# Eval("AttachmentID") %>'
-                                                    CssClass="p-2 hover:bg-error-container/50 rounded-lg transition-colors" ToolTip="Remove"
-                                                    OnClientClick="return dtasConfirm(this, 'Remove this attachment?');">
-                                                    <span class="material-symbols-outlined text-outline hover:text-error transition-colors text-[20px]">close</span>
-                                                </asp:LinkButton>
-                                            </asp:Panel>
-                                        </div>
-                                    </ItemTemplate>
-                                </asp:Repeater>
-                            </div>
-                            <asp:Panel ID="pnlNoAttachments" runat="server" CssClass="p-6 text-center" Visible="false">
-                                <span class="material-symbols-outlined text-[40px] text-outline-variant block mb-2">attach_file</span>
-                                <p class="font-body-md text-body-md text-on-surface-variant">No files attached yet.</p>
-                            </asp:Panel>
-                        </div>
-                    </section>
-
-                    <!-- Discussion / Comments -->
-                    <section class="standard-card rounded-xl overflow-hidden">
-                        <div class="px-6 py-4 border-b border-surface-container-high flex justify-between items-center">
-                            <h3 class="font-title-lg text-title-lg text-primary">Discussion</h3>
-                            <asp:Literal ID="litCommentCount" runat="server"></asp:Literal>
-                        </div>
-                        <div class="p-6">
-                            <!-- Add Comment Form -->
-                            <div class="mb-6 space-y-3">
-                                <asp:TextBox ID="txtNewComment" runat="server" CssClass="w-full px-4 py-3 bg-surface-container-low border border-outline rounded-lg font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Write a comment for this task..." TextMode="MultiLine" Rows="3"></asp:TextBox>
-                                <div>
-                                    <label class="block font-label-md text-label-md text-on-surface-variant mb-2">Tag a member</label>
-                                    <asp:DropDownList ID="ddlTagUser" runat="server" CssClass="w-full px-4 py-3 bg-surface-container-low border border-outline rounded-lg font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none">
-                                        <asp:ListItem Text="Everyone on this task" Value="" />
-                                    </asp:DropDownList>
-                                    <p class="text-xs text-outline mt-2">Tag a specific user to send this comment to them and their event task.</p>
-                                </div>
-                                <asp:Button ID="btnAddComment" runat="server" Text="Post Comment" CssClass="px-6 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold active:scale-95 transition-transform cursor-pointer" OnClick="btnAddComment_Click" />
-                            </div>
-                            <!-- Comments List -->
-                            <div class="space-y-4">
-                                <asp:Repeater ID="rptComments" runat="server" OnItemCommand="rptComments_ItemCommand">
-                                    <ItemTemplate>
-                                        <div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant/30">
-                                            <div class="flex items-center gap-3 mb-2">
-                                                <div class="h-8 w-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
-                                                    <span class="material-symbols-outlined text-on-primary-container text-[16px]">person</span>
-                                                </div>
-                                                <div>
-                                                    <p class="font-label-md text-label-md font-bold"><%# Eval("UserName") %></p>
-                                                    <p class="text-xs text-on-surface-variant"><%# Eval("CreatedAt", "{0:MMM dd, yyyy - hh:mm tt}") %></p>
-                                                </div>
-                                            </div>
-                                            <asp:Panel ID="pnlTaggedUser" runat="server" Visible='<%# Convert.ToBoolean(Eval("HasMention")) %>' CssClass="ml-11 mb-2">
-                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container font-badge-cap text-badge-cap">
-                                                    <span class="material-symbols-outlined text-[14px]">alternate_email</span>
-                                                    <%# Eval("MentionedName") %>
-                                                </span>
-                                            </asp:Panel>
-                                            <p class="font-body-md text-body-md text-on-surface ml-11"><%# Eval("CommentHtml") %></p>
-                                        </div>
-                                    </ItemTemplate>
-                                </asp:Repeater>
-                            </div>
-                            <asp:Panel ID="pnlNoComments" runat="server" CssClass="p-6 text-center" Visible="false">
-                                <span class="material-symbols-outlined text-[40px] text-outline-variant block mb-2">chat_bubble_outline</span>
-                                <p class="font-body-md text-body-md text-on-surface-variant">No comments yet. Start the discussion!</p>
-                            </asp:Panel>
-                        </div>
-                    </section>
-
-                    <!-- Checklist / Sub-tasks -->
-                    <section class="standard-card rounded-xl overflow-hidden">
-                        <div class="px-6 py-4 border-b border-surface-container-high flex justify-between items-center">
-                            <h3 class="font-title-lg text-title-lg text-primary">Checklist</h3>
-                            <asp:Literal ID="litChecklistProgress" runat="server"></asp:Literal>
-                        </div>
-                        <div class="p-6">
-                            <asp:Panel ID="pnlChecklistEdit" runat="server">
-                            <!-- Add Item Form -->
-                            <div class="mb-6 flex gap-3">
-                                <asp:TextBox ID="txtNewChecklistItem" runat="server" CssClass="flex-1 px-4 py-3 bg-surface-container-low border border-outline rounded-lg font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Add a checklist item..." MaxLength="300"></asp:TextBox>
-                                <asp:Button ID="btnAddChecklistItem" runat="server" Text="Add" CssClass="px-5 py-3 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold active:scale-95 transition-transform cursor-pointer" OnClick="btnAddChecklistItem_Click" />
-                            </div>
-                            </asp:Panel>
-                            <!-- Progress Bar -->
-                            <asp:Panel ID="pnlProgressBar" runat="server" Visible="false" class="mb-4">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden">
-                                        <asp:Literal ID="litProgressBar" runat="server"></asp:Literal>
-                                    </div>
-                                    <span class="font-label-md text-label-md text-on-surface-variant whitespace-nowrap"><asp:Literal ID="litProgressText" runat="server"></asp:Literal></span>
-                                </div>
-                            </asp:Panel>
-                            <!-- Checklist Items -->
-                            <div class="space-y-2">
-                                <asp:Repeater ID="rptChecklist" runat="server" OnItemCommand="rptChecklist_ItemCommand" OnItemDataBound="rptChecklist_ItemDataBound">
-                                    <ItemTemplate>
-                                        <div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg border border-outline-variant/30 hover:bg-surface-container-high transition-colors">
-                                            <asp:LinkButton ID="btnToggleCheck" runat="server" CommandName="ToggleCheck" CommandArgument='<%# Eval("ItemID") %>'
-                                                CssClass="shrink-0">
-                                                <span class="material-symbols-outlined text-[22px]" style='<%# Eval("CheckStyle") %>'><%# Eval("CheckIcon") %></span>
-                                            </asp:LinkButton>
-                                            <span class="flex-1 font-body-md text-body-md" style='<%# Eval("TextStyle") %>'><%# Eval("ItemText") %></span>
-                                            <asp:Panel ID="pnlDeleteChecklist" runat="server">
-                                                <asp:LinkButton ID="btnDeleteItem" runat="server" CommandName="DeleteItem" CommandArgument='<%# Eval("ItemID") %>'
-                                                    CssClass="p-1 hover:bg-error-container/50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
-                                                    OnClientClick="return dtasConfirm(this, 'Delete this item?');">
-                                                    <span class="material-symbols-outlined text-outline hover:text-error transition-colors text-[18px]">close</span>
-                                                </asp:LinkButton>
-                                            </asp:Panel>
-                                        </div>
-                                    </ItemTemplate>
-                                </asp:Repeater>
-                            </div>
-                            <asp:Panel ID="pnlNoChecklist" runat="server" CssClass="p-6 text-center" Visible="false">
-                                <span class="material-symbols-outlined text-[40px] text-outline-variant block mb-2">checklist</span>
-                                <p class="font-body-md text-body-md text-on-surface-variant">No checklist items yet.</p>
-                            </asp:Panel>
-                        </div>
-                    </section>
                 </div>
 
                 <!-- Right Column: Assigned Users & Related Items -->
@@ -507,6 +357,167 @@
                     </section>
                 </div>
             </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 items-start">
+                <div class="lg:col-span-2">
+                    <!-- Discussion / Comments -->
+                    <section class="standard-card rounded-xl overflow-hidden">
+                        <div class="px-6 py-4 border-b border-surface-container-high flex justify-between items-center">
+                            <h3 class="font-title-lg text-title-lg text-primary">Discussion</h3>
+                            <asp:Literal ID="litCommentCount" runat="server"></asp:Literal>
+                        </div>
+                        <div class="p-6">
+                            <!-- Add Comment Form -->
+                            <div class="mb-6 space-y-3">
+                                <asp:TextBox ID="txtNewComment" runat="server" CssClass="w-full px-4 py-3 bg-surface-container-low border border-outline rounded-lg font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Write a comment for this task..." TextMode="MultiLine" Rows="3"></asp:TextBox>
+                                <div>
+                                    <label class="block font-label-md text-label-md text-on-surface-variant mb-2">Tag a member</label>
+                                    <asp:DropDownList ID="ddlTagUser" runat="server" CssClass="w-full px-4 py-3 bg-surface-container-low border border-outline rounded-lg font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none">
+                                        <asp:ListItem Text="Everyone on this task" Value="" />
+                                    </asp:DropDownList>
+                                    <p class="text-xs text-outline mt-2">Tag a specific user to send this comment to them and their event task.</p>
+                                </div>
+                                <asp:Button ID="btnAddComment" runat="server" Text="Post Comment" CssClass="px-6 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold active:scale-95 transition-transform cursor-pointer" OnClick="btnAddComment_Click" />
+                            </div>
+                            <!-- Comments List -->
+                            <div class="task-discuss-scroll space-y-4">
+                                <asp:Repeater ID="rptComments" runat="server" OnItemCommand="rptComments_ItemCommand">
+                                    <ItemTemplate>
+                                        <div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant/30">
+                                            <div class="flex items-center gap-3 mb-2">
+                                                <div class="h-8 w-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                                                    <span class="material-symbols-outlined text-on-primary-container text-[16px]">person</span>
+                                                </div>
+                                                <div>
+                                                    <p class="font-label-md text-label-md font-bold"><%# Eval("UserName") %></p>
+                                                    <p class="text-xs text-on-surface-variant"><%# Eval("CreatedAt", "{0:MMM dd, yyyy - hh:mm tt}") %></p>
+                                                </div>
+                                            </div>
+                                            <asp:Panel ID="pnlTaggedUser" runat="server" Visible='<%# Convert.ToBoolean(Eval("HasMention")) %>' CssClass="ml-11 mb-2">
+                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container font-badge-cap text-badge-cap">
+                                                    <span class="material-symbols-outlined text-[14px]">alternate_email</span>
+                                                    <%# Eval("MentionedName") %>
+                                                </span>
+                                            </asp:Panel>
+                                            <p class="font-body-md text-body-md text-on-surface ml-11"><%# Eval("CommentHtml") %></p>
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </div>
+                            <asp:Panel ID="pnlNoComments" runat="server" CssClass="p-6 text-center" Visible="false">
+                                <span class="material-symbols-outlined text-[40px] text-outline-variant block mb-2">chat_bubble_outline</span>
+                                <p class="font-body-md text-body-md text-on-surface-variant">No comments yet. Start the discussion!</p>
+                            </asp:Panel>
+                        </div>
+                    </section>
+                </div>
+                <div class="space-y-6">
+                    <!-- Attachments -->
+                    <section class="standard-card rounded-xl overflow-hidden">
+                        <div class="px-6 py-4 border-b border-surface-container-high flex justify-between items-center">
+                            <h3 class="font-title-lg text-title-lg text-primary">Attachments</h3>
+                            <asp:Literal ID="litAttachmentCount" runat="server"></asp:Literal>
+                        </div>
+                        <div class="p-6">
+                            <asp:Panel ID="pnlUploadAttachment" runat="server">
+                            <!-- Upload Form -->
+                            <div class="mb-4 p-4 bg-surface-container-low rounded-lg border border-dashed border-outline-variant">
+                                <div class="flex flex-col gap-3">
+                                    <asp:FileUpload ID="fuAttachment" runat="server" CssClass="flex-1 text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-primary-container file:text-on-primary-container hover:file:bg-primary/10 cursor-pointer" />
+                                    <asp:Button ID="btnUpload" runat="server" Text="Upload" CssClass="px-5 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold active:scale-95 transition-transform cursor-pointer" OnClick="btnUpload_Click" />
+                                </div>
+                                <p class="text-xs text-outline mt-2">Supported: PDF, Images, Documents (Max 10MB)</p>
+                            </div>
+                            </asp:Panel>
+                            <asp:Panel ID="pnlAdminNoUpload" runat="server" Visible="false" CssClass="mb-6 p-3 rounded-lg bg-surface-container-low text-sm text-on-surface-variant">
+                                System admin can review files here but cannot upload. Use a tagged comment to reach a specific member.
+                            </asp:Panel>
+                            <!-- File List -->
+                            <div class="task-side-scroll space-y-3">
+                                <asp:Repeater ID="rptAttachments" runat="server" OnItemCommand="rptAttachments_ItemCommand" OnItemDataBound="rptAttachments_ItemDataBound">
+                                    <ItemTemplate>
+                                        <div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg border border-outline-variant/30 hover:bg-surface-container-high transition-colors">
+                                            <div class="h-10 w-10 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+                                                <span class="material-symbols-outlined text-on-primary-container text-[20px]"><%# Eval("Icon") %></span>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="font-label-md text-label-md font-bold truncate"><%# Eval("FileName") %></p>
+                                                <p class="text-xs text-on-surface-variant"><%# Eval("FileSizeText") %> &middot; <%# Eval("UploadedAt", "{0:MMM dd, yyyy}") %></p>
+                                            </div>
+                                            <asp:LinkButton ID="btnDownload" runat="server" CommandName="Download" CommandArgument='<%# Eval("AttachmentID") %>'
+                                                CssClass="p-2 hover:bg-surface-container-low rounded-lg transition-colors" ToolTip="Download">
+                                                <span class="material-symbols-outlined text-outline hover:text-primary transition-colors text-[20px]">download</span>
+                                            </asp:LinkButton>
+                                            <asp:Panel ID="pnlRemoveAttachment" runat="server">
+                                                <asp:LinkButton ID="btnRemoveAttachment" runat="server" CommandName="RemoveAttachment" CommandArgument='<%# Eval("AttachmentID") %>'
+                                                    CssClass="p-2 hover:bg-error-container/50 rounded-lg transition-colors" ToolTip="Remove"
+                                                    OnClientClick="return dtasConfirm(this, 'Remove this attachment?');">
+                                                    <span class="material-symbols-outlined text-outline hover:text-error transition-colors text-[20px]">close</span>
+                                                </asp:LinkButton>
+                                            </asp:Panel>
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </div>
+                            <asp:Panel ID="pnlNoAttachments" runat="server" CssClass="p-6 text-center" Visible="false">
+                                <span class="material-symbols-outlined text-[40px] text-outline-variant block mb-2">attach_file</span>
+                                <p class="font-body-md text-body-md text-on-surface-variant">No files attached yet.</p>
+                            </asp:Panel>
+                        </div>
+                    </section>
+                    <!-- Checklist / Sub-tasks -->
+                    <section class="standard-card rounded-xl overflow-hidden">
+                        <div class="px-6 py-4 border-b border-surface-container-high flex justify-between items-center">
+                            <h3 class="font-title-lg text-title-lg text-primary">Checklist</h3>
+                            <asp:Literal ID="litChecklistProgress" runat="server"></asp:Literal>
+                        </div>
+                        <div class="p-6">
+                            <asp:Panel ID="pnlChecklistEdit" runat="server">
+                            <!-- Add Item Form -->
+                            <div class="mb-4 flex flex-col gap-3">
+                                <asp:TextBox ID="txtNewChecklistItem" runat="server" CssClass="flex-1 px-4 py-3 bg-surface-container-low border border-outline rounded-lg font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Add a checklist item..." MaxLength="300"></asp:TextBox>
+                                <asp:Button ID="btnAddChecklistItem" runat="server" Text="Add" CssClass="px-5 py-3 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold active:scale-95 transition-transform cursor-pointer" OnClick="btnAddChecklistItem_Click" />
+                            </div>
+                            </asp:Panel>
+                            <!-- Progress Bar -->
+                            <asp:Panel ID="pnlProgressBar" runat="server" Visible="false" class="mb-4">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden">
+                                        <asp:Literal ID="litProgressBar" runat="server"></asp:Literal>
+                                    </div>
+                                    <span class="font-label-md text-label-md text-on-surface-variant whitespace-nowrap"><asp:Literal ID="litProgressText" runat="server"></asp:Literal></span>
+                                </div>
+                            </asp:Panel>
+                            <!-- Checklist Items -->
+                            <div class="task-side-scroll space-y-2">
+                                <asp:Repeater ID="rptChecklist" runat="server" OnItemCommand="rptChecklist_ItemCommand" OnItemDataBound="rptChecklist_ItemDataBound">
+                                    <ItemTemplate>
+                                        <div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg border border-outline-variant/30 hover:bg-surface-container-high transition-colors">
+                                            <asp:LinkButton ID="btnToggleCheck" runat="server" CommandName="ToggleCheck" CommandArgument='<%# Eval("ItemID") %>'
+                                                CssClass="shrink-0">
+                                                <span class="material-symbols-outlined text-[22px]" style='<%# Eval("CheckStyle") %>'><%# Eval("CheckIcon") %></span>
+                                            </asp:LinkButton>
+                                            <span class="flex-1 font-body-md text-body-md" style='<%# Eval("TextStyle") %>'><%# Eval("ItemText") %></span>
+                                            <asp:Panel ID="pnlDeleteChecklist" runat="server">
+                                                <asp:LinkButton ID="btnDeleteItem" runat="server" CommandName="DeleteItem" CommandArgument='<%# Eval("ItemID") %>'
+                                                    CssClass="p-1 hover:bg-error-container/50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                                                    OnClientClick="return dtasConfirm(this, 'Delete this item?');">
+                                                    <span class="material-symbols-outlined text-outline hover:text-error transition-colors text-[18px]">close</span>
+                                                </asp:LinkButton>
+                                            </asp:Panel>
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </div>
+                            <asp:Panel ID="pnlNoChecklist" runat="server" CssClass="p-6 text-center" Visible="false">
+                                <span class="material-symbols-outlined text-[40px] text-outline-variant block mb-2">checklist</span>
+                                <p class="font-body-md text-body-md text-on-surface-variant">No checklist items yet.</p>
+                            </asp:Panel>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
         </main>
     </div>
 
@@ -514,7 +525,7 @@
     <footer class="dashboard-footer bg-on-secondary-fixed text-on-primary py-20 px-8 ml-64">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
             <div class="md:col-span-1">
-                <h2 class="font-headline-md text-headline-md font-bold mb-4">DTAS</h2>
+                <h2 class="font-headline-md text-headline-md font-bold mb-4"><a href="<%= ResolveUrl("~/Default.aspx") %>" class="hover:text-white">DTAS</a></h2>
                 <p class="font-body-md text-surface-container-high/60">The authoritative platform for educational accountability and data transparency.</p>
             </div>
             <div>

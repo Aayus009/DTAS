@@ -219,6 +219,7 @@ namespace DigitalTransparencySystem.Helpers
                 case "assignmentoverdue":
                     return "school";
                 case "meeting":
+                case "meetingreminder":
                     return "groups";
                 case "decision":
                     return "gavel";
@@ -290,6 +291,15 @@ namespace DigitalTransparencySystem.Helpers
 
         public static void EnsureAssignmentReminders(int userId)
         {
+            try
+            {
+                MeetingService.SendDueReminders();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Meeting reminders: " + ex.Message);
+            }
+
             using (var con = new SqlConnection(AuthService.ConnectionString))
             {
                 con.Open();

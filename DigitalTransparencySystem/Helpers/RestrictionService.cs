@@ -5,16 +5,21 @@ namespace DigitalTransparencySystem.Helpers
 {
     public static class RestrictionService
     {
+        private static readonly object SchemaLock = new object();
         private static bool schemaReady;
 
         public static void EnsureSchema()
         {
             if (schemaReady)
                 return;
-            using (var con = new SqlConnection(AuthService.ConnectionString))
+            lock (SchemaLock)
             {
-                con.Open();
-                new SqlCommand(@"
+                if (schemaReady)
+                    return;
+                using (var con = new SqlConnection(AuthService.ConnectionString))
+                {
+                    con.Open();
+                    new SqlCommand(@"
                     IF COL_LENGTH('dbo.Tasks', 'IsRestricted') IS NULL
                         ALTER TABLE dbo.Tasks ADD IsRestricted BIT NOT NULL CONSTRAINT DF_Tasks_IsRestricted DEFAULT 0;
                     IF COL_LENGTH('dbo.Decisions', 'IsRestricted') IS NULL
@@ -24,8 +29,9 @@ namespace DigitalTransparencySystem.Helpers
                     IF COL_LENGTH('dbo.Polls', 'IsRestricted') IS NULL
                         ALTER TABLE dbo.Polls ADD IsRestricted BIT NOT NULL CONSTRAINT DF_Polls_IsRestricted DEFAULT 0;
                 ", con).ExecuteNonQuery();
+                }
+                schemaReady = true;
             }
-            schemaReady = true;
         }
 
         public static bool IsEventRestricted(int eventId)

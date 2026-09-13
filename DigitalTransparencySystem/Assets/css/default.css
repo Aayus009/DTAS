@@ -112,6 +112,26 @@
     color: rgba(243, 234, 216, 0.78);
 }
 
+.lp-hero-copy.lp-hero-center {
+    max-width: 42rem;
+    margin: 0 auto;
+    text-align: center;
+}
+.lp-hero-copy.lp-hero-center > p {
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+.lp-hero-copy.lp-hero-center .lp-hero-actions {
+    justify-content: center;
+}
+.lp-hero-copy.lp-hero-center .lp-trust {
+    justify-content: center;
+}
+.lp-hero-copy.lp-hero-center .lp-pill {
+    margin-bottom: 0.35rem;
+}
+
 .lp-hero-actions {
     display: flex;
     flex-wrap: wrap;
@@ -541,8 +561,8 @@
 .lp-step.is-last .lp-step-tag .material-symbols-outlined { color: var(--brass-soft); }
 
 .step-card-sm {
-    opacity: 0;
-    transform: translateY(28px) rotate(2deg);
+    opacity: 1;
+    transform: none;
     transition: opacity 0.55s ease, transform 0.55s ease;
 }
 .step-card-sm.is-visible {
@@ -593,15 +613,16 @@
 .lp-cta .lp-hero-actions { justify-content: center; }
 
 .lp-anim-rise {
-    animation: lpRise 0.85s ease both;
+    opacity: 1;
+    animation: lpRise 0.85s ease;
 }
 .lp-anim-delay { animation-delay: 0.16s; }
 
 .lp-reveal,
 .lp-role,
 .lp-module {
-    opacity: 0;
-    transform: translateY(24px);
+    opacity: 1;
+    transform: none;
     transition: opacity 0.55s ease, transform 0.55s ease;
 }
 .lp-reveal.is-in,

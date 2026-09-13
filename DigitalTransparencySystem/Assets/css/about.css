@@ -1,94 +1,128 @@
-﻿/* ============================================
-   EDUTRANSPARENCY - ABOUT PAGE STYLES
-   ============================================ */
-
-/* --- Glass Card Effect --- */
-.glass-card {
-    background: rgba(var(--dt-surface-container-lowest-rgb) / 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(var(--dt-primary-rgb) / 0.08);
+﻿/* About us — landing palette, about-page layout */
+.about-hero-copy {
+    max-width: 42rem;
+    margin: 0 auto;
+    text-align: center;
 }
 
-/* --- Grayscale Hover Effect --- */
-.grayscale-hover {
-    filter: grayscale(100%);
-    transition: filter 0.4s ease, transform 0.4s ease;
+.about-hero-copy > p {
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-    .grayscale-hover:hover {
-        filter: grayscale(0%);
-        transform: scale(1.02);
-    }
-
-/* --- Pill Border for Mission Section --- */
-.pill-border {
-    border-right: 1px solid var(--dt-outline-variant);
-}
-
-@media (max-width: 768px) {
-    .pill-border {
-        border-right: none;
-        border-bottom: 1px solid var(--dt-outline-variant);
-    }
-}
-
-/* --- Fade In Animation --- */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate-fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
-}
-
-/* --- Section Entrance Animation --- */
-.section-animate {
-    opacity: 0;
-    transform: translateY(32px);
-    transition: all 0.7s ease-out;
-}
-
-    .section-animate.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-/* --- Leader Card Hover --- */
-.leader-card {
-    transition: all 0.3s ease;
-}
-
-    .leader-card:hover {
-        transform: translateY(-4px);
-    }
-
-/* --- CTA Section Glow --- */
-.cta-glow {
+.about-mission {
+    margin-top: -1.6rem;
     position: relative;
+    z-index: 2;
+    padding: 0 0 0.4rem;
 }
 
-    .cta-glow::before {
-        content: '';
-        position: absolute;
-        inset: -2px;
-        background: linear-gradient(135deg, rgba(185, 196, 255, 0.2), rgba(119, 142, 222, 0.1));
-        border-radius: inherit;
-        z-index: -1;
-        filter: blur(20px);
+.about-mission-card {
+    margin: 0 auto;
+    max-width: 46rem;
+    padding: 2rem 2.1rem 1.85rem;
+    background: var(--cream);
+    border: 1px solid var(--stone);
+    border-radius: 1.35rem;
+    box-shadow: 0 16px 34px rgba(14, 34, 56, 0.12);
+    text-align: center;
+}
+
+.about-mission-card p {
+    margin: 0.55rem 0 0;
+    font-size: 1.18rem;
+    line-height: 1.55;
+    color: var(--navy);
+    font-weight: 600;
+}
+
+.about-story {
+    padding: 3.2rem 0 1rem;
+}
+
+.about-story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.4rem 3rem;
+}
+
+.about-story-col h2 {
+    margin: 0 0 0.85rem;
+    font-size: clamp(1.45rem, 2.4vw, 1.85rem);
+    letter-spacing: -0.03em;
+    color: var(--navy);
+}
+
+.about-story-col p {
+    margin: 0 0 0.9rem;
+    color: #5c5346;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.about-story-col p:last-child {
+    margin-bottom: 0;
+}
+
+.about-bottom {
+    padding-bottom: 3.4rem;
+}
+
+.about-note {
+    margin: 2rem auto 0;
+    max-width: 36rem;
+    text-align: center;
+    color: #5c5346;
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+
+.about-note a {
+    color: #16324f;
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.about-note a:hover {
+    color: #b08948;
+}
+
+.about-values .lp-module:nth-child(3),
+.about-values .lp-module:nth-child(6) {
+    background: var(--cream);
+    border-color: var(--stone);
+    color: inherit;
+}
+
+.about-values .lp-module:nth-child(3) h3,
+.about-values .lp-module:nth-child(6) h3 {
+    color: var(--navy);
+}
+
+.about-values .lp-module:nth-child(3) p,
+.about-values .lp-module:nth-child(6) p {
+    color: #5c5346;
+}
+
+.about-values .lp-module:nth-child(3) .material-symbols-outlined,
+.about-values .lp-module:nth-child(6) .material-symbols-outlined {
+    background: #eadfc8;
+    color: var(--navy);
+}
+
+@media (max-width: 800px) {
+    .about-story-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
     }
 
-/* --- Responsive Adjustments --- */
-@media (max-width: 768px) {
-    .grayscale-hover {
-        filter: grayscale(0%);
+    .about-mission-card {
+        padding: 1.5rem 1.25rem 1.4rem;
+    }
+
+    .about-mission-card p {
+        font-size: 1.05rem;
     }
 }

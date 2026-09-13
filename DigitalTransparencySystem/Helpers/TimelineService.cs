@@ -6,6 +6,10 @@ namespace DigitalTransparencySystem.Helpers
 {
     public static class TimelineService
     {
+        private static readonly object RefreshLock = new object();
+        private static DateTime lastCoreUtc = DateTime.MinValue;
+        private static DateTime lastMailUtc = DateTime.MinValue;
+
         public static DateTime? AsDate(object value)
         {
             if (value == null || value == DBNull.Value)
@@ -129,9 +133,34 @@ namespace DigitalTransparencySystem.Helpers
 
         public static void RefreshOverdueStatuses()
         {
-            MarkInstitutionTasksLate();
-            DeadlineService.RefreshAssignmentDeadlines();
-            MeetingService.CloseExpiredMeetings();
+            bool runCore;
+            bool runMail;
+            lock (RefreshLock)
+            {
+                DateTime now = DateTime.UtcNow;
+                runCore = (now - lastCoreUtc).TotalSeconds >= 90;
+                runMail = (now - lastMailUtc).TotalMinutes >= 10;
+                if (runCore)
+                    lastCoreUtc = now;
+                if (runMail)
+                    lastMailUtc = now;
+            }
+
+            try
+            {
+                if (runCore)
+                {
+                    MarkInstitutionTasksLate();
+                    DeadlineService.RefreshAssignmentDeadlines();
+                    MeetingService.CloseExpiredMeetings(false);
+                }
+                if (runMail)
+                    DeadlineService.SendNearDeadlineEmails();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("RefreshOverdueStatuses: " + ex.Message);
+            }
         }
 
         private static void MarkInstitutionTasksLate()

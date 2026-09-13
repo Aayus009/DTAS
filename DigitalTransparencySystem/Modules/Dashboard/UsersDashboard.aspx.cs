@@ -254,8 +254,8 @@ namespace DigitalTransparencySystem.Modules.Dashboard
 
         private void SetActiveFilterButton()
         {
-            string idle = "px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-colors";
-            string active = "px-4 py-2 rounded-full font-label-md text-label-md bg-primary text-on-primary";
+            string idle = "dash-task-filter";
+            string active = "dash-task-filter is-active";
 
             btnFilterAll.CssClass = idle;
             btnFilterPending.CssClass = idle;
@@ -278,6 +278,7 @@ namespace DigitalTransparencySystem.Modules.Dashboard
             TaskFilter = filter;
             SetActiveFilterButton();
             LoadMyTasks();
+            upMyTasks.Update();
         }
 
         protected void btnFilterAll_Click(object sender, EventArgs e)

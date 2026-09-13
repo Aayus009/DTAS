@@ -112,7 +112,7 @@ namespace DigitalTransparencySystem.Modules.Clubs
                 type = "Announcement";
 
             Show(ClubService.SendMessage(clubId, Convert.ToInt32(Session["UserID"]), Session["Role"] as string, txtMessage.Text, type), "Message sent.");
-            if (lblMessage.CssClass.IndexOf("error", StringComparison.OrdinalIgnoreCase) < 0)
+            if (!UiNotice.HasError(lblMessage))
                 txtMessage.Text = "";
             Reload();
         }
@@ -243,10 +243,7 @@ namespace DigitalTransparencySystem.Modules.Clubs
 
         private void Show(string error, string ok)
         {
-            lblMessage.Text = error ?? ok;
-            lblMessage.CssClass = error != null
-                ? "font-label-md block mb-4 text-error"
-                : "font-label-md block mb-4 text-tertiary";
+            UiNotice.Bind(lblMessage, error, ok);
         }
     }
 }

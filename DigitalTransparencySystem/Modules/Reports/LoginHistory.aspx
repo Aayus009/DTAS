@@ -8,7 +8,7 @@
 <%@ Register TagPrefix="uc" TagName="AdminTopbar" Src="~/MasterPages/AdminTopbar.ascx" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>" />
+    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=trailscroll1" />
 </asp:Content>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -81,7 +81,7 @@
                     <h3 class="font-title-lg text-title-lg text-primary">Login Records</h3>
                     <span class="font-badge-cap text-badge-cap uppercase text-outline"><asp:Literal ID="litRecordCount" runat="server" Text="0"></asp:Literal> records</span>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="report-table-scroll">
                     <table class="w-full text-left font-body-md">
                         <thead>
                             <tr class="bg-surface-container-low text-on-surface-variant border-b border-surface-container-high">

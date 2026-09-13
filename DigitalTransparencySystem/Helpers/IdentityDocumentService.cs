@@ -252,14 +252,33 @@ namespace DigitalTransparencySystem.Helpers
                 NotificationService.Send(userId, "ID accepted",
                     "Your institutional ID was verified. DTAS features are now unlocked.",
                     "Identity", userId, "User");
+                MailSender.SendToUser(userId, "Your ID was verified",
+                    MailComposer.Build(
+                        null,
+                        "Your institutional ID was accepted. You can use DTAS normally now.",
+                        null,
+                        null,
+                        "Open DTAS",
+                        MailSender.AbsoluteUrl("~/Modules/Dashboard/UsersDashboard.aspx")));
             }
             else
             {
+                string reason = string.IsNullOrWhiteSpace(rejectionReason)
+                    ? "Upload a clearer photo or PDF of your institutional ID and submit again."
+                    : rejectionReason.Trim();
                 NotificationService.Send(userId, "ID rejected",
                     string.IsNullOrWhiteSpace(rejectionReason)
                         ? "Your institutional ID was not accepted. Upload a clearer document."
                         : "Your institutional ID was not accepted. Reason: " + rejectionReason.Trim(),
                     "Identity", userId, "User");
+                MailSender.SendToUser(userId, "Your ID was not accepted",
+                    MailComposer.Build(
+                        null,
+                        "Your institutional ID was not accepted.",
+                        reason,
+                        null,
+                        "Upload another document",
+                        MailSender.AbsoluteUrl("~/Modules/Settings/IdentityVerification.aspx")));
             }
 
             AuthService.WriteAudit(adminId, approve ? "IdentityApproved" : "IdentityRejected", "User", userId, rejectionReason, null);

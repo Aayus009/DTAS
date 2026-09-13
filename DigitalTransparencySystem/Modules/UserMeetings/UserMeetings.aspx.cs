@@ -19,6 +19,7 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
             }
 
             MeetingService.EnsureSchema();
+            MeetingService.SendDueReminders();
 
             if (!IsPostBack)
             {
@@ -27,6 +28,7 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
                 BindZoomHint();
                 LoadMeetings();
             }
+            ApplyAssignmentContext();
         }
 
         private int UserId
@@ -77,14 +79,19 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
                 ddlWork.SelectedValue = taskId;
                 open = true;
             }
-            if (!string.IsNullOrEmpty(groupId) && ddlGroup.Items.FindByValue(groupId) != null)
+            if (!string.IsNullOrEmpty(groupId))
             {
-                ddlGroup.SelectedValue = groupId;
+                EnsureGroupInList(groupId);
+                if (ddlGroup.Items.FindByValue(groupId) != null)
+                    ddlGroup.SelectedValue = groupId;
+                hidGroupId.Value = groupId;
                 open = true;
             }
-            if (!string.IsNullOrEmpty(assignmentId) && ddlAssignment.Items.FindByValue(assignmentId) != null)
+            if (!string.IsNullOrEmpty(assignmentId))
             {
-                ddlAssignment.SelectedValue = assignmentId;
+                if (ddlAssignment.Items.FindByValue(assignmentId) != null)
+                    ddlAssignment.SelectedValue = assignmentId;
+                hidAssignmentId.Value = assignmentId;
                 open = true;
             }
             if (!string.IsNullOrEmpty(eventId) && ddlEvent.Items.FindByValue(eventId) != null)
@@ -95,6 +102,103 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
 
             if (open)
                 pnlForm.Visible = true;
+        }
+
+        private void EnsureGroupInList(string groupId)
+        {
+            if (string.IsNullOrEmpty(groupId) || ddlGroup.Items.FindByValue(groupId) != null)
+                return;
+            int id;
+            if (!int.TryParse(groupId, out id))
+                return;
+            AssignmentGroupRecord group = AssignmentService.GetGroup(id);
+            if (group == null || group.IsDeleted)
+                return;
+            AssignmentRecord assignment = AssignmentService.GetAssignment(group.AssignmentID);
+            string label = (assignment == null ? "" : assignment.AssignmentName + " / ") + group.GroupName;
+            ddlGroup.Items.Add(new ListItem(label, groupId));
+        }
+
+        private bool HasAssignmentGroupContext()
+        {
+            return ParseOptional(Request.QueryString["GroupID"]).HasValue
+                || ParseOptional(hidGroupId.Value).HasValue;
+        }
+
+        private bool HasAssignmentContext()
+        {
+            return HasAssignmentGroupContext()
+                || ParseOptional(Request.QueryString["AssignmentID"]).HasValue
+                || ParseOptional(hidAssignmentId.Value).HasValue;
+        }
+
+        private void ApplyAssignmentContext()
+        {
+            if (!HasAssignmentContext())
+            {
+                rfvEvent.Enabled = pnlEventLink.Visible;
+                return;
+            }
+
+            pnlEventLink.Visible = false;
+            pnlWorkLink.Visible = false;
+            rfvEvent.Enabled = false;
+            if (ddlMeetingType.Items.FindByValue("Assignment") != null)
+                ddlMeetingType.SelectedValue = "Assignment";
+
+            if (HasAssignmentGroupContext())
+            {
+                string groupId = Request.QueryString["GroupID"];
+                if (string.IsNullOrEmpty(groupId))
+                    groupId = hidGroupId.Value;
+                EnsureGroupInList(groupId);
+                if (ddlGroup.Items.FindByValue(groupId) != null)
+                {
+                    ddlGroup.Items.Clear();
+                    AssignmentGroupRecord group = AssignmentService.GetGroup(Convert.ToInt32(groupId));
+                    AssignmentRecord assignment = group == null ? null : AssignmentService.GetAssignment(group.AssignmentID);
+                    string label = (assignment == null ? "Assignment group" : assignment.AssignmentName + " / " + group.GroupName);
+                    ddlGroup.Items.Add(new ListItem(label, groupId));
+                    ddlGroup.SelectedValue = groupId;
+                }
+                hidGroupId.Value = groupId;
+                pnlAssignment.Visible = false;
+                litGroupHint.Text = "The Zoom join link is sent only to members of this assignment group.";
+                litIntro.Text = "Schedule a meeting for this assignment group. DTAS creates the Zoom room and emails this group's members. You do not need an event or workspace.";
+                litZoomReady.Text = "DTAS will create a Zoom room and email the members of this assignment group. Members cannot enter until the host starts the room and admits them from the waiting room.";
+            }
+            else
+            {
+                string assignmentId = Request.QueryString["AssignmentID"];
+                if (string.IsNullOrEmpty(assignmentId))
+                    assignmentId = hidAssignmentId.Value;
+                hidAssignmentId.Value = assignmentId;
+                FilterGroupsToAssignment(assignmentId);
+                pnlAssignment.Visible = false;
+                litGroupHint.Text = "Choose the assignment group. The Zoom join link goes to that group's members. An event is not required.";
+                litIntro.Text = "Schedule a meeting for this college assignment. Pick the assignment group that should receive the Zoom link. You do not need an event or workspace.";
+                litZoomReady.Text = "DTAS will create a Zoom room and email the members of the selected assignment group. Members cannot enter until the host starts the room and admits them from the waiting room.";
+            }
+        }
+
+        private void FilterGroupsToAssignment(string assignmentId)
+        {
+            int id;
+            if (!int.TryParse(assignmentId, out id) || id <= 0)
+                return;
+            string selected = ddlGroup.SelectedValue;
+            var keep = new System.Collections.Generic.List<ListItem>();
+            keep.Add(new ListItem("- Choose the assignment group -", ""));
+            foreach (DataRow row in AssignmentService.ListGroups(id).Rows)
+            {
+                string value = Convert.ToString(row["GroupID"]);
+                keep.Add(new ListItem(Convert.ToString(row["GroupName"]), value));
+            }
+            ddlGroup.Items.Clear();
+            foreach (ListItem item in keep)
+                ddlGroup.Items.Add(item);
+            if (!string.IsNullOrEmpty(selected) && ddlGroup.Items.FindByValue(selected) != null)
+                ddlGroup.SelectedValue = selected;
         }
 
         private void BindZoomHint()
@@ -133,6 +237,7 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
             pnlForm.Visible = true;
             pnlMessage.Visible = false;
             BindZoomHint();
+            ApplyAssignmentContext();
         }
 
         protected void btnCancel_Click(object sender, EventArgs e)
@@ -160,6 +265,18 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
             if (!int.TryParse(txtDuration.Text, out duration) || duration <= 0)
                 duration = 60;
 
+            int? groupId = ParseOptional(hidGroupId.Value) ?? ParseOptional(ddlGroup.SelectedValue);
+            int? assignmentId = ParseOptional(hidAssignmentId.Value) ?? ParseOptional(ddlAssignment.SelectedValue);
+            int? workId = HasAssignmentContext() ? null : ParseOptional(ddlWork.SelectedValue);
+            int? eventId = HasAssignmentContext() ? null : ParseOptional(ddlEvent.SelectedValue);
+
+            if (HasAssignmentContext() && !groupId.HasValue)
+            {
+                ShowMessage("Choose the assignment group that should receive the Zoom join link.", false);
+                pnlForm.Visible = true;
+                return;
+            }
+
             int meetingId;
             string error = MeetingService.Create(
                 UserId,
@@ -171,10 +288,10 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
                 txtVenue.Text,
                 txtAgenda.Text,
                 true,
-                ParseOptional(ddlWork.SelectedValue),
-                ParseOptional(ddlAssignment.SelectedValue),
-                ParseOptional(ddlGroup.SelectedValue),
-                ParseOptional(ddlEvent.SelectedValue),
+                workId,
+                assignmentId,
+                groupId,
+                eventId,
                 null,
                 out meetingId);
 
@@ -221,7 +338,7 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
             string label = FormatStatus(status);
             if (label == "Ended")
                 return "Room closed";
-            return Convert.ToInt32(hasZoom) == 1 ? "Join link sent to event members" : "No Zoom link yet";
+            return Convert.ToInt32(hasZoom) == 1 ? "Host starts the room; members wait to be admitted" : "No Zoom link yet";
         }
 
         protected void btnAll_Click(object sender, EventArgs e) { currentFilter = "All"; LoadMeetings(); }

@@ -98,7 +98,7 @@
                                 </div>
                             </div>
                             <asp:Button ID="btnSaveProfile" runat="server" Text="Save Changes" CssClass="btn-primary" OnClick="btnSaveProfile_Click" />
-                            <asp:Label ID="lblProfileSuccess" runat="server" CssClass="text-tertiary font-label-md hidden" Text="Profile updated successfully!"></asp:Label>
+                            <asp:Label ID="lblProfileSuccess" runat="server" CssClass="dtas-notice"></asp:Label>
                         </div>
                     </section>
 
@@ -116,7 +116,7 @@
                                 <asp:TextBox ID="txtEmailOtp" runat="server" MaxLength="6" CssClass="w-full p-3 bg-surface-container-low border border-outline rounded-xl text-center tracking-[8px]" placeholder="000000"></asp:TextBox>
                                 <asp:Button ID="btnConfirmEmail" runat="server" Text="Confirm new email" CssClass="btn-primary" OnClick="btnConfirmEmail_Click" />
                             </asp:Panel>
-                            <asp:Label ID="lblEmailChangeMessage" runat="server" CssClass="font-label-md"></asp:Label>
+                            <asp:Label ID="lblEmailChangeMessage" runat="server" CssClass="dtas-notice"></asp:Label>
                         </div>
                     </section>
 
@@ -139,8 +139,8 @@
                                 </div>
                             </div>
                             <asp:Button ID="btnChangePassword" runat="server" Text="Change Password" CssClass="btn-outline" OnClick="btnChangePassword_Click" />
-                            <asp:Label ID="lblPasswordSuccess" runat="server" CssClass="text-tertiary font-label-md hidden" Text="Password changed successfully!"></asp:Label>
-                            <asp:Label ID="lblPasswordError" runat="server" CssClass="text-error font-label-md hidden"></asp:Label>
+                            <asp:Label ID="lblPasswordSuccess" runat="server" CssClass="dtas-notice"></asp:Label>
+                            <asp:Label ID="lblPasswordError" runat="server" CssClass="dtas-notice"></asp:Label>
                         </div>
                     </section>
                 </div>

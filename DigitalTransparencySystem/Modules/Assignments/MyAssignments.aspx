@@ -32,7 +32,7 @@
                 </div>
             </header>
 
-            <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md block mb-4"></asp:Label>
+            <asp:Label ID="lblMessage" runat="server" CssClass="dtas-notice"></asp:Label>
 
             <asp:Panel ID="pnlCreate" runat="server" Visible="false" CssClass="standard-card rounded-xl p-6 mb-6">
                 <div class="flex justify-between items-start gap-4 mb-4">
@@ -74,10 +74,10 @@
                 </asp:Panel>
 
                 <asp:Panel ID="pnlCollegeFields" runat="server" Visible="false" CssClass="space-y-4 max-w-2xl">
-                    <p class="text-sm text-on-surface-variant">Enter the faculty assignment code to create your college group. Faculty can monitor progress.</p>
+                    <p class="text-sm text-on-surface-variant">Enter the faculty assignment code to create your college group. Faculty can monitor progress. Example: FYP-0000.</p>
                     <asp:TextBox ID="txtCode" runat="server" MaxLength="50"
                         CssClass="w-full p-3 bg-surface-container-low border border-outline rounded-xl font-body-md"
-                        placeholder="SNA-ASSIGN-0000"></asp:TextBox>
+                        placeholder="FYP-0000"></asp:TextBox>
                     <asp:TextBox ID="txtGroupName" runat="server" MaxLength="200"
                         CssClass="w-full p-3 bg-surface-container-low border border-outline rounded-xl font-body-md"
                         placeholder="Group name, e.g. Group A"></asp:TextBox>
@@ -161,7 +161,7 @@
                                     <p class="text-sm text-on-surface-variant mb-4 line-clamp-2"><%# Eval("AssignmentName") %></p>
                                     <div class="flex justify-between items-center text-xs text-on-surface-variant">
                                         <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">event</span> Due <%# Eval("Deadline", "{0:MMM dd, yyyy}") %></span>
-                                        <span><%# Eval("CompletedTasks") %>/<%# Eval("TotalTasks") %> tasks</span>
+                                        <span><%# DigitalTransparencySystem.Helpers.AssignmentService.FormatPercent(Eval("CompletionPercentage")) %></span>
                                     </div>
                                     <div class="mt-3 flex justify-between items-center text-xs text-on-surface-variant">
                                         <span><%# Eval("Responsibility") %></span>

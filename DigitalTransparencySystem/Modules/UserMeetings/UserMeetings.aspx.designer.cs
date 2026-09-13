@@ -2,6 +2,7 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
 {
     public partial class UserMeetings
     {
+        protected global::System.Web.UI.WebControls.Literal litIntro;
         protected global::System.Web.UI.WebControls.Button btnNew;
         protected global::System.Web.UI.WebControls.Panel pnlMessage;
         protected global::System.Web.UI.WebControls.Literal litMessage;
@@ -14,15 +15,22 @@ namespace DigitalTransparencySystem.Modules.UserMeetings
         protected global::System.Web.UI.WebControls.TextBox txtDateTime;
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvDateTime;
         protected global::System.Web.UI.WebControls.TextBox txtVenue;
+        protected global::System.Web.UI.WebControls.HiddenField hidGroupId;
+        protected global::System.Web.UI.WebControls.HiddenField hidAssignmentId;
+        protected global::System.Web.UI.WebControls.Panel pnlEventLink;
         protected global::System.Web.UI.WebControls.DropDownList ddlEvent;
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvEvent;
+        protected global::System.Web.UI.WebControls.Panel pnlWorkLink;
         protected global::System.Web.UI.WebControls.DropDownList ddlWork;
+        protected global::System.Web.UI.WebControls.Panel pnlGroupLink;
         protected global::System.Web.UI.WebControls.DropDownList ddlGroup;
+        protected global::System.Web.UI.WebControls.Literal litGroupHint;
         protected global::System.Web.UI.WebControls.Panel pnlAssignment;
         protected global::System.Web.UI.WebControls.DropDownList ddlAssignment;
         protected global::System.Web.UI.WebControls.TextBox txtAgenda;
         protected global::System.Web.UI.WebControls.Panel pnlZoomHint;
         protected global::System.Web.UI.WebControls.Panel pnlZoomReady;
+        protected global::System.Web.UI.WebControls.Literal litZoomReady;
         protected global::System.Web.UI.WebControls.Button btnSave;
         protected global::System.Web.UI.WebControls.Button btnCancel;
         protected global::System.Web.UI.WebControls.Button btnAll;

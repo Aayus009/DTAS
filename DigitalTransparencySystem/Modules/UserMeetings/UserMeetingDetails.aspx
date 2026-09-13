@@ -72,10 +72,7 @@
                             <asp:Panel ID="pnlZoomOpen" runat="server" Visible="false">
                                 <p class="text-sm text-on-surface-variant mb-2">Passcode: <strong><asp:Literal ID="litPasscode" runat="server"></asp:Literal></strong></p>
                                 <p class="text-sm text-on-surface-variant mb-3 break-all">Join link: <asp:HyperLink ID="lnkJoinUrlText" runat="server" Target="_blank" CssClass="text-primary font-bold"></asp:HyperLink></p>
-                                <p class="text-sm text-on-surface-variant mb-4">
-                                    Event members already received this join link. The host should click <strong>Start as host</strong>. Everyone else uses <strong>Join</strong>.
-                                    The room closes automatically when the scheduled duration ends.
-                                </p>
+                                <p class="text-sm text-on-surface-variant mb-4"><asp:Literal ID="litZoomHelp" runat="server"></asp:Literal></p>
                                 <div id="txZoomActions" class="flex flex-wrap gap-3">
                                     <asp:HyperLink ID="lnkStart" runat="server" Target="_blank" Visible="false"
                                         CssClass="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-full font-label-md font-bold">
@@ -87,6 +84,7 @@
                                     </asp:HyperLink>
                                 </div>
                                 <asp:HiddenField ID="hidRoomEndsAt" runat="server" />
+                                <asp:HiddenField ID="hidWaitForHost" runat="server" />
                             </asp:Panel>
                             <asp:Panel ID="pnlZoomClosed" runat="server" Visible="false">
                                 <p class="text-sm text-on-surface-variant m-0">
@@ -141,6 +139,10 @@
 <asp:Content ID="ScriptContent" ContentPlaceHolderID="ScriptContent" runat="server">
     <script type="text/javascript">
         (function () {
+            var wait = document.getElementById('<%= hidWaitForHost.ClientID %>');
+            if (wait && wait.value === '1')
+                setTimeout(function () { window.location.reload(); }, 20000);
+
             var field = document.getElementById('<%= hidRoomEndsAt.ClientID %>');
             if (!field || !field.value) return;
             var ends = Date.parse(field.value);

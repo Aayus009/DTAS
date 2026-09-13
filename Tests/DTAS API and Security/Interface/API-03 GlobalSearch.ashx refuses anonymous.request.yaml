@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{baseUrl}}/Modules/Search/GlobalSearch.ashx?q=event"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      var t = pm.response.text().toLowerCase();
+      pm.test('API-03 GlobalSearch refuses anonymous caller', function () { pm.expect(t).to.include('sign in'); });
+    language: text/javascript
+order: 3000

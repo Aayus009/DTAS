@@ -12,6 +12,7 @@ namespace DigitalTransparencySystem.Modules.Assignments
         protected global::System.Web.UI.WebControls.Literal litStatus;
         protected global::System.Web.UI.WebControls.Literal litDescription;
         protected global::System.Web.UI.WebControls.HyperLink lnkScheduleMeeting;
+        protected global::System.Web.UI.WebControls.HyperLink lnkAssignmentConnect;
         protected global::System.Web.UI.WebControls.Panel pnlNearDeadline;
         protected global::System.Web.UI.WebControls.Literal litNearDeadline;
         protected global::System.Web.UI.WebControls.Panel pnlExtend;

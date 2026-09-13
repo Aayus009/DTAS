@@ -15,6 +15,15 @@ namespace DigitalTransparencySystem
     {
 
         /// <summary>
+        /// lnkAccessDashboard control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkAccessDashboard;
+
+        /// <summary>
         /// litDecisions control.
         /// </summary>
         /// <remarks>
@@ -49,5 +58,14 @@ namespace DigitalTransparencySystem
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litAccountability;
+
+        /// <summary>
+        /// lnkCreateAccount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkCreateAccount;
     }
 }

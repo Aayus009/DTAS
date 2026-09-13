@@ -28,18 +28,6 @@ namespace DigitalTransparencySystem.Modules.Tasks
             }
 
             Response.Redirect("~/Modules/Tasks/Tasks.aspx");
-            return;
-
-            if (!IsPostBack)
-            {
-                LoadRelatedDecisions();
-                LoadRelatedEvents();
-                LoadRelatedMeetings();
-                LoadClubs();
-                LoadUsers();
-                LoadLeaders();
-                ApplyClubRoster();
-            }
         }
 
         private void LoadClubs()

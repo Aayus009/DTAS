@@ -5,29 +5,49 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" type="text/css" href="/Assets/css/faq.css" />
+    <link rel="stylesheet" type="text/css" href="/Assets/css/faq.css?v=3" />
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
+<div class="lp">
 
-    <!-- Hero Section -->
-    <header class="relative w-full py-16 overflow-hidden bg-surface-container-low border-b border-border-light">
-        <div class="absolute inset-0 opacity-40 pointer-events-none">
-            <div class="absolute top-0 right-0 w-96 h-96 bg-primary-fixed-dim/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
-            <div class="absolute bottom-0 left-0 w-64 h-64 bg-primary-container/10 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
-        </div>
-        <div class="relative z-10 max-w-7xl mx-auto px-container-padding-mobile md:px-container-padding-desktop text-center">
-            <span class="inline-block bg-surface-container-lowest text-slate-deep font-badge-cap text-badge-cap px-4 py-1.5 rounded-full mb-4 border border-border-light">SUPPORT CENTER</span>
-            <h1 class="font-headline-lg-mobile md:font-display-lg text-slate-deep mb-4">Frequently Asked Questions</h1>
-            <p class="font-body-lg text-on-surface-variant max-w-2xl mx-auto mb-8 leading-relaxed">
-                Everything you need to know about DTAS and how to participate.
-            </p>
-            <div class="max-w-xl mx-auto relative">
-                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-pacific-blue">search</span>
-                <asp:TextBox ID="txtSearch" runat="server" CssClass="w-full pl-12 pr-4 py-3 rounded-lg border border-border-light bg-surface-container-lowest text-on-surface shadow-sm text-body-md transition-all faq-search" placeholder="Search questions..."></asp:TextBox>
+    <section class="lp-hero">
+        <div class="lp-hero-glow lp-hero-glow-a"></div>
+        <div class="lp-hero-glow lp-hero-glow-b"></div>
+        <div class="lp-shell">
+            <div class="lp-hero-copy lp-hero-center lp-anim-rise">
+                <span class="lp-pill">
+                    <span class="lp-dot"></span>
+                    Support
+                </span>
+                <h1>Frequently asked questions</h1>
+                <p>Short answers for people who are new to DTAS.</p>
+                <div class="lp-hero-actions">
+                    <a href="/Contact.aspx" class="lp-btn lp-btn-primary">
+                        Contact us
+                        <span class="material-symbols-outlined">mail</span>
+                    </a>
+                    <a href="/Features.aspx" class="lp-btn lp-btn-ghost">
+                        See what DTAS does
+                    </a>
+                </div>
+                <ul class="lp-trust">
+                    <li>
+                        <span class="material-symbols-outlined">menu_book</span>
+                        Read the questions below
+                    </li>
+                    <li>
+                        <span class="material-symbols-outlined">forum</span>
+                        Write to us if you still need help
+                    </li>
+                    <li>
+                        <span class="material-symbols-outlined">play_circle</span>
+                        Try a guest demo anytime
+                    </li>
+                </ul>
             </div>
         </div>
-    </header>
+    </section>
 
     <!-- FAQ Body -->
     <section class="max-w-7xl mx-auto px-container-padding-mobile md:px-container-padding-desktop py-12">
@@ -106,42 +126,30 @@
                         </div>
                     </details>
                 </div>
-
-                <div class="mt-8 bg-surface-container-low p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 border border-border-light">
-                    <div class="space-y-1 text-center md:text-left">
-                        <h2 class="font-headline-md text-slate-deep">Still need help?</h2>
-                        <p class="font-body-md text-on-surface-variant text-[14px]">Our support team is available 24/7.</p>
-                    </div>
-                    <a href="/Contact.aspx" class="whitespace-nowrap bg-pacific-blue text-on-primary px-6 py-3 rounded-lg font-title-lg hover:bg-slate-deep transition-colors inline-block text-center">
-                        Contact Support
-                    </a>
-                </div>
             </section>
         </div>
     </section>
 
-    <!-- Illustration Section -->
-    <section class="max-w-7xl mx-auto px-container-padding-mobile md:px-container-padding-desktop pb-12">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center bg-surface-container-lowest border border-border-light rounded-2xl overflow-hidden shadow-sm">
-            <div class="p-8 md:p-12 space-y-4">
-                <span class="font-badge-cap text-badge-cap text-slate-deep bg-surface-container px-3 py-1 rounded-full uppercase text-[11px]">Knowledge Base</span>
-                <h2 class="font-headline-lg text-on-surface text-[28px]">Can't find what you need?</h2>
-                <p class="font-body-lg text-on-surface-variant text-[14px] leading-relaxed">Our documentation covers advanced setups, governance frameworks, and data integration guides.</p>
-                <div class="flex flex-wrap gap-4 pt-2">
-                    <a class="flex items-center gap-2 font-label-md text-pacific-blue group" href="#">
-                        View Documentation
-                        <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+    <section class="lp-cta-wrap">
+        <div class="lp-shell">
+            <div class="lp-cta">
+                <h2>Who is behind DTAS?</h2>
+                <p>
+                    We work from Maitidevi, Kathmandu. About us is who we are and why DTAS exists.
+                </p>
+                <div class="lp-hero-actions">
+                    <a href="/About.aspx" class="lp-btn lp-btn-primary">
+                        About us
+                        <span class="material-symbols-outlined">arrow_forward</span>
                     </a>
                 </div>
-            </div>
-            <div class="h-[320px] w-full">
-                <img class="w-full h-full object-cover" src="/Assets/images/knowledge-base.jpg" alt="Modern academic office with digital dashboards" />
             </div>
         </div>
     </section>
 
+</div>
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="ScriptContent" runat="server">
-    <script type="text/javascript" src="/Assets/js/faq.js"></script>
+    <script type="text/javascript" src="/Assets/js/faq.js?v=3"></script>
 </asp:Content>

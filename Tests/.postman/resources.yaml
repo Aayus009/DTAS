@@ -1,0 +1,13 @@
+# Use this workspace to collaborate
+workspace:
+  id: 2993508f-5363-4abc-89dd-c0860abb84b6
+
+localResources:
+  collections:
+    - ../DTAS API and Security
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/DTAS API and Security: 5379c741-8610-4db7-b188-a972b0d559cb

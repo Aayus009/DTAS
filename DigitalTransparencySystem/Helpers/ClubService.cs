@@ -298,9 +298,16 @@ namespace DigitalTransparencySystem.Helpers
             if (lookup.Found)
                 Notify(lookup.UserID.Value, "Club invitation", "You were invited to " + access.Club.ClubName + ".", clubId);
 
-            MailSender.Send(email, "DTAS club invitation",
-                "You have been invited to the DTAS club \"" + access.Club.ClubName + "\".\r\nSign in to accept, or join with code "
-                + (access.Club.InviteCode ?? "") + ".\r\n\r\nDTAS");
+            MailSender.Send(email, "Invited to " + access.Club.ClubName,
+                MailComposer.Build(
+                    null,
+                    "You were invited to " + access.Club.ClubName + ".",
+                    string.IsNullOrEmpty(access.Club.InviteCode)
+                        ? null
+                        : "Join code: " + access.Club.InviteCode,
+                    null,
+                    "Open My Clubs",
+                    MailSender.AbsoluteUrl("~/Modules/Clubs/MyClubs.aspx")));
             return null;
         }
 

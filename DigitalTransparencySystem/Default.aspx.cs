@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using DigitalTransparencySystem.Helpers;
 
 namespace DigitalTransparencySystem
 {
@@ -8,6 +9,18 @@ namespace DigitalTransparencySystem
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            bool signedIn = Session["UserID"] != null;
+            if (signedIn)
+            {
+                lnkAccessDashboard.NavigateUrl = AuthService.HomeDashboardUrl(Session);
+                lnkCreateAccount.Visible = false;
+            }
+            else
+            {
+                lnkAccessDashboard.NavigateUrl = "javascript:void(0)";
+                lnkAccessDashboard.Attributes["onclick"] = "openLogin(); return false;";
+            }
+
             if (!IsPostBack)
             {
                 LoadStatistics();

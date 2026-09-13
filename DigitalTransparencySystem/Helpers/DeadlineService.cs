@@ -211,7 +211,6 @@ namespace DigitalTransparencySystem.Helpers
         public static void RefreshAssignmentDeadlines()
         {
             NotifyAssignmentNearDeadlines();
-            SendNearDeadlineEmails();
             AutoCloseOverdueAssignments();
         }
 
@@ -277,15 +276,17 @@ namespace DigitalTransparencySystem.Helpers
             foreach (DeadlineMail item in pending)
             {
                 int days = (item.Due.Date - DateTime.Today).Days;
-                string subject = "DTAS warning: task due in " + days + " day" + (days == 1 ? "" : "s");
-                string body =
-                    "Hello " + item.Name + ",\r\n\r\n" +
-                    "This is a warning from DTAS. A task assigned to you is nearing its deadline.\r\n\r\n" +
-                    "Task: " + item.Title + "\r\n" +
-                    "Due: " + item.Due.ToString("MMM dd, yyyy") + " (" + days + " days left)\r\n\r\n" +
-                    "Please finish the remaining work or ask the leader to extend or redistribute it.\r\n\r\n" +
-                    "DTAS";
-                DispatchDeadlineMail(item, subject, body, "Task deadline warning", "TaskDeadlineEmail", "Task");
+                string dayLabel = days == 1 ? "1 day" : days + " days";
+                string subject = "Task due in " + dayLabel + ": " + item.Title;
+                MailContent mail = MailComposer.Build(
+                    null,
+                    "\"" + item.Title + "\" is due in " + dayLabel + " (" + item.Due.ToString("MMM dd, yyyy") + ").",
+                    null,
+                    null,
+                    "Open the task",
+                    MailSender.AbsoluteUrl("~/Modules/TaskWorkspaces/TaskWorkspace.aspx?TaskID=" + item.RelatedId),
+                    MailComposer.FirstName(item.Name));
+                DispatchDeadlineMail(item, subject, mail, "Task deadline warning", "TaskDeadlineEmail", "Task");
             }
         }
 
@@ -344,21 +345,24 @@ namespace DigitalTransparencySystem.Helpers
             foreach (DeadlineMail item in pending)
             {
                 int days = (item.Due.Date - DateTime.Today).Days;
-                string subject = "DTAS warning: event deadline in " + days + " day" + (days == 1 ? "" : "s");
-                string body =
-                    "Hello " + item.Name + ",\r\n\r\n" +
-                    "This is a warning from DTAS. An event you are part of is nearing its date.\r\n\r\n" +
-                    "Event: " + item.Title + "\r\n" +
-                    "Date: " + item.Due.ToString("MMM dd, yyyy") + " (" + days + " days left)\r\n\r\n" +
-                    "Please review remaining tasks and follow-through before the event date.\r\n\r\n" +
-                    "DTAS";
-                DispatchDeadlineMail(item, subject, body, "Event deadline warning", "EventDeadlineEmail", "Event");
+                string dayLabel = days == 1 ? "1 day" : days + " days";
+                string subject = "Event coming up in " + dayLabel + ": " + item.Title;
+                MailContent mail = MailComposer.Build(
+                    null,
+                    item.Title + " is in " + dayLabel + " (" + item.Due.ToString("MMM dd, yyyy") + ").",
+                    null,
+                    null,
+                    "Open the event",
+                    MailSender.AbsoluteUrl("~/Modules/Events/EventWorkspace.aspx?EventID=" + item.RelatedId),
+                    MailComposer.FirstName(item.Name));
+                DispatchDeadlineMail(item, subject, mail, "Event deadline warning", "EventDeadlineEmail", "Event");
             }
         }
 
-        private static void DispatchDeadlineMail(DeadlineMail item, string subject, string body, string inAppTitle, string notificationType, string relatedType)
+        private static void DispatchDeadlineMail(DeadlineMail item, string subject, MailContent mail, string inAppTitle, string notificationType, string relatedType)
         {
-            MailSender.Send(item.Email.Trim(), subject, body);
+            if (!string.IsNullOrWhiteSpace(item.Email))
+                MailSender.Send(item.Email.Trim(), subject, mail);
             NotificationService.Send(item.UserId, inAppTitle,
                 item.Title + " is due " + item.Due.ToString("MMM dd, yyyy") + ".",
                 notificationType, item.RelatedId, relatedType);

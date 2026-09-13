@@ -190,11 +190,7 @@ namespace DigitalTransparencySystem.Modules.Events
 
         private void ShowMessage(string message, bool isSuccess)
         {
-            pnlMessage.Visible = true;
-            pnlMessage.CssClass = isSuccess
-                ? "mb-6 p-4 rounded-xl flex items-center gap-3 bg-tertiary-container/10 border border-tertiary-container text-on-tertiary-container"
-                : "mb-6 p-4 rounded-xl flex items-center gap-3 bg-error-container border border-error text-error";
-            lblMessage.Text = message;
+            UiNotice.BindPanel(pnlMessage, lblMessage, message, isSuccess);
         }
     }
 }

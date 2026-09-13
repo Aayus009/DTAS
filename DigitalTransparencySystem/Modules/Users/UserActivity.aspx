@@ -3,7 +3,7 @@
 <%@ Register TagPrefix="uc" TagName="AdminTopbar" Src="~/MasterPages/AdminTopbar.ascx" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>" />
+    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=trailscroll1" />
 </asp:Content>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -152,7 +152,7 @@
                 <div class="px-6 py-4 border-b border-surface-container-high">
                     <h3 class="font-title-lg text-title-lg text-primary">Login History</h3>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="report-table-scroll">
                     <table class="w-full text-left font-body-md">
                         <thead>
                             <tr class="bg-surface-container-low text-on-surface-variant border-b border-surface-container-high">
@@ -187,7 +187,7 @@
     <footer class="dashboard-footer bg-on-secondary-fixed text-on-primary py-20 px-8 ml-64">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
             <div class="md:col-span-1">
-                <h2 class="font-headline-md text-headline-md font-bold mb-4">DTAS</h2>
+                <h2 class="font-headline-md text-headline-md font-bold mb-4"><a href="<%= ResolveUrl("~/Default.aspx") %>" class="hover:text-white">DTAS</a></h2>
                 <p class="font-body-md text-surface-container-high/60">The authoritative platform for educational accountability and data transparency.</p>
             </div>
             <div>

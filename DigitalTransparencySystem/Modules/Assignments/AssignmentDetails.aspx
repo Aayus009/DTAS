@@ -38,6 +38,11 @@
                         <span class="material-symbols-outlined text-[18px]">videocam</span>
                         Schedule meeting
                     </asp:HyperLink>
+                    <asp:HyperLink ID="lnkAssignmentConnect" runat="server" Visible="false"
+                        CssClass="inline-flex items-center justify-center gap-1 px-4 py-2 border border-outline rounded-xl font-label-md font-bold">
+                        <span class="material-symbols-outlined text-[18px]">forum</span>
+                        Open Connect
+                    </asp:HyperLink>
                     <asp:Button ID="btnClose" runat="server" Text="Close assignment" CssClass="px-4 py-2 border border-outline rounded-xl font-label-md" OnClick="btnClose_Click" />
                     <asp:Panel ID="pnlExtend" runat="server" CssClass="p-3 rounded-xl bg-surface-container-low space-y-2">
                         <p class="text-xs text-on-surface-variant">Faculty can change the deadline at any time. Students cannot extend it.</p>
@@ -48,7 +53,7 @@
                 </div>
             </header>
 
-            <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md block mb-4"></asp:Label>
+            <asp:Label ID="lblMessage" runat="server" CssClass="dtas-notice"></asp:Label>
 
             <section class="standard-card rounded-xl overflow-hidden">
                 <div class="px-6 py-4 border-b border-surface-container-high">
@@ -74,7 +79,7 @@
                             <td class="px-6 py-4 font-semibold"><%# Eval("GroupName") %></td>
                             <td class="px-6 py-4"><%# Eval("LeaderName") %></td>
                             <td class="px-6 py-4"><%# DigitalTransparencySystem.Helpers.AssignmentService.FormatPercent(Eval("CompletionPercentage")) %>
-                                <span class="text-xs text-outline">(<%# Eval("CompletedTasks") %>/<%# Eval("TotalTasks") %>)</span></td>
+                                <span class="text-xs text-outline">(<%# Eval("TotalTasks") %> tasks)</span></td>
                             <td class="px-6 py-4"><%# Convert.ToBoolean(Eval("IsFinalized")) ? "Yes" : "No" %></td>
                             <td class="px-6 py-4 text-right">
                                 <a class="text-primary font-bold mr-3" href='<%# ResolveUrl("~/Modules/Assignments/GroupWorkspace.aspx?GroupID=" + Eval("GroupID")) %>'>Open</a>

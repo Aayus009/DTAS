@@ -4,7 +4,7 @@
 <%@ Register TagPrefix="uc" TagName="AdminTopbar" Src="~/MasterPages/AdminTopbar.ascx" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=6" />
+    <link rel="stylesheet" type="text/css" href="<%= ResolveUrl("~/Assets/css/dashboard.css") %>?v=sidebadge1" />
 </asp:Content>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -45,11 +45,11 @@
                         </span>
                     </div>
                     <div class="mt-4">
-                        <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
-                            <div id="barAccountability" runat="server" class="bg-on-tertiary-container h-full transition-all duration-1000" style="width: 0%"></div>
+                        <div class="dash-meter">
+                            <div id="barAccountability" runat="server" class="dash-meter-fill h-full transition-all duration-1000" style="width: 0%"></div>
                         </div>
                         <p class="mt-2 font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
-                            <span class="material-symbols-outlined text-on-tertiary-container text-[18px]">task_alt</span>
+                            <span class="material-symbols-outlined dash-meter-icon text-[18px]">task_alt</span>
                             Task completion across the institution
                         </p>
                     </div>
@@ -63,11 +63,11 @@
                             <asp:Literal ID="litActiveDecisions" runat="server" Text="12"></asp:Literal>
                         </span>
                     </div>
-                    <div class="flex -space-x-2 overflow-hidden mt-4">
-                        <div class="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-primary-container"></div>
-                        <div class="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-secondary-container"></div>
-                        <div class="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-surface-variant"></div>
-                        <div class="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-outline flex items-center justify-center text-[10px] text-white">+5</div>
+                    <div class="dash-avatar-stack mt-4" aria-hidden="true">
+                        <span class="dash-avatar dash-avatar-a"></span>
+                        <span class="dash-avatar dash-avatar-b"></span>
+                        <span class="dash-avatar dash-avatar-c"></span>
+                        <span class="dash-avatar dash-avatar-more">+5</span>
                     </div>
                 </div>
 
@@ -308,8 +308,8 @@
                                     <span>Task Completion</span>
                                     <asp:Literal ID="litComplianceRate" runat="server" Text="0%"></asp:Literal>
                                 </div>
-                                <div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden">
-                                    <div id="barTaskCompletion" runat="server" class="h-full bg-primary js-progress-fill" style="width: 0%"></div>
+                                <div class="dash-meter dash-meter-sm">
+                                    <div id="barTaskCompletion" runat="server" class="dash-meter-fill h-full js-progress-fill" style="width: 0%"></div>
                                 </div>
                             </div>
                             <div>
@@ -317,8 +317,8 @@
                                     <span>Decision Progress</span>
                                     <asp:Literal ID="litAccessibilityRate" runat="server" Text="0%"></asp:Literal>
                                 </div>
-                                <div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden">
-                                    <div id="barDecisionProgress" runat="server" class="h-full bg-on-tertiary-container js-progress-fill" style="width: 0%"></div>
+                                <div class="dash-meter dash-meter-sm">
+                                    <div id="barDecisionProgress" runat="server" class="dash-meter-fill dash-meter-fill-alt h-full js-progress-fill" style="width: 0%"></div>
                                 </div>
                             </div>
                         </div>
@@ -371,7 +371,7 @@
     <footer class="dashboard-footer bg-on-secondary-fixed text-on-primary py-20 px-8 ml-64">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
             <div class="md:col-span-1">
-                <h2 class="font-headline-md text-headline-md font-bold mb-4">DTAS</h2>
+                <h2 class="font-headline-md text-headline-md font-bold mb-4"><a href="<%= ResolveUrl("~/Default.aspx") %>" class="hover:text-white">DTAS</a></h2>
                 <p class="font-body-md text-surface-container-high/60">The authoritative platform for educational accountability and data transparency.</p>
             </div>
             <div>
@@ -416,7 +416,6 @@
 
 <asp:Content ID="ScriptContent" ContentPlaceHolderID="ScriptContent" runat="server">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script type="text/javascript" src="<%= ResolveUrl("~/Assets/js/dashboard.js") %>"></script>
     <script type="text/javascript">
         function promptRejectReason(event, link) {
             if (event) event.preventDefault();

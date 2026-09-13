@@ -4,8 +4,72 @@
 
 /* --- Hero Gradient --- */
 .hero-gradient {
-    background: linear-gradient(135deg, rgb(var(--dt-surface-rgb)) 0%, rgb(var(--dt-surface-container-rgb)) 100%);
+    background:
+        radial-gradient(circle at 14% 18%, rgba(176, 137, 72, 0.16), transparent 30%),
+        radial-gradient(circle at 88% 0%, rgba(72, 202, 228, 0.12), transparent 34%),
+        linear-gradient(165deg, #0e2238 0%, #16324f 48%, #1b4464 100%);
+    color: #f3ead8;
 }
+
+.lp-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 1.1rem;
+    color: rgba(243, 234, 216, 0.78);
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+.lp-back:hover { color: #e8d5a8; }
+.lp-back .material-symbols-outlined { font-size: 18px; }
+
+.event-hero-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.4rem;
+}
+.event-hero-date {
+    width: 6.5rem;
+    min-height: 7.2rem;
+    border-radius: 1.1rem;
+    background: #f3ead8;
+    color: #12243a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 16px 28px rgba(8, 20, 34, 0.22);
+}
+.event-hero-day {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+}
+.event-hero-month {
+    margin-top: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #b08948;
+}
+.event-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 1.2rem;
+    margin: 0.85rem 0 0;
+    color: rgba(243, 234, 216, 0.78);
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+.event-hero-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.event-hero-meta .material-symbols-outlined { font-size: 18px; color: #e8d5a8; }
 
 /* --- Glass Card Effect --- */
 .glass-card {

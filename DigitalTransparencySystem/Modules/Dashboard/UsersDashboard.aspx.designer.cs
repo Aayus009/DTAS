@@ -31,6 +31,8 @@ namespace DigitalTransparencySystem.Modules.Dashboard
         protected global::System.Web.UI.WebControls.Literal litDecisionsApproved;
         protected global::System.Web.UI.WebControls.Literal litDecisionsRejected;
         protected global::System.Web.UI.WebControls.Literal litDecisionsCompleted;
+        protected global::System.Web.UI.ScriptManager smUserDash;
+        protected global::System.Web.UI.UpdatePanel upMyTasks;
         protected global::System.Web.UI.WebControls.Button btnFilterAll;
         protected global::System.Web.UI.WebControls.Button btnFilterPending;
         protected global::System.Web.UI.WebControls.Button btnFilterInProgress;

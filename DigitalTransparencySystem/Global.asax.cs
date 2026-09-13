@@ -1,6 +1,7 @@
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Threading;
 using System.Web;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -21,11 +22,37 @@ namespace DigitalTransparencySystem
                 RestrictionService.EnsureSchema();
                 AssignmentService.EnsureSchema();
                 ConnectService.EnsureSchema();
+                MeetingService.EnsureSchema();
+                ModerationService.EnsureSchema();
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Restriction schema: " + ex.Message);
             }
+
+            StartMeetingReminderLoop();
+        }
+
+        private static void StartMeetingReminderLoop()
+        {
+            var worker = new Thread(() =>
+            {
+                while (true)
+                {
+                    try
+                    {
+                        MeetingService.SendDueReminders();
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Meeting reminders: " + ex.Message);
+                    }
+                    Thread.Sleep(TimeSpan.FromMinutes(2));
+                }
+            });
+            worker.IsBackground = true;
+            worker.Name = "DTAS-MeetingReminders";
+            worker.Start();
         }
 
         protected void Application_PostAcquireRequestState(object sender, EventArgs e)

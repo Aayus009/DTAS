@@ -1,0 +1,10 @@
+$kind: collection
+schemaVersion: "3.0"
+name: DTAS API and Security
+description: >-
+  Start the DTAS web project first (https://localhost:44353).
+  Open this collection from the Collections list, not as a YAML file.
+  Send one request at a time. Green test in Scripts / Tests = Pass.
+variables:
+  - key: baseUrl
+    value: https://localhost:44353

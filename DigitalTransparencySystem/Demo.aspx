@@ -5,11 +5,13 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" type="text/css" href="/Assets/css/demo.css?v=2" />
+    <link rel="stylesheet" type="text/css" href="/Assets/css/demo.css?v=3" />
     <meta name="robots" content="noindex" />
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
+
+<div class="lp">
 
     <div class="demo-banner" role="status">
         <span class="demo-banner-tag">Guest demo</span>
@@ -17,31 +19,35 @@
         <span class="demo-banner-progress" id="demoProgress">Tried 0 of 6 guest actions</span>
     </div>
 
-    <section class="demo-hero">
-        <div class="demo-wrap">
-            <span class="demo-pill">Limited tour · no sign-in</span>
-            <h1>Try a handful of DTAS flows <span>without creating an account.</span></h1>
-            <p>
-                Browse sample events, leave a visitor note, move work on a mini board, RSVP to a meeting,
-                skim a transparency gist, and send one Connect message. Live Zoom, clubs, and real records stay locked.
-            </p>
-            <div class="demo-hero-actions">
-                <a href="#demo-event" class="demo-btn demo-btn-primary">
-                    Start the tour
-                    <span class="material-symbols-outlined">play_circle</span>
-                </a>
-                <a href="javascript:void(0)" onclick="openRegister('/Demo.aspx')" class="demo-btn demo-btn-ghost">
-                    Create an account for full access
-                </a>
+    <section class="lp-hero">
+        <div class="lp-hero-glow lp-hero-glow-a"></div>
+        <div class="lp-hero-glow lp-hero-glow-b"></div>
+        <div class="lp-shell">
+            <div class="lp-hero-copy lp-hero-center lp-anim-rise">
+                <span class="lp-pill">Limited tour · no sign-in</span>
+                <h1>Try a handful of DTAS flows <em>without creating an account.</em></h1>
+                <p>
+                    Browse sample events, leave a visitor note, move work on a mini board, RSVP to a meeting,
+                    skim a transparency gist, and send one Connect message. Live Zoom, clubs, and real records stay locked.
+                </p>
+                <div class="lp-hero-actions">
+                    <a href="#demo-event" class="lp-btn lp-btn-primary">
+                        Start the tour
+                        <span class="material-symbols-outlined">play_circle</span>
+                    </a>
+                    <a href="javascript:void(0)" onclick="openRegister('/Demo.aspx')" class="lp-btn lp-btn-ghost">
+                        Create an account for full access
+                    </a>
+                </div>
+                <ul class="demo-limits" id="demoTryList">
+                    <li data-try="browse"><span class="material-symbols-outlined">check_circle</span> Browse 3 sample events</li>
+                    <li data-try="note"><span class="material-symbols-outlined">check_circle</span> Leave a visitor note</li>
+                    <li data-try="board"><span class="material-symbols-outlined">check_circle</span> Move tasks to In Review</li>
+                    <li data-try="meeting"><span class="material-symbols-outlined">check_circle</span> RSVP and check agenda</li>
+                    <li data-try="records"><span class="material-symbols-outlined">check_circle</span> Filter sample records</li>
+                    <li data-try="connect"><span class="material-symbols-outlined">check_circle</span> Send one Connect message</li>
+                </ul>
             </div>
-            <ul class="demo-limits" id="demoTryList">
-                <li data-try="browse"><span class="material-symbols-outlined">check_circle</span> Browse 3 sample events</li>
-                <li data-try="note"><span class="material-symbols-outlined">check_circle</span> Leave a visitor note</li>
-                <li data-try="board"><span class="material-symbols-outlined">check_circle</span> Move tasks to In Review</li>
-                <li data-try="meeting"><span class="material-symbols-outlined">check_circle</span> RSVP and check agenda</li>
-                <li data-try="records"><span class="material-symbols-outlined">check_circle</span> Filter sample records</li>
-                <li data-try="connect"><span class="material-symbols-outlined">check_circle</span> Send one Connect message</li>
-            </ul>
         </div>
     </section>
 
@@ -281,17 +287,20 @@
         </article>
     </section>
 
-    <section class="demo-cta">
-        <div class="demo-wrap demo-cta-inner">
-            <h2>Ready for the real workspace?</h2>
-            <p>Create an account to run events, assign tasks, host meetings, and publish a live transparency record.</p>
-            <div class="demo-hero-actions">
-                <a href="javascript:void(0)" onclick="openRegister('/Demo.aspx')" class="demo-btn demo-btn-light">Create an account</a>
-                <a href="/Features.aspx" class="demo-btn demo-btn-outline">Back to features</a>
+    <section class="lp-cta-wrap">
+        <div class="lp-shell">
+            <div class="lp-cta">
+                <h2>Ready for the real workspace?</h2>
+                <p>Create an account to run events, assign tasks, host meetings, and publish a live transparency record.</p>
+                <div class="lp-hero-actions">
+                    <a href="javascript:void(0)" onclick="openRegister('/Demo.aspx')" class="lp-btn lp-btn-primary">Create an account</a>
+                    <a href="/Features.aspx" class="lp-btn lp-btn-ghost">Back to features</a>
+                </div>
             </div>
         </div>
     </section>
 
+</div>
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="ScriptContent" runat="server">

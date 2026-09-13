@@ -53,6 +53,34 @@ textarea:focus {
     border-color: var(--dt-primary);
 }
 
+.contact-cta {
+    display: grid;
+    gap: 0.35rem;
+}
+.contact-cta-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.65rem;
+    margin-top: 0.4rem;
+}
+.contact-cta-input {
+    min-width: min(22rem, 100%);
+    padding: 0.7rem 1rem;
+    border-radius: 0.85rem;
+    border: 1px solid rgba(243, 234, 216, 0.28);
+    background: rgba(243, 234, 216, 0.1);
+    color: #f3ead8;
+    font-size: 0.95rem;
+}
+.contact-cta-input::placeholder {
+    color: rgba(243, 234, 216, 0.55);
+}
+.contact-cta-form .lp-btn {
+    border: 0;
+    cursor: pointer;
+}
+
 /* --- Smooth Transitions --- */
 .transition-all {
     transition-property: all;

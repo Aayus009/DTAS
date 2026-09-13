@@ -1,0 +1,14 @@
+$kind: http-request
+name: API-01 ConnectApi.ashx refuses anonymous
+url: "{{baseUrl}}/Modules/Connect/ConnectApi.ashx?action=messages&groupId=1"
+method: GET
+queryParams:
+  action: messages
+  groupId: "1"
+scripts:
+  - type: afterResponse
+    code: |-
+      var t = pm.response.text().toLowerCase();
+      pm.test('API-01 ConnectApi refuses anonymous caller', function () { pm.expect(t).to.include('sign in'); });
+    language: text/javascript
+order: 1000

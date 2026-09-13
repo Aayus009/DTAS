@@ -54,7 +54,7 @@
                         <p class="text-xs text-outline mt-1">JPG, PNG, or PDF. Maximum 5 MB.</p>
                     </div>
                     <asp:Button ID="btnUpload" runat="server" Text="Submit for review" CssClass="btn-primary" OnClick="btnUpload_Click" />
-                    <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md block"></asp:Label>
+                    <asp:Label ID="lblMessage" runat="server" CssClass="dtas-notice"></asp:Label>
                 </div>
             </asp:Panel>
         </main>

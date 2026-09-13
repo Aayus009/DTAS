@@ -68,12 +68,17 @@ namespace DigitalTransparencySystem.Helpers
             }
 
             string subject = "Your DTAS verification code";
-            string body =
-                "Your one-time verification code is:\r\n\r\n  " + result.Code +
-                "\r\n\r\nIt expires in " + ExpiryMinutes +
-                " minutes. Do not share this code.\r\n\r\nIf you did not request this, ignore this email.\r\n\r\nDTAS Security";
-
-            result.Sent = MailSender.Send(email.Trim(), subject, body);
+            UserAccount account = AuthService.FindById(userId);
+            MailContent mail = MailComposer.Build(
+                null,
+                "Your DTAS verification code is below. It expires in " + ExpiryMinutes + " minutes.",
+                "If you did not request this, ignore this email.",
+                null,
+                null,
+                null,
+                MailComposer.FirstName(account != null ? account.FullName : null),
+                result.Code);
+            result.Sent = MailSender.Send(email.Trim(), subject, mail);
             return result;
         }
 

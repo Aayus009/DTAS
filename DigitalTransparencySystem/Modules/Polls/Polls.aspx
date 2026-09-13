@@ -24,8 +24,8 @@
                     OnClick="btnNewPoll_Click" />
             </header>
 
-            <asp:Panel ID="pnlMessage" runat="server" CssClass="mb-6 p-4 rounded-xl" Visible="false">
-                <asp:Label ID="lblMessage" runat="server" CssClass="font-label-md text-label-md"></asp:Label>
+            <asp:Panel ID="pnlMessage" runat="server" CssClass="dtas-notice" Visible="false">
+                <asp:Label ID="lblMessage" runat="server"></asp:Label>
             </asp:Panel>
 
             <asp:Panel ID="pnlForm" runat="server" CssClass="standard-card rounded-xl p-6 mb-6" Visible="false">

@@ -1,0 +1,4 @@
+$kind: collection
+description: Import this file in the Postman app. Start the DTAS web project first (https://localhost:44353). Run one request at a time. Green Tests tab = Pass.
+variables:
+  baseUrl: https://localhost:44353
